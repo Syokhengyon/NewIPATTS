@@ -1,0 +1,33 @@
+speech — IPA 讀音合成包
+========================================
+
+  node tools/cli.mjs speak "<IPA 串>" [輸出.wav] [--rate 140] [--pitch 40]
+      合成一段 IPA。音節用空格分隔；調值可寫上標(⁵³)或 ASCII(53)。
+      例: node tools/cli.mjs speak "ɭiæŋ²⁴ nʌm³¹ dɑw²⁴" out/demo.wav
+
+  node tools/cli.mjs check "<IPA 串>"
+      只做診斷，不出音頻。列出每個音節的音段、調值、聲調類型與建議語速。
+
+  node tools/cli.mjs derive "<漢字文本>" [輸出.wav] [--deriver 文件] [--phonology 名稱]
+      模式一：漢字 → 音韻地位 → 推導器 → IPA → 音頻。
+      預設用 derivers/qieyun-basic.js。
+      例: node tools/cli.mjs derive "天地玄黃宇宙洪荒" out/qieyun.wav
+
+  node tools/cli.mjs lexicon <字表文件> "<文本>" [輸出.wav]
+      模式二：逐字查表得 IPA 再合成。
+      字表支持 .json（{"山":"ʂæn⁵³"} 或 [{"字":"山","ipa":"..."}]）
+      也支持 .txt（每行「字 IPA」，# 為註釋）
+
+  node tools/cli.mjs help
+      顯示本說明。
+
+瀏覽器界面
+----------------------------------------
+  node tools/serve.mjs [端口]
+  然後打開 http://127.0.0.1:<端口>/
+
+安裝依賴
+----------------------------------------
+  npm install
+  （若 npm 報 EPERM 寫快取失敗，把快取指到工作區內：
+    npm install --cache .npm-cache   或設 npm_config_cache 環境變數）

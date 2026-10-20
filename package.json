@@ -1,0 +1,23 @@
+{
+  "name": "ipa-speech",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "IPA 讀音合成 — espeak-ng 發音 + 切韻推導器 / 字表兩種模式",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "test": "node tools/test-all.mjs",
+    "test:quick": "node tools/test-all.mjs --quick",
+    "speak": "node tools/cli.mjs speak",
+    "check": "node tools/cli.mjs check"
+  },
+  "dependencies": {
+    "tshet-uinh": "^0.15.4"
+  },
+  "optionalDependencies": {
+    "tshet-uinh-deriver-tools": "^0.2.0"
+  },
+  "devDependencies": {
+    "jsdom": "^27.0.0"
+  }
+}

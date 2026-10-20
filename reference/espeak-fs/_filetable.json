@@ -1,0 +1,2252 @@
+[
+ {
+  "filename": "/usr/local/share/espeak-ng-data/eo_dict",
+  "start": 0,
+  "end": 4666
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/es_dict",
+  "start": 4666,
+  "end": 53411
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/et_dict",
+  "start": 53411,
+  "end": 97674
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/eu_dict",
+  "start": 97674,
+  "end": 146265
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/fa_dict",
+  "start": 146265,
+  "end": 438572
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/fi_dict",
+  "start": 438572,
+  "end": 482500
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/fr_dict",
+  "start": 482500,
+  "end": 546231
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ga_dict",
+  "start": 546231,
+  "end": 598904
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/gd_dict",
+  "start": 598904,
+  "end": 648025
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/gn_dict",
+  "start": 648025,
+  "end": 651165
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/grc_dict",
+  "start": 651165,
+  "end": 654598
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/gu_dict",
+  "start": 654598,
+  "end": 737078
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/hak_dict",
+  "start": 737078,
+  "end": 740413
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/haw_dict",
+  "start": 740413,
+  "end": 742856
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/he_dict",
+  "start": 742856,
+  "end": 747807
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/hi_dict",
+  "start": 747807,
+  "end": 839950
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/hr_dict",
+  "start": 839950,
+  "end": 889338
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ht_dict",
+  "start": 889338,
+  "end": 891141
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/hu_dict",
+  "start": 891141,
+  "end": 1044926
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/hy_dict",
+  "start": 1044926,
+  "end": 1107189
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/id_dict",
+  "start": 1107189,
+  "end": 1150647
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/intonations",
+  "start": 1150647,
+  "end": 1152687
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/io_dict",
+  "start": 1152687,
+  "end": 1154852
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ipa_dict",
+  "start": 1154852,
+  "end": 1155886
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/is_dict",
+  "start": 1155886,
+  "end": 1200240
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/it_dict",
+  "start": 1200240,
+  "end": 1351856
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ja_dict",
+  "start": 1351856,
+  "end": 1398897
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/jbo_dict",
+  "start": 1398897,
+  "end": 1401140
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ka_dict",
+  "start": 1401140,
+  "end": 1488636
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/kk_dict",
+  "start": 1488636,
+  "end": 1490294
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/kl_dict",
+  "start": 1490294,
+  "end": 1492939
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/kn_dict",
+  "start": 1492939,
+  "end": 1580787
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/kok_dict",
+  "start": 1580787,
+  "end": 1587181
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ko_dict",
+  "start": 1587181,
+  "end": 1634704
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ku_dict",
+  "start": 1634704,
+  "end": 1636969
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ky_dict",
+  "start": 1636969,
+  "end": 1701390
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/la_dict",
+  "start": 1701390,
+  "end": 1705196
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lfn_dict",
+  "start": 1705196,
+  "end": 1707989
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lt_dict",
+  "start": 1707989,
+  "end": 1757879
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lv_dict",
+  "start": 1757879,
+  "end": 1823500
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/mi_dict",
+  "start": 1823500,
+  "end": 1824846
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/mk_dict",
+  "start": 1824846,
+  "end": 1888705
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ml_dict",
+  "start": 1888705,
+  "end": 1981054
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/mr_dict",
+  "start": 1981054,
+  "end": 2068457
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ms_dict",
+  "start": 2068457,
+  "end": 2121998
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/mt_dict",
+  "start": 2121998,
+  "end": 2126382
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/my_dict",
+  "start": 2126382,
+  "end": 2222442
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/nci_dict",
+  "start": 2222442,
+  "end": 2223976
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ne_dict",
+  "start": 2223976,
+  "end": 2319353
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/nl_dict",
+  "start": 2319353,
+  "end": 2385332
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/nog_dict",
+  "start": 2385332,
+  "end": 2386914
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/no_dict",
+  "start": 2386914,
+  "end": 2391092
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/om_dict",
+  "start": 2391092,
+  "end": 2393394
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/or_dict",
+  "start": 2393394,
+  "end": 2482640
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/pap_dict",
+  "start": 2482640,
+  "end": 2484768
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/pa_dict",
+  "start": 2484768,
+  "end": 2564721
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/af_dict",
+  "start": 2564721,
+  "end": 2686194
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/am_dict",
+  "start": 2686194,
+  "end": 2750072
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/an_dict",
+  "start": 2750072,
+  "end": 2756763
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ar_dict",
+  "start": 2756763,
+  "end": 3234356
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/as_dict",
+  "start": 3234356,
+  "end": 3239361
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/az_dict",
+  "start": 3239361,
+  "end": 3283134
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ba_dict",
+  "start": 3283134,
+  "end": 3285349
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/bg_dict",
+  "start": 3285349,
+  "end": 3372400
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/bn_dict",
+  "start": 3372400,
+  "end": 3462379
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/bpy_dict",
+  "start": 3462379,
+  "end": 3467605
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/bs_dict",
+  "start": 3467605,
+  "end": 3514673
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ca_dict",
+  "start": 3514673,
+  "end": 3560239
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/chr_dict",
+  "start": 3560239,
+  "end": 3563098
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/cmn_dict",
+  "start": 3563098,
+  "end": 3641382
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/cs_dict",
+  "start": 3641382,
+  "end": 3691027
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/cv_dict",
+  "start": 3691027,
+  "end": 3692371
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/cy_dict",
+  "start": 3692371,
+  "end": 3735501
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/da_dict",
+  "start": 3735501,
+  "end": 3980788
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/de_dict",
+  "start": 3980788,
+  "end": 4049015
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/el_dict",
+  "start": 4049015,
+  "end": 4121856
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/phonindex",
+  "start": 4121856,
+  "end": 4165970
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/phontab",
+  "start": 4165970,
+  "end": 4270820
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/piqd_dict",
+  "start": 4270820,
+  "end": 4272530
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/pl_dict",
+  "start": 4272530,
+  "end": 4349260
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/pt_dict",
+  "start": 4349260,
+  "end": 4417077
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/py_dict",
+  "start": 4417077,
+  "end": 4419601
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/qdb_dict",
+  "start": 4419601,
+  "end": 4422629
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/quc_dict",
+  "start": 4422629,
+  "end": 4424079
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/qu_dict",
+  "start": 4424079,
+  "end": 4425998
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ro_dict",
+  "start": 4425998,
+  "end": 4494536
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ru_dict",
+  "start": 4494536,
+  "end": 4556750
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sd_dict",
+  "start": 4556750,
+  "end": 4616678
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/shn_dict",
+  "start": 4616678,
+  "end": 4621111
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/si_dict",
+  "start": 4621111,
+  "end": 4706495
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sk_dict",
+  "start": 4706495,
+  "end": 4756497
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sl_dict",
+  "start": 4756497,
+  "end": 4801544
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/smj_dict",
+  "start": 4801544,
+  "end": 4836632
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sq_dict",
+  "start": 4836632,
+  "end": 4881635
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sr_dict",
+  "start": 4881635,
+  "end": 4928467
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sv_dict",
+  "start": 4928467,
+  "end": 4976303
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/sw_dict",
+  "start": 4976303,
+  "end": 5024107
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ta_dict",
+  "start": 5024107,
+  "end": 5233748
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/te_dict",
+  "start": 5233748,
+  "end": 5328585
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/th_dict",
+  "start": 5328585,
+  "end": 5330886
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/tk_dict",
+  "start": 5330886,
+  "end": 5351394
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/tn_dict",
+  "start": 5351394,
+  "end": 5354466
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/tr_dict",
+  "start": 5354466,
+  "end": 5401315
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/tt_dict",
+  "start": 5401315,
+  "end": 5403436
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ug_dict",
+  "start": 5403436,
+  "end": 5405036
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/uk_dict",
+  "start": 5405036,
+  "end": 5407118
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ur_dict",
+  "start": 5407118,
+  "end": 5540674
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/uz_dict",
+  "start": 5540674,
+  "end": 5543202
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/vi_dict",
+  "start": 5543202,
+  "end": 5595810
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/yue_dict",
+  "start": 5595810,
+  "end": 5670246
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/en_dict",
+  "start": 5670246,
+  "end": 5836866
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/ia_dict",
+  "start": 5836866,
+  "end": 6168141
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/phondata",
+  "start": 6168141,
+  "end": 6735481
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/eu",
+  "start": 6735481,
+  "end": 6735521
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ko",
+  "start": 6735521,
+  "end": 6735572
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/qu",
+  "start": 6735572,
+  "end": 6735660
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/aav/vi",
+  "start": 6735660,
+  "end": 6735771
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/aav/vi-VN-x-central",
+  "start": 6735771,
+  "end": 6735979
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/aav/vi-VN-x-south",
+  "start": 6735979,
+  "end": 6736186
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/eo",
+  "start": 6736186,
+  "end": 6736227
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/ia",
+  "start": 6736227,
+  "end": 6736256
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/io",
+  "start": 6736256,
+  "end": 6736304
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/jbo",
+  "start": 6736304,
+  "end": 6736373
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/lfn",
+  "start": 6736373,
+  "end": 6736508
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/piqd",
+  "start": 6736508,
+  "end": 6736564
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/py",
+  "start": 6736564,
+  "end": 6736704
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/art/qdb",
+  "start": 6736704,
+  "end": 6736761
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/azc/nci",
+  "start": 6736761,
+  "end": 6736875
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/bat/lt",
+  "start": 6736875,
+  "end": 6736903
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/bat/ltg",
+  "start": 6736903,
+  "end": 6737272
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/bat/lv",
+  "start": 6737272,
+  "end": 6737558
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/bnt/sw",
+  "start": 6737558,
+  "end": 6737599
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/bnt/tn",
+  "start": 6737599,
+  "end": 6737641
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ccs/ka",
+  "start": 6737641,
+  "end": 6737765
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/cel/cy",
+  "start": 6737765,
+  "end": 6737802
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/cel/ga",
+  "start": 6737802,
+  "end": 6737868
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/cel/gd",
+  "start": 6737868,
+  "end": 6737919
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/cus/om",
+  "start": 6737919,
+  "end": 6737958
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/dra/kn",
+  "start": 6737958,
+  "end": 6738013
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/dra/ml",
+  "start": 6738013,
+  "end": 6738070
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/dra/ta",
+  "start": 6738070,
+  "end": 6738121
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/dra/te",
+  "start": 6738121,
+  "end": 6738191
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/esx/kl",
+  "start": 6738191,
+  "end": 6738221
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmq/da",
+  "start": 6738221,
+  "end": 6738264
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmq/is",
+  "start": 6738264,
+  "end": 6738291
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmq/nb",
+  "start": 6738291,
+  "end": 6738378
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmq/sv",
+  "start": 6738378,
+  "end": 6738403
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/af",
+  "start": 6738403,
+  "end": 6738526
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/de",
+  "start": 6738526,
+  "end": 6738568
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en",
+  "start": 6738568,
+  "end": 6738708
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en-029",
+  "start": 6738708,
+  "end": 6739043
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en-GB-scotland",
+  "start": 6739043,
+  "end": 6739338
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en-GB-x-gbclan",
+  "start": 6739338,
+  "end": 6739576
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en-GB-x-gbcwmd",
+  "start": 6739576,
+  "end": 6739764
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en-GB-x-rp",
+  "start": 6739764,
+  "end": 6740013
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/en-US",
+  "start": 6740013,
+  "end": 6740270
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/gmw/nl",
+  "start": 6740270,
+  "end": 6740293
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/grk/el",
+  "start": 6740293,
+  "end": 6740316
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/grk/grc",
+  "start": 6740316,
+  "end": 6740415
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/as",
+  "start": 6740415,
+  "end": 6740457
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/bn",
+  "start": 6740457,
+  "end": 6740482
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/bpy",
+  "start": 6740482,
+  "end": 6740521
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/gu",
+  "start": 6740521,
+  "end": 6740563
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/hi",
+  "start": 6740563,
+  "end": 6740586
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/kok",
+  "start": 6740586,
+  "end": 6740612
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/mr",
+  "start": 6740612,
+  "end": 6740653
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/ne",
+  "start": 6740653,
+  "end": 6740690
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/or",
+  "start": 6740690,
+  "end": 6740729
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/pa",
+  "start": 6740729,
+  "end": 6740754
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/sd",
+  "start": 6740754,
+  "end": 6740820
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/si",
+  "start": 6740820,
+  "end": 6740875
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/inc/ur",
+  "start": 6740875,
+  "end": 6740969
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ine/hy",
+  "start": 6740969,
+  "end": 6741030
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ine/hyw",
+  "start": 6741030,
+  "end": 6741395
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ine/sq",
+  "start": 6741395,
+  "end": 6741498
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ira/fa",
+  "start": 6741498,
+  "end": 6741588
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ira/fa-Latn",
+  "start": 6741588,
+  "end": 6741857
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/ira/ku",
+  "start": 6741857,
+  "end": 6741897
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/iro/chr",
+  "start": 6741897,
+  "end": 6742466
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/itc/la",
+  "start": 6742466,
+  "end": 6742752
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/jpx/ja",
+  "start": 6742752,
+  "end": 6742804
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/map/haw",
+  "start": 6742804,
+  "end": 6742846
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/myn/quc",
+  "start": 6742846,
+  "end": 6743056
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/poz/id",
+  "start": 6743056,
+  "end": 6743190
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/poz/mi",
+  "start": 6743190,
+  "end": 6743557
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/poz/ms",
+  "start": 6743557,
+  "end": 6743987
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/an",
+  "start": 6743987,
+  "end": 6744014
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/ca",
+  "start": 6744014,
+  "end": 6744039
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/es",
+  "start": 6744039,
+  "end": 6744102
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/es-419",
+  "start": 6744102,
+  "end": 6744279
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/fr",
+  "start": 6744279,
+  "end": 6744358
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/fr-BE",
+  "start": 6744358,
+  "end": 6744442
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/fr-CH",
+  "start": 6744442,
+  "end": 6744528
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/ht",
+  "start": 6744528,
+  "end": 6744668
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/it",
+  "start": 6744668,
+  "end": 6744777
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/pap",
+  "start": 6744777,
+  "end": 6744839
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/pt",
+  "start": 6744839,
+  "end": 6744934
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/pt-BR",
+  "start": 6744934,
+  "end": 6745043
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/roa/ro",
+  "start": 6745043,
+  "end": 6745069
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sai/gn",
+  "start": 6745069,
+  "end": 6745116
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sem/am",
+  "start": 6745116,
+  "end": 6745157
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sem/ar",
+  "start": 6745157,
+  "end": 6745207
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sem/he",
+  "start": 6745207,
+  "end": 6745247
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sem/mt",
+  "start": 6745247,
+  "end": 6745288
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/cmn",
+  "start": 6745288,
+  "end": 6746033
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/cmn-Latn-pinyin",
+  "start": 6746033,
+  "end": 6746194
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/hak",
+  "start": 6746194,
+  "end": 6746322
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/ipa",
+  "start": 6746322,
+  "end": 6746402
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/my",
+  "start": 6746402,
+  "end": 6746458
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/yue",
+  "start": 6746458,
+  "end": 6746652
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/sit/yue-Latn-jyutping",
+  "start": 6746652,
+  "end": 6746865
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/tai/shn",
+  "start": 6746865,
+  "end": 6746957
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/tai/th",
+  "start": 6746957,
+  "end": 6746994
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/az",
+  "start": 6746994,
+  "end": 6747039
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/ba",
+  "start": 6747039,
+  "end": 6747064
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/cv",
+  "start": 6747064,
+  "end": 6747104
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/kk",
+  "start": 6747104,
+  "end": 6747144
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/ky",
+  "start": 6747144,
+  "end": 6747187
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/nog",
+  "start": 6747187,
+  "end": 6747226
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/tk",
+  "start": 6747226,
+  "end": 6747251
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/tr",
+  "start": 6747251,
+  "end": 6747276
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/tt",
+  "start": 6747276,
+  "end": 6747299
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/ug",
+  "start": 6747299,
+  "end": 6747323
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/trk/uz",
+  "start": 6747323,
+  "end": 6747362
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/urj/et",
+  "start": 6747362,
+  "end": 6747389
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/urj/fi",
+  "start": 6747389,
+  "end": 6747414
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/urj/hu",
+  "start": 6747414,
+  "end": 6747487
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/urj/smj",
+  "start": 6747487,
+  "end": 6747532
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zle/ru",
+  "start": 6747532,
+  "end": 6747598
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zle/ru-LV",
+  "start": 6747598,
+  "end": 6747878
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zle/uk",
+  "start": 6747878,
+  "end": 6747920
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zls/bg",
+  "start": 6747920,
+  "end": 6748031
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zls/bs",
+  "start": 6748031,
+  "end": 6748261
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zls/hr",
+  "start": 6748261,
+  "end": 6748523
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zls/mk",
+  "start": 6748523,
+  "end": 6748551
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zls/sl",
+  "start": 6748551,
+  "end": 6748594
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zls/sr",
+  "start": 6748594,
+  "end": 6748844
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zlw/cs",
+  "start": 6748844,
+  "end": 6748867
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zlw/pl",
+  "start": 6748867,
+  "end": 6748905
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/lang/zlw/sk",
+  "start": 6748905,
+  "end": 6748929
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Denis",
+  "start": 6748929,
+  "end": 6749234
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/iven3",
+  "start": 6749234,
+  "end": 6749497
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Marco",
+  "start": 6749497,
+  "end": 6749964
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/adam",
+  "start": 6749964,
+  "end": 6750039
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Alex",
+  "start": 6750039,
+  "end": 6750167
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Alicia",
+  "start": 6750167,
+  "end": 6750633
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Andrea",
+  "start": 6750633,
+  "end": 6750990
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Andy",
+  "start": 6750990,
+  "end": 6751310
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/anika",
+  "start": 6751310,
+  "end": 6751803
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/anikaRobot",
+  "start": 6751803,
+  "end": 6752315
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Annie",
+  "start": 6752315,
+  "end": 6752630
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/announcer",
+  "start": 6752630,
+  "end": 6752930
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/antonio",
+  "start": 6752930,
+  "end": 6753312
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/AnxiousAndy",
+  "start": 6753312,
+  "end": 6753673
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/aunty",
+  "start": 6753673,
+  "end": 6754031
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/belinda",
+  "start": 6754031,
+  "end": 6754371
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/benjamin",
+  "start": 6754371,
+  "end": 6754572
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/boris",
+  "start": 6754572,
+  "end": 6754796
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/boy10",
+  "start": 6754796,
+  "end": 6755145
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/caleb",
+  "start": 6755145,
+  "end": 6755202
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/chihiro",
+  "start": 6755202,
+  "end": 6755449
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/chihiro2",
+  "start": 6755449,
+  "end": 6755742
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/chihiro3",
+  "start": 6755742,
+  "end": 6755981
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/croak",
+  "start": 6755981,
+  "end": 6756074
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/david",
+  "start": 6756074,
+  "end": 6756186
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Demonic",
+  "start": 6756186,
+  "end": 6760046
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Diogo",
+  "start": 6760046,
+  "end": 6760425
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/ed",
+  "start": 6760425,
+  "end": 6760712
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/edward",
+  "start": 6760712,
+  "end": 6760863
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/edward2",
+  "start": 6760863,
+  "end": 6761015
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/f1",
+  "start": 6761015,
+  "end": 6761339
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/f2",
+  "start": 6761339,
+  "end": 6761696
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/f3",
+  "start": 6761696,
+  "end": 6762071
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/f4",
+  "start": 6762071,
+  "end": 6762421
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/f5",
+  "start": 6762421,
+  "end": 6762846
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/f7",
+  "start": 6762846,
+  "end": 6763144
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/fast",
+  "start": 6763144,
+  "end": 6763293
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female15",
+  "start": 6763293,
+  "end": 6763616
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female20",
+  "start": 6763616,
+  "end": 6763939
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female25",
+  "start": 6763939,
+  "end": 6764304
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female30",
+  "start": 6764304,
+  "end": 6764672
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female35",
+  "start": 6764672,
+  "end": 6765043
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female40",
+  "start": 6765043,
+  "end": 6765386
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female50",
+  "start": 6765386,
+  "end": 6765777
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/female70",
+  "start": 6765777,
+  "end": 6766060
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Gene",
+  "start": 6766060,
+  "end": 6766341
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Gene2",
+  "start": 6766341,
+  "end": 6766624
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/girl10",
+  "start": 6766624,
+  "end": 6766939
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/grandma",
+  "start": 6766939,
+  "end": 6767202
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/grandpa",
+  "start": 6767202,
+  "end": 6767458
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/gustave",
+  "start": 6767458,
+  "end": 6767711
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Henrique",
+  "start": 6767711,
+  "end": 6768092
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Hugo",
+  "start": 6768092,
+  "end": 6768470
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/iven",
+  "start": 6768470,
+  "end": 6768732
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/iven2",
+  "start": 6768732,
+  "end": 6769012
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/iven4",
+  "start": 6769012,
+  "end": 6769273
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Jacky",
+  "start": 6769273,
+  "end": 6769540
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/john",
+  "start": 6769540,
+  "end": 6772727
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/kaukovalta",
+  "start": 6772727,
+  "end": 6773088
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/klatt",
+  "start": 6773088,
+  "end": 6773126
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/klatt2",
+  "start": 6773126,
+  "end": 6773164
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/klatt3",
+  "start": 6773164,
+  "end": 6773203
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/klatt4",
+  "start": 6773203,
+  "end": 6773242
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/klatt5",
+  "start": 6773242,
+  "end": 6773281
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/klatt6",
+  "start": 6773281,
+  "end": 6773320
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Lee",
+  "start": 6773320,
+  "end": 6773658
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/linda",
+  "start": 6773658,
+  "end": 6774008
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m1",
+  "start": 6774008,
+  "end": 6774343
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m2",
+  "start": 6774343,
+  "end": 6774607
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m3",
+  "start": 6774607,
+  "end": 6774907
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m4",
+  "start": 6774907,
+  "end": 6775197
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m5",
+  "start": 6775197,
+  "end": 6775459
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m6",
+  "start": 6775459,
+  "end": 6775647
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m7",
+  "start": 6775647,
+  "end": 6775901
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/m8",
+  "start": 6775901,
+  "end": 6776185
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/male20",
+  "start": 6776185,
+  "end": 6776455
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/male30",
+  "start": 6776455,
+  "end": 6776786
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/male40",
+  "start": 6776786,
+  "end": 6777041
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/male45",
+  "start": 6777041,
+  "end": 6777312
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/male50",
+  "start": 6777312,
+  "end": 6777652
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/male70",
+  "start": 6777652,
+  "end": 6778041
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/marcelo",
+  "start": 6778041,
+  "end": 6778292
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Mario",
+  "start": 6778292,
+  "end": 6778562
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/max",
+  "start": 6778562,
+  "end": 6778787
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Michael",
+  "start": 6778787,
+  "end": 6779057
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/michel",
+  "start": 6779057,
+  "end": 6779461
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/miguel",
+  "start": 6779461,
+  "end": 6779843
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Mike",
+  "start": 6779843,
+  "end": 6779955
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Mr serious",
+  "start": 6779955,
+  "end": 6783149
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Nguyen",
+  "start": 6783149,
+  "end": 6783429
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/norbert",
+  "start": 6783429,
+  "end": 6786619
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/pablo",
+  "start": 6786619,
+  "end": 6789762
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/paul",
+  "start": 6789762,
+  "end": 6790046
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/pedro",
+  "start": 6790046,
+  "end": 6790399
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/quincy",
+  "start": 6790399,
+  "end": 6790753
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/RicishayMax",
+  "start": 6790753,
+  "end": 6790986
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/RicishayMax2",
+  "start": 6790986,
+  "end": 6791421
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/RicishayMax3",
+  "start": 6791421,
+  "end": 6791856
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/rob",
+  "start": 6791856,
+  "end": 6792121
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robert",
+  "start": 6792121,
+  "end": 6792395
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft",
+  "start": 6792395,
+  "end": 6792846
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft2",
+  "start": 6792846,
+  "end": 6793300
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft3",
+  "start": 6793300,
+  "end": 6793755
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft4",
+  "start": 6793755,
+  "end": 6794202
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft5",
+  "start": 6794202,
+  "end": 6794647
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft6",
+  "start": 6794647,
+  "end": 6794934
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft7",
+  "start": 6794934,
+  "end": 6795344
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/robosoft8",
+  "start": 6795344,
+  "end": 6795587
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/sandro",
+  "start": 6795587,
+  "end": 6796117
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/shelby",
+  "start": 6796117,
+  "end": 6796397
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/steph",
+  "start": 6796397,
+  "end": 6796761
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/steph2",
+  "start": 6796761,
+  "end": 6797128
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/steph3",
+  "start": 6797128,
+  "end": 6797505
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Storm",
+  "start": 6797505,
+  "end": 6797925
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/travis",
+  "start": 6797925,
+  "end": 6798308
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/Tweaky",
+  "start": 6798308,
+  "end": 6801498
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/UniRobot",
+  "start": 6801498,
+  "end": 6801915
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/victor",
+  "start": 6801915,
+  "end": 6802168
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/whisper",
+  "start": 6802168,
+  "end": 6802354
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/whisperf",
+  "start": 6802354,
+  "end": 6802746
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/zac",
+  "start": 6802746,
+  "end": 6803021
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de4",
+  "start": 6803021,
+  "end": 6803150
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr5",
+  "start": 6803150,
+  "end": 6803233
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-lt1",
+  "start": 6803233,
+  "end": 6803320
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-af1",
+  "start": 6803320,
+  "end": 6803408
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-af1-en",
+  "start": 6803408,
+  "end": 6803491
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ar1",
+  "start": 6803491,
+  "end": 6803575
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ar2",
+  "start": 6803575,
+  "end": 6803659
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-br1",
+  "start": 6803659,
+  "end": 6803774
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-br2",
+  "start": 6803774,
+  "end": 6803893
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-br3",
+  "start": 6803893,
+  "end": 6804008
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-br4",
+  "start": 6804008,
+  "end": 6804127
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ca1",
+  "start": 6804127,
+  "end": 6804215
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ca2",
+  "start": 6804215,
+  "end": 6804303
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-cn1",
+  "start": 6804303,
+  "end": 6804395
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-cr1",
+  "start": 6804395,
+  "end": 6804506
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-cz1",
+  "start": 6804506,
+  "end": 6804576
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-cz2",
+  "start": 6804576,
+  "end": 6804658
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de1",
+  "start": 6804658,
+  "end": 6804802
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de1-en",
+  "start": 6804802,
+  "end": 6804898
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de2",
+  "start": 6804898,
+  "end": 6805026
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de2-en",
+  "start": 6805026,
+  "end": 6805106
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de3",
+  "start": 6805106,
+  "end": 6805205
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de3-en",
+  "start": 6805205,
+  "end": 6805301
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de4-en",
+  "start": 6805301,
+  "end": 6805382
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de5",
+  "start": 6805382,
+  "end": 6805618
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de5-en",
+  "start": 6805618,
+  "end": 6805708
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de6",
+  "start": 6805708,
+  "end": 6805830
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de6-en",
+  "start": 6805830,
+  "end": 6805904
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de6-grc",
+  "start": 6805904,
+  "end": 6805987
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de7",
+  "start": 6805987,
+  "end": 6806137
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-de8",
+  "start": 6806137,
+  "end": 6806208
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ee1",
+  "start": 6806208,
+  "end": 6806303
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-en1",
+  "start": 6806303,
+  "end": 6806416
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-es1",
+  "start": 6806416,
+  "end": 6806513
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-es2",
+  "start": 6806513,
+  "end": 6806604
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-es3",
+  "start": 6806604,
+  "end": 6806691
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-es4",
+  "start": 6806691,
+  "end": 6806762
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr1",
+  "start": 6806762,
+  "end": 6806911
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr1-en",
+  "start": 6806911,
+  "end": 6807013
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr2",
+  "start": 6807013,
+  "end": 6807099
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr3",
+  "start": 6807099,
+  "end": 6807182
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr4",
+  "start": 6807182,
+  "end": 6807292
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr4-en",
+  "start": 6807292,
+  "end": 6807397
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr6",
+  "start": 6807397,
+  "end": 6807480
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-fr7",
+  "start": 6807480,
+  "end": 6807563
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-gr1",
+  "start": 6807563,
+  "end": 6807657
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-gr2",
+  "start": 6807657,
+  "end": 6807751
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-gr2-en",
+  "start": 6807751,
+  "end": 6807839
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-hu1",
+  "start": 6807839,
+  "end": 6807941
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-hu1-en",
+  "start": 6807941,
+  "end": 6808038
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ic1",
+  "start": 6808038,
+  "end": 6808124
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-id1",
+  "start": 6808124,
+  "end": 6808225
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-in1",
+  "start": 6808225,
+  "end": 6808294
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-in2",
+  "start": 6808294,
+  "end": 6808379
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ir1",
+  "start": 6808379,
+  "end": 6809132
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-it1",
+  "start": 6809132,
+  "end": 6809216
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-it2",
+  "start": 6809216,
+  "end": 6809303
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-it3",
+  "start": 6809303,
+  "end": 6809445
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-it4",
+  "start": 6809445,
+  "end": 6809590
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-jp1",
+  "start": 6809590,
+  "end": 6809661
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-jp2",
+  "start": 6809661,
+  "end": 6809762
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-jp3",
+  "start": 6809762,
+  "end": 6809849
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-la1",
+  "start": 6809849,
+  "end": 6809932
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-lt2",
+  "start": 6809932,
+  "end": 6810019
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ma1",
+  "start": 6810019,
+  "end": 6810117
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-mx1",
+  "start": 6810117,
+  "end": 6810237
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-mx2",
+  "start": 6810237,
+  "end": 6810357
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-nl1",
+  "start": 6810357,
+  "end": 6810426
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-nl2",
+  "start": 6810426,
+  "end": 6810522
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-nl2-en",
+  "start": 6810522,
+  "end": 6810613
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-nl3",
+  "start": 6810613,
+  "end": 6810698
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-nz1",
+  "start": 6810698,
+  "end": 6810766
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-pl1",
+  "start": 6810766,
+  "end": 6810865
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-pl1-en",
+  "start": 6810865,
+  "end": 6810947
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-pt1",
+  "start": 6810947,
+  "end": 6811061
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ro1",
+  "start": 6811061,
+  "end": 6811148
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-ro1-en",
+  "start": 6811148,
+  "end": 6811229
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-sw1",
+  "start": 6811229,
+  "end": 6811327
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-sw1-en",
+  "start": 6811327,
+  "end": 6811420
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-sw2",
+  "start": 6811420,
+  "end": 6811522
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-sw2-en",
+  "start": 6811522,
+  "end": 6811621
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-tl1",
+  "start": 6811621,
+  "end": 6811706
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-tr1",
+  "start": 6811706,
+  "end": 6811791
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-tr2",
+  "start": 6811791,
+  "end": 6811905
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-us1",
+  "start": 6811905,
+  "end": 6812075
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-us2",
+  "start": 6812075,
+  "end": 6812253
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-us3",
+  "start": 6812253,
+  "end": 6812433
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/mb/mb-vz1",
+  "start": 6812433,
+  "end": 6812577
+ },
+ {
+  "filename": "/usr/local/share/espeak-ng-data/voices/!v/wide80",
+  "start": 6812577,
+  "end": 6812619
+ }
+]

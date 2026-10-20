@@ -1,0 +1,336 @@
+
+if (!音韻地位) return [
+['日母',[2,'文讀','白讀']],
+['支微白讀入魚虞',true],
+['魚韻白讀',true],
+];
+
+const is = (x) => 音韻地位.屬於(x);
+const 果攝滯古 = ['他那爸'].join('');
+const 蟹攝二等歸假攝字 = ['咼(呙)扠哇洼絓畫(画)罣罷(罢)', '佳鼃娃卦', '灑蝸話(话)掛挂查叉杈衩'].join('');
+const 流攝幫滂並母未歸遇攝字 = ['浮桴蜉䳕抔掊裒婄箁䍌蔀捊', '不否缶剖紑鴀缹秠'].join('');
+const 流攝明母歸遇攝字 = ['母拇', '戊姆呣'].join('');
+const 匣母讀零聲母= ['完院丸皖莞芄紈垸晥汍綄','螢熒䁝褮'].join('');
+const 魚韻白讀= ['渠去居鋸魚許虛墟踞琚'].join('');
+const 支微入魚= ['貴鬼季龜圍虧跪'].join('');
+
+function 調整(表達式, 調整屬性) { if (is(表達式)) 音韻地位 = 音韻地位.調整(調整屬性); }
+
+if (['鼻'].includes(字頭)) 調整('脂韻 入聲', { 韻: '真', });
+//if (is`云母 通攝 舒聲`) 音韻地位 = 音韻地位.調整('匣母', ['匣母三等']);
+
+function 聲母規則() {
+  if (is('幫母')) {
+    return is('東韻 三等 或 鍾微廢文元凡虞尤陽韻')?'f':'p';
+  }
+  if (is('滂母')) {
+    return is('東韻 三等 或 鍾微廢文元凡虞尤陽韻')?'f':'pʰ';
+  }
+  if (is('並母')) {
+    return is('東韻 三等 或 鍾微廢文元凡虞尤陽韻')?'v':'b';
+  }
+  if (is('明母')) {
+    return is('微廢文元凡虞陽韻')?'v':'m';
+  }
+
+  if (is('端母')) return 't';
+  if (is('透母')) return 'tʰ';
+  if (is('定母')) return 'd';
+  if (is('泥母')) return 'n';
+  if (is('來母 非 三等')) return 'l';
+
+  if (is('知母 二等')) return 'ts';
+  if (is('徹母 二等')) return 'tsʰ';
+  if (is('澄母 二等')) return 'dz';
+  if (is('知母')) return 'tʂ';
+  if (is('徹母')) return 'tʂʰ';
+  if (is('澄母')) return 'dʐ';
+  if (is('孃母')) return 'n';
+  if (is('來母')) return 'l';
+
+  if (is('精母')) return 'ts';
+  if (is('清母')) return 'tsʰ';
+  if (is('從邪母')) return 'z';
+  if (is('心母')) return 's';
+
+  if (is('莊母')) return 'ts';
+  if (is('初母')) return 'tsʰ';
+  if (is('崇俟母')) return 'z';
+  if (is('生母')) return 's';
+
+  if (is('章母')) return 'tʂ';
+  if (is('昌母')) return 'tʂʰ';
+  if (is('常船母')) return 'ʐ';
+  if (is('書母')) return 'ʂ';
+  if (is('日母')) return 'ȵ';
+
+  if (is('見母')) return 'k';
+  if (is('溪母')) return 'kʰ';
+  if (is('羣母')) return 'ɡ';
+  if (is('疑母')) return 'ŋ';
+
+  if (is('曉母')) return 'h';
+  if (is('匣云以母')) return 'ɦ';
+  if (is('影母')) return 'ʔ';
+
+
+  throw new Error('無聲母規則');
+}
+
+function 韻母規則() {
+  // 通攝
+  if (is('東冬韻 一等')) return 'oŋ';
+  if (is('東韻 三等 舒聲 溪母')) return 'ioŋ';
+  if (is('鍾韻 三等 平聲 溪母')) return 'ioŋ';
+  if (is('東鍾韻 三等 平聲 羣母')) return 'ioŋ';
+  if (is('東鍾韻 三等 日母')) return 'ioŋ';
+  if (is('東鍾韻 三等 舒聲 疑曉匣影云以母')) return 'ioŋ';
+  if (is('東鍾韻 三等 入聲 孃母')) return 'ioŋ';
+  if (is('東鍾韻 三等')) return is('牙喉音 入聲')?'ioŋ':'oŋ';
+
+  // 江攝
+  if (is('江韻')) return 'ɑŋ';
+
+  // 止攝
+  if (選項.支微白讀入魚虞&&支微入魚.includes(字頭)) return 'y';
+  if (is('支脂之微韻 開口')) return is('精知章莊組 非 孃母')?'ɨ':'i';
+  if (is('支脂之微韻 精端莊組 合口')) return 'e';
+  if (is('支脂之微韻 精知章組 非 孃母 合口')) return 'y';
+  if (is('支脂之微韻 合口')) return is('莊組')?'e':'ue';
+  if (is('支脂韻 幫母 平聲 或 脂韻 明母')) return 'e';//碑、悲、美、媚
+  if (is('支脂之韻')) return 'i';
+  if (is('微韻')) return 'i';
+
+
+  // 遇攝
+  if (is('虞韻 幫組')) return 'u';
+  if (選項.魚韻白讀&&魚韻白讀.includes(字頭)) return 'e';
+  if (is('魚虞韻')) return is('莊組')?'u':'y';
+  if (is('模韻')&&['作祚胙阼飵秨錯措厝謨摸膜嫫摹'].join('').includes(字頭)) return 'u';
+  if (is('模韻')) return 'u';
+
+  // 蟹攝
+  if (is('齊韻')) return is('合口')?'ue':'i';
+  if (is('祭韻 莊組 開口')) return 'ɨ'
+  if (is('祭韻 以母 合口')) return 'ye';
+  if (is('祭韻 日母 合口')) return 'y';
+  if (is('祭韻 合口 知章組')) return 'e';
+  if (is('祭韻')) return is('合口')?'ue':'i';
+  if (is('泰韻 疑母 合口')) return 'a';
+  if (is('泰韻 舌齒音 開口')) return 'a';
+  if (is('佳皆夬韻')&&蟹攝二等歸假攝字.includes(字頭)) return 'o';
+  if (is('佳皆夬韻')) return 'a';
+  if (is('泰灰咍韻')) return 'e';
+  if (is('廢韻 開口')) return 'i';
+  if (is('廢韻')) return is('合口')?'ue':'i';
+
+  // 臻攝
+  //if (is('真韻 來母 合口')) return 'ən'; 
+  if (is('真韻')) return is('莊組')?'əŋ':'iɪŋ';
+  if (is('殷韻')) return 'iɪŋ';
+  if (is('臻韻')) return 'əŋ';
+  if (is('文韻')) return is('幫組')?'əŋ':'iɪŋ';
+  if (is('元韻')) return is('幫莊組')?'ɛn':'iɪn';
+  if (is('魂韻')) return is('合口')?'uəŋ':'əŋ';
+  if (is('痕韻')) return 'əŋ';
+
+  // 山攝
+  if (is('寒韻 舌齒音 開口')) return 'ɛn';
+  if (is('寒韻')) return 'øn';
+  if (is('刪山韻')) return 'ɛn';
+  if (is('仙韻')) return is('莊組')?'ɛn':'iɪn';
+  if (is('先韻')) return 'iɪn';
+
+  // 效攝
+  if (is('蕭韻')) return 'iɔ';
+  if (is('宵韻')) return 'iɔ';
+  if (is('肴韻')) return 'ɔ';
+  if (is('豪韻')) return 'ɔ';
+
+  // 果攝
+  if (is('歌韻 一等')&&果攝滯古.includes(字頭)) return 'a';
+  if (is('歌韻 一等')) return 'u';
+  if (is('歌韻 三等')) return is('幫組')?'a':'ia';
+
+  // 假攝
+  if (is('麻韻 二等')) return 'o';
+  if (is('麻韻 三等')) return is('章組')?'io':'ia';
+  if (is('麻韻 四等')) return 'ia';
+
+  // 宕攝
+  if (is('陽韻 幫組')) return 'ɑŋ';
+  if (is('陽韻 合口')) return is('入聲')?'ioŋ':'uɑŋ';
+  if (is('陽韻')) return is('章莊組')?'ɑŋ':'iaŋ';
+  if (is('唐韻')) return 'ɑŋ';
+
+  // 梗攝
+  //if (is('庚耕韻 二等 匣母 開口 非 入聲')&&['行莖幸倖杏荇洐莕'].join('').includes(字頭)) return 'iŋ';
+  if (is('庚耕韻 二等')) return 'aŋ';
+  if (is('庚耕韻 莊組')) return 'aŋ';
+  if (is('庚清韻 三等 章組')) return is('入聲')?'aŋ':'iɪŋ';
+  if (is('庚清韻 三等 合口')) return is('入聲')?'iɪŋ':'ioŋ';
+  if (is('庚清韻 三等')) return 'iɪŋ';
+  if (is('青韻')) return 'iɪŋ';
+  if (is('清韻')) return 'iɪŋ';
+
+
+  // 曾攝
+  if (is('蒸韻 合口')) return is('入聲')?'iɪŋ':'ioŋ';
+  if (is('蒸韻')) return is('莊組')?'əŋ':'iɪŋ';
+  if (is('登韻 明母'))  return is('入聲')?'əŋ':'aŋ';
+  if (is('登韻 幫組'))  return is('入聲')?'oŋ':'aŋ';
+  if (is('登韻'))  return is('合口 舒聲')?'oŋ':'əŋ';
+
+  // 流攝
+  if (is('尤侯韻 明母')&&流攝明母歸遇攝字.includes(字頭)) return 'u'; //不含「畝、牡、茂」等字
+  if (is('尤侯韻 明母')) return 'ɤ';
+  if (is('尤侯韻 幫滂並母')&&流攝幫滂並母未歸遇攝字.includes(字頭)) return 'ɤ';
+  if (is('尤侯韻 幫滂並母')) return 'u';
+  if (is('尤韻')) return is('莊組')?'ɤ':'iɤ';
+  if (is('幽韻')) return is('幫滂並母')?'iɔ':'iɤ';
+  if (is('侯韻')) return 'ɤ';
+
+  // 深攝
+  if (is('侵韻')) return is('莊組')?'əŋ':'iɪŋ';
+
+  // 咸攝
+  if (is('覃韻')) return 'øn';
+  if (is('談韻')) return is('牙喉音')?'øn':'ɛn';
+  if (is('凡韻')) return 'ɛn';
+  if (is('嚴鹽添韻')) return is('莊組')?'ɛn':'iɪn';
+  if (is('咸銜韻')) return 'ɛn';
+
+  throw new Error('無韻母規則');
+}
+
+function 聲調規則() {
+  if (is('全清 或 次清')) {
+    if (is('平聲')) return '⁴⁴'; // 陰平
+    if (is('上聲')) return '⁵¹'; // 陰上
+    if (is('去聲')) return '⁴²³'; // 陰去
+    if (is('入聲')) return '⁵'; // 陰入
+  } else {
+    if (is('平聲')) return '²⁴'; // 陽平
+    if (is('上聲')) return '³¹'; // 陽上
+    if (is('去聲')) return '³¹'; // 陽去
+    if (is('入聲')) return '²³'; // 陽入
+  }
+  throw new Error("無聲調規則");
+}
+
+let 聲母 = 聲母規則();
+let 韻母 = 韻母規則();
+let 聲調 = 聲調規則();
+
+
+if (is('入聲')) {
+  if (韻母.endsWith('n')) 韻母 = 韻母.slice(0, -1) + 'ʔ';
+  else if (韻母.endsWith('ŋ')) 韻母 = 韻母.slice(0, -1) + 'ʔ';
+  //韻母=韻母.replace('io','y');
+  //韻母=韻母.replace('o','u');
+
+}
+
+
+if (is('合口')) {
+  韻母='u'+韻母;
+  if(is("非 止蟹攝"))
+韻母=韻母.replace('ui','y');
+韻母=韻母.replace('uoŋ','oŋ');
+韻母=韻母.replace('uəu','u');
+韻母=韻母.replace('uu','u');
+韻母=韻母.replace('uʉ','ʉ');
+韻母=韻母.replace('uy','y');
+}
+
+韻母=韻母.replace('øʔ','eʔ');
+//韻母=韻母.replace('ɛʔ','æʔ');
+韻母=韻母.replace('ɑʔ','ɔʔ');
+韻母=韻母.replace('yɪn','yøn');
+韻母=韻母.replace('yøʔ','yɪʔ');
+韻母=韻母.replace('yo','io');
+if (韻母.endsWith('n')) 韻母 = 韻母.slice(0, -1) + '';
+
+if(韻母==="ye")
+{韻母="e";
+聲母="ʐ";}
+
+if(is('疑母'))
+{
+if(韻母[0]==='i'||韻母[0]==='y')
+{聲母=聲母.replace('ŋ','ȵ');}
+if(韻母==='ue'||韻母=='uɛ'||韻母=='uø')
+{
+聲母='ɦ'
+}
+if(韻母[0]==='u')
+{
+韻母=韻母.replace('ua','a');
+韻母=韻母.replace('uə','ə');
+韻母=韻母.replace('uo','o');
+}
+}
+
+if(is('精端莊組 或 來母'))
+{
+韻母=韻母.replace('yø','iɪ');
+韻母=韻母.replace('yɪʔ','iɪʔ');
+韻母=韻母.replace('yɪŋ','iɪŋ');
+韻母=韻母.replace('y','i');
+韻母=韻母.replace('ue','e');
+韻母=韻母.replace('uø','ø');
+韻母=韻母.replace('uə','ə');
+韻母=韻母.replace('uɛ','ɛ');
+韻母=韻母.replace('ua','a');
+}
+
+if(韻母[0]==='i'||韻母[0]==='y')
+{
+聲母=聲母.replace('k','tɕ');
+聲母=聲母.replace('ɡ','dʑ');
+聲母=聲母.replace('h','ɕ');
+}
+
+if(is('知章組 非 孃母'))
+{
+if(韻母[0]==='i'||韻母[0]==='y')
+{
+韻母=韻母.replace('iɪŋ','əŋ');
+韻母=韻母.replace('yɪŋ','əŋ');
+if(韻母==='i')韻母=韻母.replace('i','ɨ');
+if(韻母==='y')韻母=韻母.replace('y','ʉ');
+if(韻母==='iɪ')韻母=韻母.replace('iɪ','ø');
+if(韻母==='iɪʔ')韻母=韻母.replace('iɪ','ə');
+if(韻母==='yø')韻母=韻母.replace('yø','ø');
+if(韻母==='yɪʔ')韻母=韻母.replace('yɪ','ə');
+韻母=韻母.replace('i','');
+韻母=韻母.replace('y','');
+韻母=韻母.replace('ue','ø');
+}
+韻母=韻母.replace('ue','e');
+}
+
+if(is("日母")&&選項.日母==="文讀")
+{
+if(韻母==='i')
+{聲母='ɦ';韻母='ɜl'}
+else
+{聲母='ʐ';}
+
+
+if(韻母[0]==='i'||韻母[0]==='y')
+{
+韻母=韻母.replace('iɪŋ','əŋ');
+韻母=韻母.replace('yɪŋ','əŋ');
+if(韻母==='y')韻母=韻母.replace('y','ʉ');
+if(韻母==='iɪ')韻母=韻母.replace('iɪ','ø');
+if(韻母==='iɪʔ')韻母=韻母.replace('iɪ','ə');
+if(韻母==='yø')韻母=韻母.replace('yø','ø');
+if(韻母==='yɪʔ')韻母=韻母.replace('yɪ','ə');
+韻母=韻母.replace('i','');
+韻母=韻母.replace('y','');
+韻母=韻母.replace('ue','ø');
+}
+}
+return 聲母 + 韻母 + 聲調;
+

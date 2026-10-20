@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>切韻推導 · IPA 讀音合成 v1</title>
+<style>
+  :root{--bg:#0e1014;--pan:#171a20;--pan2:#1d2129;--line:#2a2f38;--line2:#232830;
+        --fg:#e6e8ee;--dim:#8b93a1;--acc:#4a9eff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;
+        --multi:#5aa9ff;--single:#9aa3b0;--fixed:#3fb950;}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--fg);overflow:hidden;
+       font:13.5px/1.6 -apple-system,"Segoe UI","Noto Sans CJK TC","Microsoft JhengHei",sans-serif;}
+  header{height:46px;border-bottom:1px solid var(--line);display:flex;align-items:center;
+         gap:14px;padding:0 16px;background:var(--pan);flex:0 0 auto}
+  header h1{font-size:14.5px;margin:0;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+  header .ver{font-size:10.5px;font-weight:600;color:#05121f;background:var(--acc);
+              border-radius:3px;padding:1px 5px;vertical-align:2px;letter-spacing:0}
+  header nav{margin-left:auto;display:flex;gap:14px;font-size:12.5px}
+  header nav a{color:var(--dim);text-decoration:none}
+  header nav a:hover{color:var(--acc)}
+  #app{display:flex;height:calc(100% - 46px)}
+
+  /* ---------- 左欄 ---------- */
+  #left{width:392px;flex:0 0 392px;border-right:1px solid var(--line);background:var(--pan);
+        overflow-y:auto;padding:12px 14px 40px}
+  .sec{margin-bottom:14px}
+  .sec>h2{font-size:12px;margin:0 0 6px;font-weight:600;color:#9aa3b0;
+          display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .sec>h2 .hint{font-weight:400;color:var(--dim);font-size:11.5px;margin-left:auto}
+  textarea{width:100%;background:#0b0d11;color:var(--fg);border:1px solid var(--line);
+           border-radius:6px;padding:8px 10px;
+           font:12.5px/1.6 ui-monospace,Consolas,"Cascadia Mono",monospace;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--acc)}
+  #text{height:104px;font-size:15px;letter-spacing:.5px}
+  #script{height:190px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .row+.row{margin-top:7px}
+  button{background:#232830;color:var(--fg);border:1px solid var(--line);border-radius:6px;
+         padding:5px 11px;cursor:pointer;font-size:12.5px;transition:background .12s;white-space:nowrap}
+  button:hover{background:#2c323c}
+  button:disabled{opacity:.4;cursor:default}
+  button.primary{background:var(--acc);border-color:var(--acc);color:#05121f;font-weight:600}
+  button.primary:hover{background:#5fabff}
+  select,input[type=number],input[type=text]{background:#232830;color:var(--fg);
+      border:1px solid var(--line);border-radius:6px;padding:4px 7px;font-size:12.5px;max-width:100%}
+  label{font-size:12.5px;color:var(--dim);display:inline-flex;align-items:center;gap:5px}
+  #options{display:flex;flex-direction:column;gap:6px}
+  #options label{color:var(--fg);flex-wrap:wrap}
+  #options .grp{font-size:11.5px;color:#9aa3b0;border-top:1px solid var(--line2);
+                padding-top:5px;margin-top:3px}
+  .grid2{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center}
+  .grid2>label{white-space:nowrap}
+  .rng{display:flex;align-items:center;gap:8px}
+  .rng input[type=range]{flex:1;min-width:80px}
+  .rng .val{font-size:12px;color:var(--fg);min-width:28px;text-align:right;
+            font-family:ui-monospace,Consolas,monospace}
+  #log{background:#08090c;border:1px solid var(--line);border-radius:6px;padding:7px 9px;
+       font:11.5px/1.55 ui-monospace,Consolas,monospace;white-space:pre-wrap;height:150px;
+       overflow:auto;color:#b9c0cc}
+  #log:empty::before{content:"（尚無輸出）";color:var(--dim)}
+
+  /* ---------- 右欄 ---------- */
+  #right{flex:1;display:flex;flex-direction:column;min-width:0}
+  #toolbar{height:40px;border-bottom:1px solid var(--line);display:flex;align-items:center;
+           gap:8px;padding:0 14px;background:var(--pan);flex:0 0 auto;flex-wrap:wrap}
+  #toolbar .sep{width:1px;height:18px;background:var(--line);margin:0 3px}
+  #toolbar .info{margin-left:auto;font-size:12px;color:var(--dim)}
+  #canvas{flex:1;overflow:auto;padding:18px 22px 60px}
+
+  /* 標題區（首行）與正文區 */
+  .titleblock{margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--line2)}
+  .titleblock .meta{font-size:12px;color:var(--dim);margin-bottom:8px}
+  .line{display:flex;flex-wrap:wrap;row-gap:16px;margin-bottom:20px}
+  .cell{display:flex;flex-direction:column;align-items:center;margin:0 9px;
+        cursor:default;user-select:none;position:relative}
+  .cell .ipa{font-size:12px;color:var(--dim);font-family:ui-monospace,Consolas,monospace;
+             white-space:nowrap;margin-bottom:2px;min-height:17px}
+  .cell .ch{font-size:25px;line-height:1.15;color:var(--single)}
+  .cell.multi{cursor:pointer}
+  .cell.multi .ch{color:var(--multi)}
+  .cell.multi:hover .ch{text-decoration:underline dotted}
+  .cell.sel .ch{text-shadow:0 0 12px rgba(90,169,255,.65)}
+  /* 已由括號註明音韻地位的字 —— 綠色，讀音被固定 */
+  .cell.fixed .ch{color:var(--fixed)}
+  .cell.fixed .ipa{color:var(--fixed)}
+  .cell.fixed{cursor:pointer}
+  .cell.fixed:hover .ch{text-decoration:underline dotted}
+  /* 借字：`说<悦>` —— 紅色 */
+  .cell.borrow .ch{color:var(--bad)}
+  .cell.borrow .ipa{color:var(--bad)}
+  .cell.borrow{cursor:pointer}
+  .cell.borrow:hover .ch{text-decoration:underline dotted}
+  /* 類推：不在廣韻字表，但可從補充字表聯想（黃） */
+  .cell.guess .ch{color:var(--warn)}
+  .cell.guess .ipa{color:var(--warn)}
+  /* 失敗：兩張表都沒有，或括號固定但與廣韻完全不合（紅） */
+  .cell.err .ch{color:var(--bad)}
+  .cell.err .ipa{color:var(--bad)}
+  .cell .badge{position:absolute;top:-3px;right:-6px;font-size:9.5px;color:var(--multi);
+               background:var(--pan2);border:1px solid var(--line);border-radius:8px;padding:0 4px}
+
+  /* 停頓：空格一個小點、逗號稍大、句末一個長條 —— 不佔字格 */
+  .pause{display:inline-block;width:3px;height:3px;border-radius:50%;
+         background:#2f3540;margin:0 5px;flex:0 0 auto}
+  .pause.short{width:5px;height:5px;background:#3a414d;margin:0 7px}
+  .pause.long{width:13px;height:5px;border-radius:2px;background:#4a525f;margin:0 8px}
+
+  /* 段落：一塊一塊，各帶「只唸這段」 */
+  .para{border-left:2px solid var(--line2);padding-left:14px;margin-bottom:6px}
+  .para-hd{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--dim);
+           margin:14px 0 6px}
+  .para-hd button{font-size:11.5px;padding:2px 9px}
+
+  /* 多音字選擇彈窗 */
+  #pop{position:fixed;z-index:50;display:none;background:var(--pan2);border:1px solid var(--line);
+       border-radius:8px;padding:8px;min-width:380px;max-width:min(620px,92vw);
+       box-shadow:0 8px 28px rgba(0,0,0,.55)}
+  #pop .hd{font-size:11.5px;color:var(--dim);margin-bottom:6px;padding:0 2px}
+  #pop .op{display:flex;align-items:baseline;gap:9px;padding:5px 8px;border-radius:5px;cursor:pointer}
+  #pop .op:hover{background:#2b313b}
+  #pop .op.on{background:#1e3a5c}
+  /* 只有「可選」的項纔有指針與懸停；單一讀音只展示 */
+  #pop .op.only{cursor:default;opacity:.75}
+  #pop .op.only:hover{background:transparent}
+  #pop .op .ipa{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:var(--fg);
+                min-width:66px;flex:0 0 auto}
+  #pop .op .d{font-size:11.5px;color:var(--dim);flex:0 0 auto;min-width:110px}
+  /* 釋義：讓它佔滿剩餘寬度，兩行截斷 */
+  #pop .op .g{font-size:11px;color:#7d8695;flex:1 1 auto;min-width:0;text-align:right;
+              display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #pop .hint{font-size:11px;color:var(--dim);padding:4px 8px 6px}
+  #pop .sep{height:1px;background:var(--line);margin:6px 0}
+  #pop .custom{display:flex;gap:6px;padding:2px 4px}
+  #pop .custom input{flex:1;min-width:120px;background:#0b0d11;color:var(--fg);
+                     border:1px solid var(--line);border-radius:5px;padding:4px 7px;font-size:12.5px}
+  #pop .custom button{padding:4px 10px;font-size:12.5px}
+
+  .legend{font-size:11.5px;color:var(--dim);margin-bottom:14px}
+  .legend b{font-weight:600}
+  .legend code{background:#232830;border-radius:3px;padding:0 4px;font-size:11px}
+  .empty{color:var(--dim);font-size:13px;padding:24px 4px}
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:#2e343d;border-radius:5px}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>切韻推導 · IPA 讀音合成 <span class="ver">v1</span></h1>
+  <nav>
+    <a href="/chart">IPA 音素表</a>
+    <a href="/ipa">IPA 直輸 / 字表</a>
+  </nav>
+</header>
+
+<div id="app">
+
+  <!-- ==================== 左欄 ==================== -->
+  <div id="left">
+
+    <div class="sec">
+      <h2>文章 <span class="hint">可用 <code>字(音韻地位)</code> 固定讀音</span></h2>
+      <textarea id="text" spellcheck="false"
+        placeholder="輸入漢字，例如：天地玄黃宇宙洪荒&#10;&#10;多音字可括號註明音韻地位，例如：&#10;事(崇開三之去)無兩樣(以開三陽去)人心別(並三B仙入)">天地玄黃宇宙洪荒日月盈昃</textarea>
+      <div class="row" style="margin-top:7px">
+        <button id="derive" class="primary">推導並發音</button>
+        <button id="deriveOnly">只推導</button>
+        <select id="textPick" title="從 texts/ 資料夾選一篇" style="max-width:170px"></select>
+        <button id="saveText" title="覆蓋 texts/ 裏的原檔">儲存</button>
+        <button id="saveTextAs">另存新檔</button>
+        <button id="clearText">清空</button>
+      </div>
+      <div class="row" style="margin-top:5px">
+        <span id="textFile" class="dim" style="font-size:11.5px;color:var(--dim)">未綁定檔案</span>
+      </div>
+      <div class="hint" style="margin-top:6px;font-size:11.5px;color:var(--dim)">
+        括號內只要是合法的音韻地位，該字即被<b style="color:var(--fixed)">固定</b>成這個讀音（結果區顯示為綠色），括號本身不會出現在結果裏。
+        不合法的括號（例如「（辛棄疾）」）按普通文字處理。
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>自定推導方案 <span class="hint">貼入函數體</span></h2>
+      <textarea id="script" spellcheck="false"
+        placeholder="if (!音韻地位) return [];&#10;const is = (x) => 音韻地位.屬於(x);&#10;…&#10;return 聲母 + 韻母 + 聲調;"></textarea>
+      <div class="row" style="margin-top:7px">
+        <button id="loadEx" title="插入一段可編譯的起點代碼">插模板</button>
+        <select id="deriverPick" title="從 derivers/ 資料夾選一個方案" style="max-width:165px"></select>
+        <button id="saveDeriver" title="覆蓋 derivers/ 裏的原檔">儲存</button>
+        <button id="saveDeriverAs">另存新檔</button>
+        <button id="selfTest">自檢</button>
+        <button id="clearScript">清空</button>
+      </div>
+      <div class="row" style="margin-top:5px">
+        <span id="deriverFile" class="dim" style="font-size:11.5px;color:var(--dim)">未綁定檔案</span>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <span id="scriptStatus" class="dim" style="font-size:11.5px;color:var(--dim)">尚未載入方案</span>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>音系設置 <span class="hint">方案宣告的設定項</span></h2>
+      <div id="options"></div>
+    </div>
+
+    <div class="sec">
+      <h2>高級配置</h2>
+      <div class="grid2">
+        <label>嗓音</label>
+        <select id="variant">
+          <option value="ipa+wide80">ipa+wide80（預設）</option>
+          <option value="ipa">ipa（原版）</option>
+          <option value="ipa+male20">ipa+male20（站點用）</option>
+        </select>
+
+        <label>發音人</label>
+        <select id="voicePreset">
+          <option value="wide80">男聲（低音域・預設）</option>
+          <option value="male20">男聲（站點）</option>
+          <option value="plain">原版（無變體）</option>
+        </select>
+
+        <label>音調</label>
+        <div class="rng"><input type="range" id="pitch" min="0" max="99" value="40">
+          <span class="val" id="pitchVal">40</span></div>
+
+        <label>語速</label>
+        <div class="rng"><input type="range" id="rateR" min="80" max="300" value="140">
+          <span class="val" id="rateVal">140</span></div>
+
+        <label>字間隔</label>
+        <div class="rng"><input type="range" id="gapR" min="0" max="300" value="45">
+          <span class="val" id="gapVal">45</span></div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <label>零聲母
+          <select id="zeroInit">
+            <option value="glottal">前加喉塞 ʔ</option>
+            <option value="length">首元音加長</option>
+            <option value="none">不補償</option>
+          </select></label>
+        <label>三位調
+          <select id="threeFactor">
+            <option value="1">不降速</option>
+            <option value="0.8">×0.8</option>
+            <option value="0.6">×0.6</option>
+            <option value="0.45">×0.45</option>
+          </select></label>
+        <label><input type="checkbox" id="autoRate" checked> 啟用</label>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <label><input type="checkbox" id="showIpa" checked> 顯示標音</label>
+        <label><input type="checkbox" id="showPhon"> 顯示音素名</label>
+        <label><input type="checkbox" id="hideUnknown"> 只顯示推導失敗的字</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>語音合成</h2>
+      <div class="row">
+        <button id="play">▶ 播放</button>
+        <button id="stop">■ 停止</button>
+        <button id="dl">下載 WAV</button>
+        <button id="reload">重載引擎</button>
+      </div>
+      <div id="log" style="margin-top:8px"></div>
+    </div>
+
+  </div>
+
+  <!-- ==================== 右欄 ==================== -->
+  <div id="right">
+    <div id="toolbar">
+      <button id="tbDerive" class="primary" title="推導">推導</button>
+      <button id="tbPlay" title="播放">▶</button>
+      <button id="tbStop" title="停止">■</button>
+      <select id="paraPick" title="只朗讀某一段" style="display:none;max-width:220px"></select>
+      <div class="sep"></div>
+      <button id="tbDl" title="下載 WAV">下載</button>
+      <button id="tbCopy" title="複製 IPA">複製 IPA</button>
+      <div class="sep"></div>
+      <span id="status" style="font-size:12px;color:var(--dim)">引擎未就緒</span>
+      <span class="info" id="resInfo"></span>
+    </div>
+    <div id="canvas">
+      <div class="empty" id="placeholder">
+        在左欄輸入漢字、貼入推導方案，然後按「推導」。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="pop"></div>
+
+<script src="/vendor/tshet-uinh.js"></script>
+<script src="/vendor/deriver-tools.js"></script>
+<script src="/engine/espeakng.js"></script>
+<script type="module">
+import { prepareBody, toEspeak, segmentPhonemes, EXT_CAVEATS } from '/src/ipa-espeak.mjs';
+import { splitTone } from '/src/tones.mjs';
+import { trimSilence, mergeWithGap, encodeWav as encodeWavBuf } from '/src/audio.mjs';
+
+const $ = id => document.getElementById(id);
+const SR = 22050;
+let tts = null, ready = false, ctx = null, cur = null;
+let rows = [], lastSamples = null, deriver = null, rawFn = null, T = null;
+/* 當前綁定的檔案名（'' = 未綁定）。「儲存」會直接覆蓋這個檔案。 */
+let textFile = '', deriverFile = '';
+let 方案選項 = {};
+
+function log(s, cls) {
+  $('log').innerHTML += `\n<span class="${cls || ''}">${s}</span>`;
+  $('log').scrollTop = $('log').scrollHeight;
+}
+function clearLog() { $('log').innerHTML = ''; }
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+/*
+ * 全局錯誤可見化。
+ * 教訓：先前有一處 $(id + 'Val') 取到 null，out.textContent 拋 TypeError，
+ * 模組求值中斷，後面所有按鈕都沒綁上 —— 但頁面看起來正常，只是「點了沒反應」。
+ * 這類錯誤必須顯示出來，不能靜默。
+ */
+window.addEventListener('error', (e) => {
+  try { log(`✗ 頁面錯誤：${e.message}  @${e.filename || ''}:${e.lineno || ''}`, 'bad'); } catch (_) {}
+});
+window.addEventListener('unhandledrejection', (e) => {
+  try { log(`✗ 未處理的 Promise 錯誤：${e.reason && e.reason.message || e.reason}`, 'bad'); } catch (_) {}
+});
+
+/** 安全執行一段初始化；出錯就寫進日誌，不讓它拖垮整個頁面 */
+function safeInit(label, fn) {
+  try { fn(); return true; }
+  catch (e) { log(`✗ 初始化失敗 [${label}]：${e.message}`, 'bad'); console.error(label, e); return false; }
+}
+
+/* ============================ 推導器 ============================ */
+/*
+ * 推導器是「函數體」，自由變數有四個（依 tshet-uinh-deriver-tools 的定義）：
+ *   new Function("TshetUinh", "選項 = {}", "音韻地位", "字頭 = null", 方案代碼)
+ * 缺任何一個，用到它的方案就會整個拋錯。
+ */
+function makeRawFn(source) {
+  return new Function('TshetUinh', '選項', '音韻地位', '字頭', source).bind(undefined, T);
+}
+/**
+ * 包裝原始推導函數。
+ *
+ * 站點約定：方案返回**陣列**表示「僅轉寫、不發音」（通常寫在
+ * `if (!音韻地位) return [["轉寫", false]];` 這句裏，用來宣告設定項）。
+ *
+ * 注意：不要把陣列**靜默**轉成空串 —— 那樣推導失敗時頁面只顯示空白，
+ * 完全看不出原因。改成帶上 reason 回報。
+ * @returns {{ ipa: string, reason: string }}
+ */
+function runDeriver(rawFn, pos, 字頭, 選項) {
+  let out;
+  try { out = rawFn(選項, pos, 字頭); }
+  catch (e) { return { ipa: '', reason: '方案拋錯：' + e.message }; }
+  if (Array.isArray(out)) {
+    return { ipa: '', reason: '方案返回陣列（約定為「僅轉寫、不發音」）' };
+  }
+  if (out == null || out === '') {
+    /* 詳細診斷：寫進 console，方便排查 */
+    try {
+      const s = $('script').value;
+      console.warn('[runDeriver] 空值', {
+        typeofOut: typeof out,
+        選項: JSON.stringify(選項 ?? null),
+        音韻地位: String(pos),
+        字頭,
+        posType: typeof pos,
+        posIsFalsy: !pos,
+        源碼長度: s.length,
+        源碼首40: s.slice(0, 40),
+        源碼尾40: s.slice(-40),
+        rawFnIsNull: !rawFn,
+      });
+    } catch (_) {}
+    return { ipa: '', reason: `方案返回空值（typeof=${typeof out}）` };
+  }
+  return { ipa: String(out), reason: '' };
+}
+function compileDeriver(source) {
+  const fn = makeRawFn(source);
+  return (pos, 字頭 = null, 選項 = {}) => runDeriver(fn, pos, 字頭, 選項).ipa;
+}
+const OPT_KEY = () => 'opts:v2:' + $('script').value.length + ':' + $('script').value.slice(0, 60);
+function loadOptionValues() {
+  try { 方案選項 = JSON.parse(localStorage.getItem(OPT_KEY()) || '{}'); } catch (e) { 方案選項 = {}; }
+}
+function saveOptionValues() {
+  try { localStorage.setItem(OPT_KEY(), JSON.stringify(方案選項)); } catch (e) {}
+}
+
+/** 渲染方案宣告的設定項（完整格式見 推導設定.d.ts：Parameter / Newline / GroupLabel） */
+function renderOptions(source) {
+  const box = $('options');
+  let list;
+  try {
+    const raw = makeRawFn(source)(方案選項, null, null);
+    const DT = window.TshetUinhDeriverTools;
+    if (DT && DT.推導設定 && Array.isArray(raw)) {
+      const 設定 = new DT.推導設定(raw);
+      list = 設定.列表;
+      if (設定.解析錯誤 && 設定.解析錯誤.length) log('設定項解析錯誤：' + 設定.解析錯誤.join('；'), 'warn');
+    } else {
+      list = (Array.isArray(raw) ? raw : []).filter(x => Array.isArray(x) && x.length >= 2)
+        .map(([key, value]) => ({ key, value }));
+    }
+  } catch (e) {
+    box.innerHTML = `<span class="bad" style="font-size:12px">讀取設定項失敗：${esc(e.message)}</span>`;
+    return;
+  }
+  if (!list || !list.length) {
+    box.innerHTML = '<span class="dim" style="font-size:12px;color:var(--dim)">此方案沒有宣告設定項</span>';
+    return;
+  }
+  for (const o of list) if (o && o.key !== undefined && !(o.key in 方案選項)) 方案選項[o.key] = o.value;
+
+  box.innerHTML = '';
+  const params = [];
+  for (const o of list) {
+    if (!o) continue;
+    if (o.type === 'groupLabel') {
+      const g = document.createElement('div');
+      g.className = 'grp';
+      g.textContent = o.text + (o.description ? '　' + o.description : '');
+      box.appendChild(g); continue;
+    }
+    if (o.type === 'newline') { const d = document.createElement('div'); d.style.height = '2px'; box.appendChild(d); continue; }
+    if (o.key === undefined) continue;
+    params.push(o);
+
+    const cur = 方案選項[o.key];
+    const lab = document.createElement('label');
+    if (o.description) lab.title = o.description;
+    let ctl;
+    if (Array.isArray(o.options) && o.options.length) {
+      ctl = `<select data-k="${esc(o.key)}" data-json="1">` + o.options.map(op => {
+        const v = JSON.stringify(op.value);
+        return `<option value='${esc(v)}'${op.value === cur ? ' selected' : ''}>${esc(op.text ?? String(op.value))}</option>`;
+      }).join('') + '</select>';
+    } else if (typeof o.value === 'boolean') {
+      ctl = `<input type="checkbox" data-k="${esc(o.key)}"${cur ? ' checked' : ''}>`;
+    } else if (typeof o.value === 'number') {
+      ctl = `<input type="number" data-k="${esc(o.key)}" value="${cur}" style="width:80px">`;
+    } else {
+      ctl = `<input type="text" data-k="${esc(o.key)}" value="${esc(cur ?? '')}" style="width:120px">`;
+    }
+    lab.innerHTML = `${ctl} <span>${esc(o.text ?? o.key)}</span>` +
+      (o.description ? `<span style="font-size:11px;color:var(--dim)">（${esc(o.description)}）</span>` : '');
+    box.appendChild(lab);
+  }
+  box.querySelectorAll('[data-k]').forEach(el => {
+    el.onchange = () => {
+      const k = el.dataset.k;
+      const def = params.find(x => x.key === k).value;
+      if (el.dataset.json) { try { 方案選項[k] = JSON.parse(el.value); } catch (e) { 方案選項[k] = el.value; } }
+      else if (typeof def === 'boolean') 方案選項[k] = el.checked;
+      else if (typeof def === 'number') 方案選項[k] = Number(el.value);
+      else 方案選項[k] = el.value;
+      saveOptionValues();
+      log(`設定 ${k} = ${JSON.stringify(方案選項[k])}（按「推導」生效）`, 'dim');
+    };
+  });
+  const reset = document.createElement('button');
+  reset.textContent = '恢復默認';
+  reset.style.cssText = 'font-size:12px;padding:3px 10px;align-self:flex-start';
+  reset.onclick = () => { 方案選項 = {}; saveOptionValues(); renderOptions(source); log('設定項已恢復默認', 'dim'); };
+  box.appendChild(reset);
+}
+
+function setScript(src, from) {
+  if (typeof src !== 'string' || !src.trim()) {
+    log(`✗ 方案源碼為空（${from || '未知來源'}，長度 ${typeof src === 'string' ? src.length : typeof src}）`, 'bad');
+    return;
+  }
+  $('script').value = src;
+  try {
+    rawFn = makeRawFn(src);               // 保留原始函數，好回報「返回陣列」這類情況
+    deriver = compileDeriver(src);
+    $('scriptStatus').innerHTML = `<span style="color:var(--ok)">已載入${from ? '：' + esc(from) : ''}（${src.length} 字）</span>`;
+    log(`推導方案已載入${from ? '：' + from : ''}（${src.length} 字）`, 'ok');
+    loadOptionValues();
+    renderOptions(src);
+  } catch (e) {
+    rawFn = null; deriver = null;
+    $('scriptStatus').innerHTML = `<span style="color:var(--bad)">編譯失敗：${esc(e.message)}</span>`;
+    log('方案編譯失敗：' + e.message, 'bad');
+    $('options').innerHTML = '';
+  }
+}
+
+/* 多音字選擇：記在 localStorage */
+function getPick(ch, n) {
+  try { const v = parseInt(localStorage.getItem('pick:' + ch) ?? '', 10);
+        if (Number.isFinite(v) && v >= 0 && v < n) return v; } catch (e) {}
+  return 0;
+}
+function setPick(ch, i) { try { localStorage.setItem('pick:' + ch, String(i)); } catch (e) {} }
+
+/**
+ * 把輸入文本切成字。
+ *
+ * 支援「字(音韻地位)」寫法：緊跟在字後面的括號，**只要內容能被
+ * 音韻地位.from描述 解析**，就當作該字的注音 —— 該字讀音被固定，
+ * 結果區顯示為綠色，且括號內容不出現在結果裏。
+ *
+ * 爲什麼用「能否解析」而不是正則：正則很難窮舉音韻地位的所有合法組合
+ * （母呼等類韻聲各有省略），而 from描述 本身就是判準。
+ * 好處是「（辛棄疾）」這類括號內容解析不了，自然不會被誤認。
+ *
+ * @returns {Array<{br?:boolean, ch?:string, 地位?:string}>}
+ */
+const posCache = new Map();
+
+/**
+ * 嘗試把一個描述解析成音韻地位，失敗時做**有限的**修補。
+ *
+ * 爲什麼要修補：人手寫的時候常省掉「類」。例如 `幫三虞上`，
+ * 系統要求寫成 `幫三C虞上`，直接 from描述 會拋
+ * 「missing 類 (should be C)」。可是人寫 `幫三虞上` 意思很明確。
+ *
+ * 修補策略只有一條：在「等」後面補類別，候選 C → B → A，逐個試。
+ * 只在能解析時才採用，並且**回報用了哪個**，不靜默猜測。
+ * 若多個候選都能解析（罕見），取第一個並提醒可能有歧義。
+ *
+ * @returns {{pos:object, used:string, repaired:boolean, ambiguous:boolean}|null}
+ */
+function resolvePosition(s) {
+  const key = String(s).trim();
+  if (posCache.has(key)) return posCache.get(key);
+  let result = null;
+  try {
+    result = { pos: T.音韻地位.from描述(key), used: key, repaired: false, ambiguous: false };
+  } catch (e) {
+    /* 只在「等」後面補類別 */
+    const m = key.match(/^(.*?[一二三四])(.*)$/);
+    if (m) {
+      const hits = [];
+      for (const k of ['C', 'B', 'A']) {
+        const cand = m[1] + k + m[2];
+        try { hits.push({ pos: T.音韻地位.from描述(cand), used: cand }); } catch (e2) {}
+      }
+      if (hits.length) {
+        result = { ...hits[0], repaired: true, ambiguous: hits.length > 1, alternatives: hits.map(h => h.used) };
+      }
+    }
+  }
+  posCache.set(key, result);
+  return result;
+}
+function isValidPosition(s) { return !!resolvePosition(s); }
+/** 是不是漢字（含擴展區）—— 只有漢字才成爲字格 */
+const CJK_RE = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\u{20000}-\u{2a6df}\u{2a700}-\u{2ebef}]/u;
+/** 括號類 —— **只丟這些**，其餘標點保留作停頓 */
+const BRACKET_RE = /[()（）\[\]［］{}｛｝「」『』【】〈〉《》‘’“”]/;
+/** 短停頓（逗號類） */
+const PAUSE_SHORT_RE = /[，,、·・]/;
+/** 長停頓（句末類）—— 同時造成換行 */
+const PAUSE_LONG_RE = /[。.！!？?；;：:…—～~]/;
+/** 行內空白（空格、製表、全角空格）→ 微停頓 */
+const SPACE_RE = /[ \t\u3000]/;
+
+/**
+ * 把輸入文本切成 token。
+ *
+ * token 形態：
+ *   {ch, 地位?}               一個要發音的字；有 地位 表示括號注音
+ *   {pause:'short'}           短停頓（逗號類）
+ *   {br:true, pause:'long'}   換行 + 長停頓（句末類）
+ *   {para:true}               分段（空行）
+ *
+ * 「字(音韻地位)」：緊跟字後的括號，內容**能被 音韻地位.from描述 解析**就算注音
+ * —— 用實際解析而不是正則當判準，所以「（辛棄疾）」自然不會被誤認。
+ *
+ * ⚠ 標點**不再一律丟掉**。早先爲了不讓「（辛棄疾）」的括號變成字格，
+ *   把非漢字全濾了，結果逗號句號一起消失，斷句變得莫名其妙。
+ *   現在只丟括號本身，逗號留短停頓、句末留換行+長停頓。
+ *
+ * @returns {Array<object>}
+ */
+function parseAnnotated(text) {
+  const out = [];
+  /* 必須按**碼位**遍歷，不能用 s[i] ——
+     s[i] 取的是 UTF-16 碼元，擴展區漢字（𠀀 U+20000 這類）會被拆成
+     兩個孤立代理項，CJK_RE 認不出，整箇被丢掉。 */
+  const chars = Array.from(String(text));
+  let i = 0;
+  while (i < chars.length) {
+    const ch = chars[i];
+
+    /* `# PAGEEND` 之類的分頁標記：整行吃掉，只留一個分段 */
+    if (ch === '#' && (i === 0 || chars[i - 1] === '\n')) {
+      while (i < chars.length && chars[i] !== '\n') i++;
+      out.push({ para: true });
+      continue;
+    }
+
+    /* 空行 → 分段 */
+    if (ch === '\n') {
+      let j = i;
+      while (j < chars.length && /[ \t\r]/.test(chars[j])) j++;
+      if (chars[j] === '\n' || j >= chars.length) {
+        /* 連續換行或到末尾：收成一個分段 */
+        while (j < chars.length && /[\s]/.test(chars[j])) j++;
+        out.push({ para: true });
+        i = j;
+        continue;
+      }
+      out.push({ br: true });
+      i++;
+      continue;
+    }
+
+    if (PAUSE_LONG_RE.test(ch)) { out.push({ br: true, pause: 'long' }); i++; continue; }
+    if (PAUSE_SHORT_RE.test(ch)) { out.push({ pause: 'short' }); i++; continue; }
+
+    /*
+     * 行內空白 → 微停頓（比逗號短）。
+     * 但兩種空白不算：
+     *   · 行首縮排（前面沒有字）
+     *   · 行尾殘留（後面就是換行或文末）
+     * 判法是看「上一個有效 token」和「下一個非空白字符」。
+     */
+    if (SPACE_RE.test(ch)) {
+      let j = i;
+      while (j < chars.length && SPACE_RE.test(chars[j])) j++;
+      const nextIsBreak = j >= chars.length || chars[j] === '\n' || chars[j] === '\r';
+      const prev = out.length ? out[out.length - 1] : null;
+      const atLineStart = !prev || prev.br || prev.para;
+      if (!nextIsBreak && !atLineStart) out.push({ pause: 'tiny' });
+      i = j;
+      continue;
+    }
+
+    if (BRACKET_RE.test(ch)) { i++; continue; }        // 括號本身不佔字格
+    if (!CJK_RE.test(ch)) { i++; continue; }           // 西文、其他符號忽略
+
+    /* 括號注音 */
+    const nx = chars[i + 1];
+    if (nx === '(' || nx === '（') {
+      const close = nx === '(' ? ')' : '）';
+      const end = chars.indexOf(close, i + 2);
+      if (end > 0) {
+        const inner = chars.slice(i + 2, end).join('').trim();
+        if (inner && isValidPosition(inner)) {
+          /* at/end 是**碼位下標**，供「改讀音後寫回源文本」定位用 */
+          out.push({ ch, 地位: inner, at: i, end: end + 1 });
+          i = end + 1;
+          continue;
+        }
+      }
+    }
+    /* 借字：`说<悦>` —— 用「悦」的音韻地位給「說」 */
+    if (nx === '<' || nx === '〈') {
+      const close = nx === '<' ? '>' : '〉';
+      const end = chars.indexOf(close, i + 2);
+      if (end === i + 2) {
+        /* 空 <> 不合法，當普通字符 */
+      } else if (end > 0) {
+        const inner = chars.slice(i + 2, end).join('').trim();
+        if ([...inner].length === 1 && CJK_RE.test(inner)) {
+          out.push({ ch, 借字: inner, at: i, end: end + 1 });
+          i = end + 1;
+          continue;
+        }
+      }
+    }
+    out.push({ ch, at: i, end: i + 1 });
+    i++;
+  }
+
+  /* 收尾：連續的分段標記合併成一個，首尾的分段去掉 ——
+     否則 `\n\n# PAGEEND\n\n` 這種會產生兩個空段。 */
+  const cleaned = [];
+  for (const t of out) {
+    if (t.para && cleaned.length && cleaned[cleaned.length - 1].para) continue;
+    cleaned.push(t);
+  }
+  while (cleaned.length && cleaned[0].para) cleaned.shift();
+  while (cleaned.length && cleaned[cleaned.length - 1].para) cleaned.pop();
+  return cleaned;
+}
+
+/**
+ * 查某字的全部音韻地位（三層：廣韻 → 補充字表 → 異體字表）。
+ * 抽出來是為了讓「借字」語法 `说<悦>` 能複用同一套查找。
+ *
+ * @returns {{來源:'gw'|'fb'|'variant', 經由?:string, rows:Array<{描述,反切,釋義}>}|null}
+ */
+function lookupReadings(ch) {
+  const raw = T.資料.query字頭(ch) || [];
+  if (raw.length) {
+    return {
+      來源: 'gw',
+      rows: raw.map(r => ({
+        描述: 描述串(r), 反切: r.反切 || '',
+        釋義: String(r.釋義 || '').slice(0, 120),
+      })).filter(x => x.描述),
+    };
+  }
+  const fb = fallbackReadings(ch);
+  if (fb && fb.length) {
+    return { 來源: 'fb', rows: fb.map(x => ({ 描述: x.描述, 反切: x.反切 || '', 釋義: x.釋義 || '' })) };
+  }
+  /* 異體字：找到第一個查得到的同組字就用它 */
+  for (const v of variantsOf(ch)) {
+    const g = T.資料.query字頭(v) || [];
+    if (g.length) {
+      return {
+        來源: 'variant', 經由: v,
+        rows: g.map(r => ({
+          描述: 描述串(r), 反切: r.反切 || '',
+          釋義: String(r.釋義 || '').slice(0, 120),
+        })).filter(x => x.描述),
+      };
+    }
+    const f = fallbackReadings(v);
+    if (f && f.length) {
+      return { 來源: 'variant', 經由: v, rows: f.map(x => ({ 描述: x.描述, 反切: x.反切 || '', 釋義: x.釋義 || '' })) };
+    }
+  }
+  return null;
+}
+
+/**
+ * 逐字推導。一個字常有多個讀音，而且第一條未必是常用音 ——
+ * 例如「列」的 [0] 是訛字條目（知合三虞平），[1] 才是正常的「來開三仙入」。
+ * 所以全部取出，由使用者點字選擇。
+ * 有括號注音的則直接固定成那一個，不列其他讀音。
+ */
+function deriveAll() {
+  if (!deriver) { log('先載入推導方案', 'warn'); return null; }
+  if (!T) { log('tshet-uinh 未載入', 'bad'); return null; }
+  const out = [];
+  let fixedN = 0, guessN = 0, conflictN = 0, paraN = 0, borrowN = 0;
+  for (const tok of parseAnnotated($('text').value)) {
+    if (tok.para) { paraN++; out.push({ para: true }); continue; }
+    if (tok.br) { out.push({ br: true, pause: tok.pause }); continue; }
+    if (tok.pause) { out.push({ pause: tok.pause }); continue; }
+    const ch = tok.ch;
+    const at = tok.at, end = tok.end;    // 源文本里的碼位区间，供改讀音後寫回
+
+    /* ⓪ 借字語法 `说<悦>` —— 直接用「悦」的音韻地位，該字**標紅**。
+       字頭仍傳本字（說），因為要發音、要顯示的都是本字，借來的只是音韻地位。 */
+    if (tok.借字) {
+      const bsrc = lookupReadings(tok.借字);
+      if (!bsrc || !bsrc.rows.length) {
+        log(`⚠ ${ch}<${tok.借字}>：「${tok.借字}」也查不到音韻地位`, 'warn');
+        out.push({ 字: ch, at, end, readings: [], err: `借字「${tok.借字}」查不到音韻地位` });
+        continue;
+      }
+      const readings = bsrc.rows.map(x => {
+        const res0 = resolvePosition(x.描述);
+        if (!res0) return null;
+        const res = rawFn ? runDeriver(rawFn, res0.pos, ch, 方案選項) : { ipa: '', reason: '方案未就緒' };
+        return { 描述: res0.used, 反切: x.反切 || '', 釋義: x.釋義 || '', ipa: res.ipa, err: res.reason };
+      }).filter(Boolean);
+      if (!readings.length) {
+        out.push({ 字: ch, at, end, readings: [], err: `借字「${tok.借字}」的音韻地位無法解析` });
+        continue;
+      }
+      out.push({ 字: ch, at, end, borrow: true, 借字: tok.借字, readings, pick: 0 });
+      borrowN++;
+      continue;
+    }
+
+    /* ① 括號注音 → 固定讀音，連廣韻都不用查（生僻字也能發音） */
+    if (tok.地位) {
+      const res0 = resolvePosition(tok.地位);
+      if (res0) {
+        /* 與廣韻是否相合：該字在廣韻裏若有多個地位，看有沒有對得上的 */
+        const gw = 廣韻描述(ch);
+        const fb = fallbackReadings(ch);
+        const inGw = gw.includes(res0.used);
+        /* 「完全不合」= 廣韻有這個字，但註明的地位一個都對不上 */
+        const conflict = gw.length > 0 && !inGw;
+        if (res0.repaired) {
+          log(`· ${ch}(${tok.地位}) 補全為 ${res0.used}` +
+              (res0.ambiguous ? `　← 注意：${(res0.alternatives || []).join(' / ')} 都能解析，取了第一個` : ''), 'dim');
+        }
+        if (conflict) log(`⚠ ${ch} 註明 ${res0.used}，但廣韻作 ${gw.join(' / ')} —— 兩者不合`, 'warn');
+        const res = rawFn ? runDeriver(rawFn, res0.pos, ch, 方案選項)
+                          : { ipa: '', reason: '方案未就緒' };
+        /* 以括號註明的為主，但**同時列出廣韻的其他音韻地位** ——
+           否則綠色字點開只看得到當前這一個，想換就得手打。
+           （顏色仍按「是否固定」決定，不因多讀音而變藍。） */
+        const readings = [{
+          描述: res0.used, 反切: '', 釋義: conflict ? `（與廣韻不合：${gw.join('／')}）` : '（由括號註明）',
+          ipa: res.ipa, err: res.reason,
+        }];
+        for (const r of (T.資料.query字頭(ch) || [])) {
+          const d = 描述串(r);
+          if (!d || readings.some(x => x.描述 === d)) continue;
+          const p2 = resolvePosition(d);
+          if (!p2) continue;
+          const r2 = rawFn ? runDeriver(rawFn, p2.pos, ch, 方案選項) : { ipa: '', reason: '' };
+          readings.push({ 描述: d, 反切: r.反切, 釋義: String(r.釋義 || '').slice(0, 120), ipa: r2.ipa, err: r2.reason });
+        }
+        out.push({
+          字: ch, at, end, fixed: !conflict, conflict,
+          原註: tok.地位, 實用: res0.used, 補全: res0.repaired,
+          readings, pick: 0,
+        });
+        if (!conflict) fixedN++;
+        continue;
+      }
+      log(`⚠ ${ch}(${tok.地位}) 不是合法的音韻地位，改用廣韻讀音`, 'warn');
+    }
+
+    /* ② 普通字 → 三層查找 */
+    const src = lookupReadings(ch);
+    if (!src || !src.rows.length) {
+      out.push({ 字: ch, at, end, readings: [], err: '廣韻、補充字表、異體字表都查不到' });
+      continue;
+    }
+    const readings = [];
+    for (const x of src.rows) {
+      const res0 = resolvePosition(x.描述);
+      if (!res0) continue;
+      const res = rawFn ? runDeriver(rawFn, res0.pos, ch, 方案選項) : { ipa: '', reason: '方案未就緒' };
+      readings.push({ 描述: res0.used, 反切: x.反切 || '', 釋義: x.釋義 || '', ipa: res.ipa, err: res.reason });
+    }
+    if (!readings.length) { out.push({ 字: ch, at, end, readings: [], err: '無法建構音韻地位' }); continue; }
+    const row = { 字: ch, at, end, readings, pick: getPick(ch, readings.length) };
+    if (src.來源 === 'fb' || src.來源 === 'variant') {
+      row.guess = true;
+      row.經由 = src.經由 || '';
+      guessN++;
+    }
+    out.push(row);
+  }
+  if (fixedN) log(`其中 ${fixedN} 個字由括號註明音韻地位，讀音已固定`, 'ok');
+  if (borrowN) log(`其中 ${borrowN} 個字借用他字的音韻地位（<…>，紅色）`, 'ok');
+  if (guessN) log(`其中 ${guessN} 個字不在廣韻，已由補充字表類推（黃色）`, 'warn');
+  if (paraN) log(`共 ${paraN + 1} 段（空行分段，右欄可單獨朗讀某段）`, 'dim');
+  return out;
+}
+function 描述串(raw) {
+  const o = raw && raw.音韻地位 ? raw.音韻地位 : raw;
+  if (!o) return '';
+  return [o.母, o.呼, o.等, o.類, o.韻, o.聲].filter(v => v != null && v !== '').join('');
+}
+
+/* ---------- 補充字表（類推用）----------
+ * 《廣韻》字表收字有限，像「窗」就查不到（「窻」才有）。
+ * 站點對這種字能「類推」，靠的是另一張收字更廣的補充表 ——
+ * 已從站點的 WASM 裏提取到 reference/site-fallback-table.json。
+ * 凡靠它查到的字，結果區標**黃色**，表示是聯想來的，不是廣韻本字。 */
+let FALLBACK = null;
+async function loadFallback() {
+  try {
+    const r = await fetch('/reference/site-fallback-table.json');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    FALLBACK = await r.json();
+    log(`補充字表已載入 ✓ ${Object.keys(FALLBACK).length} 字（用於類推）`, 'ok');
+  } catch (e) {
+    FALLBACK = null;
+    log('補充字表未載入（不影響廣韻內的字）：' + e.message, 'dim');
+  }
+}
+function fallbackReadings(ch) { return FALLBACK ? (FALLBACK[ch] || null) : null; }
+
+/* ---------- 異體字／簡繁表 ----------
+ * 站點用它做兩件事：簡化字轉繁體（才查得到廣韻），以及
+ * 對廣韻沒有的字找同組異體來「類推」——
+ * 例如 窗 → 窻（同組），窻 在廣韻裏作「初二江平」。 */
+let VARIANTS = null;
+async function loadVariants() {
+  try {
+    const r = await fetch('/reference/site-variant-table.json');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    VARIANTS = await r.json();
+    log(`異體字表已載入 ✓ ${Object.keys(VARIANTS).length} 字（簡繁／類推）`, 'ok');
+  } catch (e) {
+    VARIANTS = null;
+    log('異體字表未載入：' + e.message, 'dim');
+  }
+}
+function variantsOf(ch) { return VARIANTS ? (VARIANTS[ch] || []) : []; }
+
+/* 廣韻裏該字的所有音韻地位描述 */
+function 廣韻描述(ch) {
+  return (T.資料.query字頭(ch) || []).map(描述串).filter(Boolean);
+}
+function currentReading(row) {
+  if (!row.readings || !row.readings.length) return null;
+  return row.readings[Math.min(row.pick ?? 0, row.readings.length - 1)];
+}
+
+/* ============================ 引擎 ============================ */
+function initEngine() {
+  if (typeof eSpeakNG === 'undefined') { log('找不到 eSpeakNG', 'bad'); return; }
+  ready = false;
+  resetEngineSettings();                 // 新 worker，设置缓存作废
+  $('status').textContent = '引擎載入中…';
+  try { tts && tts.delete && tts.delete(); } catch (e) {}
+  tts = new eSpeakNG('/engine/espeakng.worker.js', () => {
+    ready = true;
+    $('status').innerHTML = '<span style="color:var(--ok)">引擎已就緒</span>';
+    log(`引擎就緒 ✓（${SR} Hz）`, 'ok');
+    applyVoice();
+  });
+}
+function applyVoice() {
+  if (!ready) return;
+  const preset = $('voicePreset').value;
+  const v = preset === 'plain' ? 'ipa' : (preset === 'male20' ? 'ipa+male20' : 'ipa+wide80');
+  $('variant').value = v;
+  appliedVoice = null;                   // 强制下次重新下发嗓音
+  try { applyEngineSettings(appliedRate ?? Number($('rateR').value)); } catch (e) {}
+}
+$('voicePreset').onchange = applyVoice;
+$('variant').onchange = () => { $('voicePreset').value = $('variant').value === 'ipa' ? 'plain' : 'wide80'; applyVoice(); };
+
+/*
+ * 引擎設置的緩存：**只在變化時才下發**。
+ *
+ * ⚠ 這是長文本 OOM 的第二個根因（第一個是定時器泄漏）。
+ *   原先每合成一個字都調 set_rate/set_voice/set_pitch ——
+ *   而 espeak 的 set_voice 會**重新加載整個語音數據**。
+ *   3387 個字就是 3387 次重載，WASM 堆不斷增長且從不回收，瀏覽器直接 OOM。
+ *   （Node 下更狠：speak.mjs 每次合成還 new 一個 worker。）
+ */
+let appliedRate = null, appliedVoice = null, appliedPitch = null;
+function applyEngineSettings(rate) {
+  if (!ready) return;
+  if (appliedRate !== rate) { tts.set_rate(rate); appliedRate = rate; }
+  const v = $('variant').value;
+  if (appliedVoice !== v) { tts.set_voice(v); appliedVoice = v; }
+  const p = Number($('pitch').value);
+  if (appliedPitch !== p) { tts.set_pitch(p); appliedPitch = p; }
+}
+/** 换了 worker 或换了嗓音就把緩存清掉，强制下次重新下发 */
+function resetEngineSettings() { appliedRate = appliedVoice = appliedPitch = null; }
+
+/**
+ * 重建引擎。
+ *
+ * ⚠ 這是長文本 OOM 的**第三個、也是最根本的**根因。
+ *   這個 espeak 構建的 WASM 堆是**固定 16 MB、不允許增長**的，
+ *   每次 synthesize 都在裏面分配。跑到一定次數後分配不出來，就
+ *   `Aborted(OOM)` + `abortOnCannotGrowMemory`，之後引擎徹底啞掉
+ *   （不報錯，只是再也沒有輸出 —— 所以很容易誤判成「跑得好好的」）。
+ *
+ *   注意 `new eSpeakNGWorker()` **不能**重置堆，只有重建整個 Module 才行；
+ *   瀏覽器裏就是重建 Worker。所以長文本每合成若干字就換一個引擎。
+ */
+function rebuildEngine() {
+  return new Promise(resolve => {
+    ready = false;
+    resetEngineSettings();
+    try { tts && tts.delete && tts.delete(); } catch (e) {}
+    tts = new eSpeakNG('/engine/espeakng.worker.js', () => {
+      ready = true;
+      applyVoice();
+      resolve();
+    });
+  });
+}
+/** 每合成这么多字就重建一次引擎（16 MB 堆撑不了太久，留足余量） */
+const REBUILD_EVERY = 400;
+
+function synth(text, rate) {
+  return new Promise(resolve => {
+    if (!ready) { resolve(null); return; }
+    applyEngineSettings(rate);
+    let chunks = []; let n = 0, peak = 0, settled = false, timer = 0;
+    const finish = (runaway) => {
+      if (settled) return; settled = true;
+      if (timer) { clearTimeout(timer); timer = 0; }     // ← 关键：别留待决定时器
+      const s = new Float32Array(n); let p = 0;
+      for (const c of chunks) { s.set(c, p); p += c.length; }
+      chunks = null;                                     // ← 释放，尽早可回收
+      resolve({ samples: s, n, peak, runaway: !!runaway });
+    };
+    try {
+      tts.synthesize(text, (samples) => {
+        if (!samples) { finish(false); return; }
+        const f = new Float32Array(samples.buffer || samples);
+        const half = f.length >> 1;
+        const a = new Float32Array(half);
+        for (let i = 0; i < half; i++) { const v = f[i * 2]; a[i] = v; const av = v < 0 ? -v : v; if (av > peak) peak = av; }
+        if (!chunks) return;
+        chunks.push(a); n += half;
+        if (n > SR * 30) finish(true);
+      });
+    } catch (e) { log('synthesize 異常：' + e.message, 'bad'); finish(false); }
+    timer = setTimeout(() => finish(false), 10000);
+  });
+}
+function play(samples) {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+  const buf = ctx.createBuffer(1, samples.length, SR);
+  buf.copyToChannel(samples, 0);
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination); src.start();
+  cur = src; return src;
+}
+
+/* 三位調語速：實測二位/三位調本來等長，降速只會拖長，故預設不降 */
+function rateForTone(tone, rate) {
+  if (!$('autoRate').checked || tone.length < 3) return rate;
+  const f = Number($('threeFactor').value) || 1;
+  return f === 1 ? rate : Math.max(60, Math.round(rate * f));
+}
+
+function espOf(ipa) {
+  const { body, tone } = splitTone(ipa);
+  const prep = prepareBody(body, $('zeroInit').value);
+  return { esp: prep.text + tone, prep, tone };
+}
+
+async function speakOne(ipa, label) {
+  const { esp, prep, tone } = espOf(ipa);
+  const rate = Number($('rateR').value);
+  const r = await synth('[[ ' + esp + ' _: ]]', rateForTone(tone, rate));
+  if (!r || !r.n) { log(`✗ ${label}  無輸出`, 'bad'); return null; }
+  log(`✓ ${label}  ${ipa} → ${esp}  ${String(r.n).padStart(6)}採樣` +
+      (prep.dropped.length ? `  丟棄${JSON.stringify(prep.dropped)}` : ''), 'ok');
+  play(r.samples);
+  return r;
+}
+
+/*
+ * 逐字合成並拼接。
+ *
+ * @param {number} [paraIndex] 只唸某一段（0 起算）；不給則唸全部。
+ *
+ * 停頓按標點處理：逗號類短停頓、句末類長停頓、分段更長。
+ * 長文本要點：每合成一字就把 samples 裁剪後存起來，原 samples 立即丟棄；
+ * 並每 20 字回報一次進度，讓使用者知道沒卡死。
+ */
+/*
+ * 朗讀任務的代號。
+ *
+ * 早先用的是布爾 stopRequested，但有個問題：開始新朗讀時把它設回 false，
+ * **上一次的循環也會看到 false 而繼續跑** —— 結果兩次朗讀同時合成，
+ * 日誌交錯、音頻亂接。用單調遞增的代號就沒有這個問題：
+ * 每次開新任務就 ++，舊循環發現自己的代號過期就自己退出。
+ */
+let speakGen = 0;
+/*
+ * 合成結果與「它是什麼」的簽名。
+ * 有了簽名，▶ 才能判斷該重播還是該重合成 ——
+ * 否則「只唸了第 2 段」之後再按 ▶，會以爲 lastSamples 是全文而重播第 2 段。
+ */
+let lastSig = '';   // 上次合成的「簽名」，見 speakSig
+
+function speakSig(paraIndex) {
+  const pick = paraIndex == null ? '' : String(paraIndex);
+  return [rows.length, paraIndex == null ? 'all' : pick, $('rateR').value, $('pitch').value,
+    $('variant').value, $('zeroInit').value, $('autoRate').checked, $('threeFactor').value,
+    rows.map(r => r.字 ? r.字 + (currentReading(r) || {}).ipa : (r.br ? '/' : r.para ? '¶' : ',')).join('')].join('|');
+}
+
+async function speakAll(paraIndex) {
+  if (!ready) { log('引擎尚未就緒', 'warn'); return; }
+  const para = paraIndex == null ? null : paras[paraIndex];
+  const list = para ? para.rows : rows;
+  if (!list || !list.length) { log('沒有可唸的內容', 'warn'); return; }
+
+  const myGen = ++speakGen;      // 作廢上一次未跑完的朗讀
+  const segs = [];
+  let okN = 0, badN = 0, done = 0;
+  const total = list.filter(r => r.字).length;
+  const gapMs = Number($('gapR').value);
+  /*
+   * 各級停頓時長。微停頓（行內空格）取 gapMs 但**上限 60ms** ——
+   * 它比逗號短，且不該隨「字間隔」滑條無限變大。
+   */
+  const PAUSE = {
+    tiny: Math.min(Math.max(gapMs, 30), 60),
+    short: Math.max(gapMs, 120),
+    long: Math.max(gapMs, 300),
+    para: Math.max(gapMs, 500),
+  };
+  const rate = Number($('rateR').value);
+  const t0 = Date.now();
+
+  log(`— 開始朗讀${para ? `第 ${paraIndex + 1} 段` : ''}，共 ${total} 字 —`, 'dim');
+  for (const row of list) {
+    if (myGen !== speakGen) { log('⏹ 已被新的朗讀取代', 'warn'); return; }
+    if (row.para) { segs.push(new Float32Array(Math.round(SR * PAUSE.para / 1000))); continue; }
+    if (row.pause) { segs.push(new Float32Array(Math.round(SR * (PAUSE[row.pause] || gapMs) / 1000))); continue; }
+    if (row.br) { segs.push(new Float32Array(Math.round(SR * PAUSE.long / 1000))); continue; }
+    const r = currentReading(row);
+    if (!r || !r.ipa) { badN++; continue; }
+    const { esp, prep, tone } = espOf(r.ipa);
+    /* 每 REBUILD_EVERY 字换一个引擎 —— WASM 堆只有 16 MB 且不可增长 */
+    if (done > 0 && done % REBUILD_EVERY === 0) {
+      log(`  …已合成 ${done} 字，重建引擎以释放 WASM 堆`, 'dim');
+      $('status').textContent = '重建引擎…';
+      await rebuildEngine();
+      $('status').innerHTML = '<span style="color:var(--ok)">引擎已就緒</span>';
+      if (myGen !== speakGen) { log('⏹ 已被新的朗讀取代', 'warn'); return; }
+    }
+    const s = await synth('[[ ' + esp + ' _: ]]', rateForTone(tone, rate));
+    if (!s || !s.n) { log(`✗ ${row.字}  ${r.ipa} → ${esp}  無輸出`, 'bad'); badN++; continue; }
+    okN++; done++;
+    const trimmed = trimSilence(s.samples, { sr: SR });
+    segs.push(trimmed);
+    if (done % 20 === 0) log(`  …已合成 ${done}/${total} 字`, 'dim');
+    if (badN && !r.err) { /* 静默 */ }
+  }
+  if (!segs.length) { log('全部無輸出', 'bad'); return; }
+  /* 字間隔已由停頓段承擔，這裏不再額外加 —— 否則每個字後面都插一次 */
+  const merged = mergeWithGap(segs, 0, SR);
+  lastSamples = merged;
+  lastSig = speakSig(paraIndex);
+  play(merged);
+  log(`\n合計 ${okN} 字成功${badN ? `、${badN} 字失敗` : ''}，` +
+      `${(merged.length / SR).toFixed(2)} 秒，耗時 ${((Date.now() - t0) / 1000).toFixed(1)}s`, 'ok');
+}
+
+/* ============================ 右欄渲染 ============================ */
+/** 把 rows 切成段落（{para:true} 爲界）；同時供「只唸某段」用 */
+let paras = [];
+function splitParas() {
+  paras = [];
+  let cur = { rows: [] };
+  for (const row of rows) {
+    if (row.para) { if (cur.rows.length) paras.push(cur); cur = { rows: [] }; continue; }
+    cur.rows.push(row);
+  }
+  if (cur.rows.length) paras.push(cur);
+  return paras;
+}
+
+function renderCanvas() {
+  const cv = $('canvas');
+  if (!rows.length) {
+    cv.innerHTML = '<div class="empty" id="placeholder">在左欄輸入漢字、貼入推導方案，然後按「推導」。</div>';
+    $('resInfo').textContent = '';
+    renderParaMenu();
+    return;
+  }
+  splitParas();
+  const showIpa = $('showIpa').checked, showPhon = $('showPhon').checked, onlyBad = $('hideUnknown').checked;
+  const frag = document.createDocumentFragment();
+  const leg = document.createElement('div');
+  leg.className = 'legend';
+  leg.innerHTML = `<b style="color:var(--multi)">藍</b>＝多音字　` +
+    `<b style="color:var(--fixed)">綠</b>＝括號 <code>字(音韻地位)</code> 固定　` +
+    `<b style="color:var(--warn)">黃</b>＝不在廣韻、由補充字表類推　` +
+    `<b style="color:var(--bad)">紅</b>＝查不到，或括號所註與廣韻完全不合　` +
+    `灰＝單一讀音　<b>點任何字</b>都能看它的全部音韻地位`;
+  frag.appendChild(leg);
+
+  let line = document.createElement('div'); line.className = 'line';
+  let okN = 0, badN = 0, multiN = 0, fixedN = 0, guessN = 0, conflictN = 0;
+  let paraIdx = -1;
+  /* 只有多於一段時才加段落外框；單段加「段落 1」是噪音。
+     注意第一段前面沒有 {para} 標記，所以要**先**開一個框，
+     不能等遇到 {para} 才開 —— 否則第一段永遠沒有自己的框。 */
+  const multiPara = paras.length > 1;
+  let box = null;
+  const openPara = () => {
+    paraIdx++;
+    if (!multiPara) { box = null; line = document.createElement('div'); line.className = 'line'; frag.appendChild(line); return; }
+    box = document.createElement('div');
+    box.className = 'para';
+    const hd = document.createElement('div');
+    hd.className = 'para-hd';
+    hd.innerHTML = `<span>段落 ${paraIdx + 1}</span>`;
+    const btn = document.createElement('button');
+    btn.textContent = '▶ 只唸這段';
+    const idx = paraIdx;
+    btn.onclick = () => { log(`— 只唸第 ${idx + 1} 段 —`, 'dim'); speakAll(idx); };
+    hd.appendChild(btn);
+    box.appendChild(hd);
+    line = document.createElement('div'); line.className = 'line';
+    box.appendChild(line);
+    frag.appendChild(box);
+  };
+  openPara();
+
+  for (const row of rows) {
+    /* 分段：另起一塊 */
+    if (row.para) { openPara(); continue; }
+    if (row.br) {
+      /* 句末標點：先在本行末尾留一個長停頓記號，再換行 */
+      if (row.pause === 'long') {
+        const sp = document.createElement('span');
+        sp.className = 'pause long';
+        sp.title = '句末停頓';
+        line.appendChild(sp);
+      }
+      line = document.createElement('div'); line.className = 'line';
+      (box || frag).appendChild(line);
+      continue;
+    }
+    if (row.pause) {
+      const sp = document.createElement('span');
+      sp.className = 'pause' + (row.pause === 'long' ? ' long' : row.pause === 'short' ? ' short' : '');
+      sp.title = row.pause === 'long' ? '句末停頓' : row.pause === 'short' ? '短停頓' : '微停頓（空格）';
+      line.appendChild(sp);
+      continue;
+    }
+    const r = currentReading(row);
+    const failed = !r || !r.ipa;
+    if (failed) badN++; else okN++;
+    if (onlyBad && !failed) continue;
+    const isMulti = !row.fixed && !row.borrow && !row.guess && !row.conflict
+      && row.readings && row.readings.length > 1;
+    if (isMulti) multiN++;
+    if (row.fixed) fixedN++;
+    if (row.guess) guessN++;
+    if (row.conflict) conflictN++;
+
+    const cell = document.createElement('div');
+    cell.className = 'cell'
+      + (isMulti ? ' multi' : '')
+      + (row.fixed ? ' fixed' : '')
+      + (row.borrow ? ' borrow' : '')
+      + (row.guess ? ' guess' : '')
+      + (row.conflict || failed ? ' err' : '');
+    cell.dataset.ch = row.字;
+
+    let ipaLines = [];
+    if (!failed) {
+      if (showIpa) ipaLines.push(esc(r.ipa));
+      if (showPhon) {
+        const { esp } = espOf(r.ipa);
+        ipaLines.push(esc(segmentPhonemes(esp.replace(/\d+$/, ''))));
+      }
+    } else {
+      ipaLines.push(esc((r && r.err) ? '✗' : '—'));
+    }
+    const badge = isMulti ? `<span class="badge">${row.readings.length}</span>` : '';
+    cell.innerHTML = `<div class="ipa">${ipaLines.join('<br>')}</div><div class="ch">${esc(row.字)}</div>${badge}`;
+
+    if (isMulti) {
+      cell.title = (r && r.err ? '✗ ' + r.err + '\n' : '') +
+        `${row.readings.length} 個音韻地位，點擊選擇（會寫回原文）`;
+      cell.onclick = (ev) => openPicker(row, cell, ev);
+    } else if (row.borrow) {
+      cell.title = `借用「${row.借字}」的音韻地位：${r ? r.描述 : ''}` +
+        (row.readings.length > 1 ? `（${row.readings.length} 個，點擊選擇）` : '') +
+        (r && r.err ? '\n✗ ' + r.err : '') + '\n（點擊看全部音韻地位）';
+      cell.onclick = (ev) => openPicker(row, cell, ev);
+    } else if (row.guess) {
+      cell.title = (row.經由
+        ? `不在《廣韻》，經異體字「${row.經由}」類推：${r ? r.描述 : ''}`
+        : `不在《廣韻》字表，由補充字表類推：${r ? r.描述 : ''}`) +
+        (r && r.err ? '\n✗ ' + r.err : '') + '\n（點擊看全部音韻地位）';
+      cell.onclick = (ev) => openPicker(row, cell, ev);
+    } else if (row.conflict) {
+      cell.title = `✗ 括號註明 ${row.實用}，但《廣韻》作 ${(r && r.釋義) || ''} —— 兩者不合` +
+        (r && r.err ? '\n' + r.err : '') + '\n（點擊看全部音韻地位）';
+      cell.onclick = (ev) => openPicker(row, cell, ev);
+    } else if (row.fixed) {
+      cell.title = `已由括號固定：${r ? r.描述 : ''}` +
+        (row.補全 ? `\n（原寫 ${row.原註}，自動補全類別）` : '') +
+        (r && r.err ? '\n✗ ' + r.err : '') + '\n（點擊看全部音韻地位）';
+      cell.onclick = (ev) => openPicker(row, cell, ev);
+    } else if (r) {
+      cell.title = (r.err ? '✗ ' + r.err + '\n' : '') +
+        `${r.描述}${r.反切 ? '　反切：' + r.反切 : ''}` +
+        '\n（點擊看全部音韻地位）';
+      cell.onclick = (ev) => openPicker(row, cell, ev);
+    } else {
+      cell.title = row.err || '無讀音';
+    }
+    line.appendChild(cell);
+  }
+  frag.appendChild(line);
+  cv.innerHTML = '';
+  cv.appendChild(frag);
+  $('resInfo').textContent = `${okN + badN} 字・成功 ${okN}・失敗 ${badN}` +
+    (multiN ? `・多音字 ${multiN}` : '') + (fixedN ? `・固定 ${fixedN}` : '') +
+    (guessN ? `・類推 ${guessN}` : '') + (conflictN ? `・不合 ${conflictN}` : '') +
+    (paras.length > 1 ? `・${paras.length} 段` : '');
+  renderParaMenu();
+}
+
+/** 工具列上的「段落」下拉 —— 只唸某一段 */
+function renderParaMenu() {
+  const sel = $('paraPick');
+  if (!sel) return;
+  if (paras.length < 2) { sel.style.display = 'none'; return; }
+  sel.style.display = '';
+  const keep = sel.value;
+  sel.innerHTML = `<option value="">全部 ${paras.length} 段</option>` +
+    paras.map((p, i) => {
+      const n = p.rows.filter(r => r.字).length;
+      const head = p.rows.filter(r => r.字).slice(0, 6).map(r => r.字).join('');
+      return `<option value="${i}">第 ${i + 1} 段（${n} 字）${esc(head)}…</option>`;
+    }).join('');
+  if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+}
+
+/* 多音字選擇彈窗 */
+let popRow = null, popCell = null;
+
+/**
+ * 把某個字的讀音寫回**源文本** —— 即在該字後面插入/替換 `(音韻地位)`。
+ *
+ * 這是「綠色」的真正含義：綠色 = 源文本裏有括號註明。
+ * 所以任何字（藍色多音字、灰色單音字、黃色類推字）都能改，
+ * 改完源文本就多一個括號，該字隨即變綠 —— 而且這個結果是**可保存的**，
+ * 存成 txt 下次直接匯入即可復現。
+ *
+ * row.at / row.end 是該字在源文本裏的**碼位區間**（含已有的括號註音）。
+ */
+function writeBackReading(row, 地位) {
+  const chars = Array.from($('text').value);
+  if (row.at == null) { log('找不到該字在原文中的位置，無法寫回', 'bad'); return false; }
+  const insert = '(' + 地位 + ')';
+  /* 碼位下標 → 字串下標 */
+  const toStr = n => chars.slice(0, n).join('').length;
+  const s = $('text').value;
+  const from = toStr(row.at + 1);        // 字本身之後
+  const to = toStr(row.end ?? row.at + 1); // 已有括號的結尾（沒有則等於 from）
+  $('text').value = s.slice(0, from) + insert + s.slice(to);
+  try { localStorage.setItem('text', $('text').value); } catch (e) {}
+  log(`↻ ${row.字} 讀音已寫回原文：${row.字}${insert}`, 'ok');
+  return true;
+}
+
+/**
+ * 統一的「音韻地位」彈窗。
+ *
+ * 設計：**任何字點下去都展示它的全部音韻地位**（包括灰色單音字）——
+ * 之前單音字走的是 `prompt()` 原生輸入框，又糙又不一致。
+ *
+ * 但**只有多於一個音韻地位時，列表項纔可點選**；
+ * 單一讀音的只展示，要改就走下面的「自訂音韻地位」。
+ * 這樣「能點」本身就傳達了「這裏有得選」。
+ */
+function openPicker(row, cell, ev) {
+  const pop = $('pop');
+  popRow = row; popCell = cell;
+
+  /* 收集全部音韻地位：廣韻／類推／當前括號註明，各標來源 */
+  const cur = currentReading(row);
+  const curDesc = cur && cur.描述;
+  const items = [];
+  const seen = new Set();
+  const push = (o) => { if (o.描述 && !seen.has(o.描述)) { seen.add(o.描述); items.push(o); } };
+
+  if (row.fixed && curDesc) {
+    /* 釋義要一併帶上 —— row.readings[0] 存的是「（由括號註明）」或不合的說明 */
+    push({ 描述: curDesc, ipa: cur.ipa, 反切: cur.反切, 釋義: cur.釋義, 當前: true });
+  }
+  for (const r of (row.readings || [])) {
+    push({
+      描述: r.描述, ipa: r.ipa, 反切: r.反切, 釋義: r.釋義,
+      來源: row.guess ? (row.經由 ? `類推（經「${row.經由}」）` : '類推') : '廣韻',
+      當前: !row.fixed && r.描述 === curDesc,
+    });
+  }
+
+  const selectable = items.length > 1;
+  const srcLabel = row.borrow ? `（借用「${row.借字}」的音韻地位）`
+    : row.guess ? '（不在廣韻，以下爲類推）' : '';
+
+  pop.innerHTML =
+    `<div class="hd">「${esc(row.字)}」` +
+    (items.length ? `${items.length} 個音韻地位 ${esc(srcLabel)}` : '查不到音韻地位') + `</div>` +
+    (items.length ? items.map((it, i) => `
+      <div class="op${it.當前 ? ' on' : ''}${selectable ? '' : ' only'}" data-i="${i}">
+        <span class="ipa">${it.ipa ? esc(it.ipa) : '<span style="color:var(--bad)">✗</span>'}</span>
+        <span class="d">${esc(it.描述)}${it.反切 ? '　' + esc(it.反切) : ''}</span>
+        <span class="g" title="${esc(it.釋義 || '')}">${esc(it.釋義 || '')}</span>
+      </div>`).join('')
+      : `<div class="hint">三張表都查不到。可在下方自訂音韻地位。</div>`) +
+    (items.length > 1 ? `<div class="op" data-i="-2">試聽全部（依序）</div>` : '') +
+    (items.length === 1 ? `<div class="hint">唯一讀音，無需選擇。要改請用下方自訂。</div>` : '') +
+    `<div class="sep"></div>
+     <div class="custom">
+       <input id="popInput" placeholder="自訂音韻地位，如 幫三C虞上" value="${esc(curDesc || '')}">
+       <button id="popOk">確定</button>
+     </div>`;
+
+  pop.style.display = 'block';
+  const rect = cell.getBoundingClientRect();
+  const w = pop.offsetWidth, h = pop.offsetHeight;
+  let x = rect.left, y = rect.bottom + 6;
+  if (x + w > innerWidth - 10) x = innerWidth - w - 10;
+  if (y + h > innerHeight - 10) y = Math.max(10, rect.top - h - 6);
+  pop.style.left = Math.max(8, x) + 'px';
+  pop.style.top = y + 'px';
+
+  /* 列表項：只有多音時可點 */
+  pop.querySelectorAll('.op').forEach(el => {
+    const i = parseInt(el.dataset.i, 10);
+    if (i === -2) {
+      el.onclick = async () => {
+        pop.style.display = 'none';
+        log(`— ${row.字} 共 ${items.length} 音，依序試聽 —`, 'dim');
+        for (let k = 0; k < items.length; k++) {
+          const it = items[k];
+          if (!it.ipa) { log(`  [${k}] ${it.描述}  （推導為空）`, 'bad'); continue; }
+          log(`  [${k}] ${it.描述.padEnd(12)} ${it.反切 || ''} → ${it.ipa}`, 'dim');
+          await speakOne(it.ipa, `${row.字}[${k}]`);
+          await new Promise(res => setTimeout(res, 280));
+        }
+      };
+      return;
+    }
+    if (!selectable) return;                 // 單一讀音：只展示
+    el.onclick = async () => {
+      const it = items[i];
+      pop.style.display = 'none';
+      /* 當前已是這個讀音且已固定 → 不必重寫 */
+      if (it.當前 && row.fixed) { if (it.ipa) await speakOne(it.ipa, row.字); return; }
+      if (writeBackReading(row, it.描述)) await rederive();
+    };
+  });
+
+  /* 自訂音韻地位（取代原本的 prompt 原生彈框） */
+  const inp = pop.querySelector('#popInput');
+  const ok = pop.querySelector('#popOk');
+  const submit = () => {
+    const v = (inp.value || '').trim();
+    if (!v) { inp.focus(); return; }
+    const res = resolvePosition(v);
+    if (!res) { alert(`「${v}」不是合法的音韻地位`); inp.focus(); return; }
+    const gw = 廣韻描述(row.字);
+    if (gw.length && !gw.includes(res.used)) {
+      if (!confirm(`「${row.字}」在《廣韻》作 ${gw.join(' / ')}，\n你輸入的是 ${res.used} —— 兩者不合。\n仍要寫入嗎？`)) return;
+    }
+    if (res.repaired) log(`· ${v} 補全為 ${res.used}`, 'dim');
+    pop.style.display = 'none';
+    if (writeBackReading(row, res.used)) rederive();
+  };
+  ok.onclick = submit;
+  inp.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); submit(); } };
+  setTimeout(() => inp.select(), 0);
+}
+
+/* 保留一個薄包裝，供只想要「輸入框」的舊呼叫點使用 */
+function promptPosition(row, cell) { openPicker(row, cell); }
+document.addEventListener('click', (e) => {
+  const pop = $('pop');
+  if (pop.style.display === 'block' && !pop.contains(e.target) && !(popCell && popCell.contains(e.target))) {
+    pop.style.display = 'none';
+  }
+});
+
+/* ============================ 事件 ============================ */
+/** 改動源文本後重新推導並重繪（用於「寫回讀音」之後） */
+async function rederive() {
+  const list = deriveAll();
+  if (!list) return;
+  rows = list;
+  lastSamples = null; lastSig = '';       // 源文本變了，之前的音頻作廢
+  renderCanvas();
+}
+
+$('derive').onclick = $('tbDerive').onclick = async () => {
+  clearLog();
+  const list = deriveAll();
+  if (!list) return;
+  rows = list;
+  lastSamples = null; lastSig = '';
+  renderCanvas();
+  const ipaText = rows.map(currentReading).filter(r => r && r.ipa).map(r => r.ipa).join(' ');
+  if (!ipaText) { log('沒有可發音的內容', 'bad'); return; }
+  log('IPA：' + ipaText);
+  if (ready) await speakAll();
+};
+$('deriveOnly').onclick = () => {
+  clearLog();
+  const list = deriveAll();
+  if (!list) return;
+  rows = list;
+  lastSamples = null; lastSig = '';
+  renderCanvas();
+  log('IPA：' + rows.map(currentReading).filter(r => r && r.ipa).map(r => r.ipa).join(' '));
+};
+$('clearText').onclick = () => {
+  $('text').value = ''; rows = []; renderCanvas();
+  textFile = ''; updateFileLabel('textFile', textFile);
+};
+
+/* 儲存：直接覆蓋 texts/ 裏的原檔。括號注音一併寫入，下次載入即可復現讀音。 */
+$('saveText').onclick = () => saveTo('texts', $('text').value, textFile,
+  (name) => { textFile = name; updateFileLabel('textFile', name); });
+$('saveTextAs').onclick = () => saveTo('texts', $('text').value, '',
+  (name) => { textFile = name; updateFileLabel('textFile', name); });
+$('play').onclick = $('tbPlay').onclick = () => {
+  /* 選了某一段就唸那段；否則唸全文。
+     內容／設定與上次合成一致才直接重播，否則重新合成 ——
+     不然「只唸過第 2 段」之後按 ▶ 會以爲手上是全文。 */
+  const p = $('paraPick') ? $('paraPick').value : '';
+  const idx = p === '' ? null : Number(p);
+  if (lastSamples && lastSig === speakSig(idx)) { play(lastSamples); return; }
+  speakAll(idx);
+};
+$('stop').onclick = $('tbStop').onclick = () => {
+  speakGen++;                                   // 作廢當前朗讀
+  try { cur && cur.stop(); } catch (e) {}
+  log('⏹ 已停止', 'warn');
+};
+if ($('paraPick')) $('paraPick').onchange = () => {
+  const v = $('paraPick').value;
+  if (v !== '') { log(`— 只唸第 ${Number(v) + 1} 段 —`, 'dim'); speakAll(Number(v)); }
+};
+$('reload').onclick = initEngine;
+$('dl').onclick = $('tbDl').onclick = () => {
+  if (!lastSamples) { log('先發音一次', 'warn'); return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([encodeWavBuf(lastSamples, SR)], { type: 'audio/wav' }));
+  a.download = 'derive.wav'; a.click();
+  log('已下載 derive.wav', 'ok');
+};
+$('tbCopy').onclick = () => {
+  const t = rows.map(currentReading).filter(r => r && r.ipa).map(r => r.ipa).join(' ');
+  navigator.clipboard.writeText(t).then(() => log('已複製 IPA 到剪貼板', 'ok'), e => log('複製失敗：' + e.message, 'bad'));
+};
+/* 滑條與其數值顯示。注意：span 的 id 不是 id+'Val' ——
+   input 是 rateR/gapR/pitch，span 是 rateVal/gapVal/pitchVal。
+   早先寫成 $(id + 'Val') 拼出 rateRVal/gapRVal，取到 null，
+   out.textContent 拋 TypeError 導致整個模組求值中斷，
+   後面所有按鈕（示例、從檔案、自檢…）都沒綁上，表現為「點了沒反應」。 */
+[['pitch', 'pitchVal'], ['rateR', 'rateVal'], ['gapR', 'gapVal']].forEach(([inputId, outId]) => {
+  const el = $(inputId), out = $(outId);
+  if (!el || !out) { console.error('滑條元素缺失:', inputId, outId); return; }
+  el.oninput = () => { out.textContent = el.value; if (inputId === 'pitch') applyVoice(); };
+  out.textContent = el.value;
+});
+['showIpa', 'showPhon', 'hideUnknown'].forEach(id => $(id).onchange = renderCanvas);
+
+/*
+ * 內建模板 —— **不從 derivers/ 讀**。
+ * derivers/ 是使用者自己的地盤，內容隨時會變；
+ * 按鈕若寫死某個檔名，那個檔案一被改名或刪掉就壞了。
+ */
+const DERIVER_TEMPLATE = `/* 起點模板：把音韻地位映射成 IPA
+ * 這只是骨架，請依自己的擬音改。 */
+
+if (!音韻地位) return [
+  ['濁音清化', false, { text: '濁音清化', description: '把濁聲母改成對應的清音' }],
+];
+
+const 母 = {
+  幫:'p', 滂:'pʰ', 並:'b', 明:'m',
+  端:'t', 透:'tʰ', 定:'d', 泥:'n', 來:'l',
+  知:'ʈ', 徹:'ʈʰ', 澄:'ɖ', 娘:'ɳ',
+  精:'ts', 清:'tsʰ', 從:'dz', 心:'s', 邪:'z',
+  莊:'tʂ', 初:'tʂʰ', 崇:'dʐ', 生:'ʂ', 俟:'ʐ',
+  章:'tɕ', 昌:'tɕʰ', 常:'dʑ', 書:'ɕ', 船:'ʑ', 日:'ȵ',
+  見:'k', 溪:'kʰ', 羣:'ɡ', 疑:'ŋ',
+  影:'ʔ', 曉:'x', 匣:'ɣ', 云:'ɦ', 以:'j',
+};
+const 清化 = { b:'p', d:'t', ɖ:'ʈ', dz:'ts', dʐ:'tʂ', dʑ:'tɕ', ɡ:'k', ɣ:'x', ɦ:'h' };
+const 等 = { 一:'ɑ', 二:'æ', 三:'i', 四:'e' };
+const 調 = { 平:'53', 上:'45', 去:'31', 入:'2' };
+
+let s = 母[音韻地位.母] || '?';
+if (選項.濁音清化 && 清化[s]) s = 清化[s];
+s += (音韻地位.呼 === '合' ? 'w' : '');
+s += 等[音韻地位.等] || 'ɑ';
+s += 調[音韻地位.聲] || '53';
+return s;
+`;
+
+$('loadEx').onclick = () => {
+  setScript(DERIVER_TEMPLATE, '內建模板');
+  deriverFile = '';                      // 模板不對應任何檔案
+  updateFileLabel('deriverFile', '');
+  log('已插入內建模板 —— 改好後按「另存新檔」存進 derivers/', 'dim');
+};
+
+async function loadDeriver(url, name) {
+  try {
+    const t = await (await fetch(url)).text();
+    setScript(t, name);
+    deriverFile = name;
+    updateFileLabel('deriverFile', deriverFile);
+  } catch (e) { log('載入方案失敗：' + e.message, 'bad'); }
+}
+
+/* ---------- 兩個專門資料夾的下拉框 ----------
+ * texts/      推導文本
+ * derivers/   推導器腳本
+ * 往資料夾裏丟檔案，刷新頁面就會出現在下拉框裏。 */
+async function fillDropdown(selId, api, placeholder, onPick) {
+  const sel = $(selId);
+  if (!sel) return;
+  try {
+    const list = await (await fetch(api)).json();
+    sel.innerHTML = `<option value="">${placeholder}</option>` +
+      list.map(f => `<option value="${esc(f.url)}">${esc(f.name)}</option>`).join('');
+    sel.onchange = () => { if (sel.value) onPick(sel.value, sel.options[sel.selectedIndex].textContent); };
+    if (!list.length) sel.innerHTML = `<option value="">（${api.includes('texts') ? 'texts' : 'derivers'}/ 是空的）</option>`;
+  } catch (e) {
+    sel.innerHTML = `<option value="">（讀取失敗）</option>`;
+  }
+}
+
+async function loadText(url, name) {
+  try {
+    let t = await (await fetch(url)).text();
+    if (t.charCodeAt(0) === 0xFEFF) t = t.slice(1);
+    $('text').value = t;
+    textFile = name;                       // 記住檔名，之後「儲存」直接覆蓋它
+    updateFileLabel('textFile', textFile);
+    try { localStorage.setItem('text', t); } catch (e) {}
+    const n = (t.match(/[\u4e00-\u9fff]/g) || []).length;
+    log(`已載入 texts/${name}（${n} 字）`, 'ok');
+    $('deriveOnly').click();
+  } catch (e) { log('載入失敗：' + e.message, 'bad'); }
+}
+
+/* ---------- 儲存（直接覆蓋 texts/ 或 derivers/ 裏的原檔）----------
+ * 只讀寫這兩個目錄 —— 不接受任意路徑，服務端也有白名單與越界檢查。 */
+function updateFileLabel(id, name) {
+  const el = $(id);
+  if (!el) return;
+  el.innerHTML = name
+    ? `已綁定檔案：<b style="color:var(--ok)">${esc(name)}</b>（「儲存」會直接覆蓋它）`
+    : '未綁定檔案 —— 「儲存」會要求輸入檔名';
+}
+
+/**
+ * 存檔。
+ * @param {'texts'|'derivers'} dir
+ * @param {string} content
+ * @param {string} name 檔名；空則問使用者
+ * @param {(name:string)=>void} [onDone]
+ */
+async function saveTo(dir, content, name, onDone) {
+  if (!content || !content.trim()) { log('沒有內容可存', 'warn'); return; }
+  if (!name) {
+    const def = dir === 'texts' ? '推導文本.txt' : '方案.js';
+    const v = window.prompt(`存到 ${dir}/ 的檔名（例：${def}）`, def);
+    if (!v || !v.trim()) return;
+    name = v.trim();
+  }
+  try {
+    const r = await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ dir, name, content }),
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || ('HTTP ' + r.status));
+    log(`✓ 已儲存 ${dir}/${j.name}（${j.bytes} 位元組）`, 'ok');
+    if (onDone) onDone(j.name);
+    /* 重新整理下拉框，新檔立刻可見 */
+    fillDropdown(dir === 'texts' ? 'textPick' : 'deriverPick',
+      dir === 'texts' ? '/api/texts' : '/api/derivers',
+      dir === 'texts' ? '選 texts/ 裏的文本…' : '選 derivers/ 裏的方案…',
+      dir === 'texts' ? loadText : loadDeriver);
+  } catch (e) {
+    log(`✗ 儲存失敗：${e.message}`, 'bad');
+  }
+}
+/* 儲存方案：直接覆蓋 derivers/ 裏的原檔 */
+$('saveDeriver').onclick = () => saveTo('derivers', $('script').value, deriverFile,
+  (name) => { deriverFile = name; updateFileLabel('deriverFile', name); });
+$('saveDeriverAs').onclick = () => saveTo('derivers', $('script').value, '',
+  (name) => { deriverFile = name; updateFileLabel('deriverFile', name); });
+$('clearScript').onclick = () => {
+  $('script').value = ''; deriver = null; rawFn = null;
+  $('scriptStatus').textContent = '尚未載入方案'; $('options').innerHTML = '';
+  deriverFile = ''; updateFileLabel('deriverFile', deriverFile);
+};
+$('text').oninput = () => { try { localStorage.setItem('text', $('text').value); } catch (e) {} };
+$('script').oninput = () => {
+  try { localStorage.setItem('deriver', $('script').value); } catch (e) {}
+  if ($('script').value.trim()) setScript($('script').value, '手動貼入');
+};
+
+/* 自檢 */
+$('selfTest').onclick = () => {
+  clearLog();
+  if (!deriver) { log('先載入推導方案', 'warn'); return; }
+  if (!T) { log('tshet-uinh 未載入', 'bad'); return; }
+  log('=== 推導方案自檢 ===', 'ok');
+  try {
+    const meta = makeRawFn($('script').value)(方案選項, null, null);
+    if (Array.isArray(meta) && meta.length) {
+      log(`  方案宣告 ${meta.length} 個設定項：`, 'dim');
+      meta.forEach(m => log(`    ${JSON.stringify(m)}`, 'dim'));
+    } else log('  方案未宣告設定項：' + JSON.stringify(meta), 'dim');
+  } catch (e) { log('  ✗ 元資料呼叫拋錯：' + e.message, 'bad'); }
+  log('  可用自由變數：TshetUinh / 選項 / 音韻地位 / 字頭', 'dim');
+
+  /*
+   * 用真實漢字查地位，不要手寫描述串 ——
+   * 手寫很容易造出非法組合（例如「並三C庚入」庚韻不分類、
+   * 「幫合一模上」脣音不帶呼），from描述 會正確拒絕，看起來卻像方案出錯。
+   */
+  const SAMPLE_CHARS = '天地玄黃宇宙洪荒日月盈昃列令行山兄來魚月補牆病惡呂';
+  const seen = new Set();
+  let okN = 0, failN = 0;
+  for (const ch of SAMPLE_CHARS) {
+    if (seen.has(ch)) continue;
+    seen.add(ch);
+    const rows = T.資料.query字頭(ch) || [];
+    if (!rows.length) { log(`  ⚠ ${ch} 廣韻查不到`, 'warn'); failN++; continue; }
+    let done = false;
+    for (const r of rows.slice(0, 3)) {
+      const d = 描述串(r);
+      let pos;
+      try { pos = T.音韻地位.from描述(d); } catch (e) { continue; }
+      try {
+        const out = deriver(pos, ch, 方案選項);
+        if (out) { log(`  ✓ ${ch} ${d.padEnd(12)} → ${out}`, 'ok'); okN++; }
+        else { log(`  ⚠ ${ch} ${d.padEnd(12)} 推導為空`, 'warn'); failN++; }
+      } catch (e) { log(`  ✗ ${ch} ${d.padEnd(12)} 拋錯：${e.message}`, 'bad'); failN++; }
+      done = true; break;
+    }
+    if (!done) { log(`  ⚠ ${ch} 無法建構音韻地位`, 'warn'); failN++; }
+  }
+  log(`\n自檢：成功 ${okN} / 失敗 ${failN}`, failN ? 'warn' : 'ok');
+  if (failN) {
+    log('常見原因：', 'dim');
+    log('  · 推導器不是「函數體」形式 —— 要貼 if (!音韻地位) return ...; … return …;', 'dim');
+    log('    不要包 function(...){ }，也不要包成完整檔案', 'dim');
+    log('  · 用到了 音韻地位 上沒有的方法/屬性', 'dim');
+    log('  · 依賴方案外的資料表 —— 本頁只能貼單一函數體，外面的 const 不會一起帶進來', 'dim');
+    log('  · 自由變數只有 TshetUinh / 選項 / 音韻地位 / 字頭 四個', 'dim');
+    log('  · 方案只覆蓋部分音韻地位（例如只處理某些聲母），其餘會拋「無…規則」', 'dim');
+  }
+};
+
+/* ============================ 啟動 ============================ */
+let booted = false;
+function boot() {
+  if (booted) return;          // load 事件在某些環境可能觸發多次，只初始化一次
+  booted = true;
+
+  /* 分組初始化：任何一組出錯只影響那一組，不會讓整頁死掉 */
+  safeInit('依賴檢查', () => {
+    /* UMD 掛的全局名是 TshetUinh（大寫 T、大寫 U） */
+    T = window.TshetUinh || window.tshetUinh || null;
+    if (!T) throw new Error('tshet-uinh 未載入');
+    log('tshet-uinh 已載入 ✓（廣韻資料庫）', 'ok');
+    if (!window.TshetUinhDeriverTools) log('⚠ tshet-uinh-deriver-tools 未載入 —— 設定項只能用簡式', 'warn');
+  });
+
+  safeInit('還原上次設定', () => {
+    try {
+      const sv = localStorage.getItem('text'); if (sv) $('text').value = sv;
+      const sd = localStorage.getItem('deriver');
+      if (sd && sd.trim()) setScript(sd, '上次使用');
+    } catch (e) {}
+  });
+
+  if (!deriver) safeInit('載入示例方案', () => $('loadEx').click());
+
+  /* 補充字表 / 異體字表（類推用）非同步載入，不阻塞其他初始化 */
+  loadFallback();
+  loadVariants();
+
+  safeInit('填充資料夾下拉框', () => {
+    fillDropdown('textPick', '/api/texts', '選 texts/ 裏的文本…', loadText);
+    fillDropdown('deriverPick', '/api/derivers', '選 derivers/ 裏的方案…', loadDeriver);
+  });
+
+  safeInit('引擎', initEngine);
+
+  /* 綁定檢查：列出所有沒綁上處理函式的按鈕，避免再次靜默失效 */
+  safeInit('綁定自檢', () => {
+    const btns = [...document.querySelectorAll('button[id]')];
+    const dead = btns.filter(b => !b.onclick);
+    if (dead.length) log(`⚠ 以下按鈕未綁定處理函式：${dead.map(b => b.id).join(' ')}`, 'warn');
+    else log(`${btns.length} 個按鈕綁定正常 ✓`, 'ok');
+  });
+
+  safeInit('初始渲染', renderCanvas);
+
+  log('按「推導」開始（或先貼入自己的方案）。', 'dim');
+}
+/* 若 load 已經過去（例如腳本晚於 load 執行），直接跑 */
+if (document.readyState === 'complete') boot();
+else window.addEventListener('load', boot);
+window.addEventListener('DOMContentLoaded', () => { if (document.readyState === 'complete') boot(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPA 讀音合成 v1</title>
+<style>
+  :root { --bg:#14161a; --panel:#1c1f26; --line:#2c313c; --fg:#e6e8ee; --dim:#9aa3b5;
+          --acc:#6ba8ff; --ok:#4ec9a0; --bad:#ff8f8f; --warn:#e5a54b; }
+  * { box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); margin:0; padding:24px;
+         font:15px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:920px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  .ver { font-size:11px; font-weight:600; color:#0d1117; background:var(--acc);
+         border-radius:3px; padding:1px 6px; vertical-align:3px; letter-spacing:0; }
+  h2 { font-size:15px; margin:0 0 10px; color:var(--dim); font-weight:600; }
+  .sub { color:var(--dim); font-size:13px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; margin:14px 0; }
+  button { background:#2a2f3a; color:var(--fg); border:1px solid var(--line); border-radius:7px;
+           padding:8px 14px; cursor:pointer; font-size:14px; font-family:inherit; }
+  button:hover { background:#353b48; }
+  button.primary { background:var(--acc); color:#0d1117; border-color:var(--acc); font-weight:600; }
+  button.tab { border-radius:7px 7px 0 0; border-bottom-color:transparent; }
+  button.tab.on { background:var(--panel); border-color:var(--line); border-bottom-color:var(--panel); color:var(--acc); }
+  textarea, input, select { background:#0f1114; color:var(--fg); border:1px solid var(--line);
+           border-radius:7px; padding:9px; font:15px/1.6 "Charis SIL","Gentium Plus",monospace; width:100%; }
+  textarea { min-height:80px; font-size:19px; resize:vertical; }
+  input[type=number] { width:90px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .row > label { color:var(--dim); font-size:13px; white-space:nowrap; }
+  pre { background:#0f1114; border:1px solid var(--line); border-radius:7px; padding:11px;
+        font-size:12.5px; max-height:280px; overflow:auto; white-space:pre-wrap; margin:0; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); } .warn { color:var(--warn); } .dim { color:var(--dim); }
+  .tabs { display:flex; gap:6px; }
+  .hide { display:none; }
+  code { background:#0f1114; padding:2px 6px; border-radius:4px; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>IPA 讀音合成 <span class="ver">v1</span></h1>
+  <div class="sub">espeak-ng（站點構建）· 走 <code>[[…]]</code> 音素輸入 · 默認嗓音變體 <code>wide80</code></div>
+
+  <div class="panel">
+    <div class="row">
+      <button class="primary" id="init">① 初始化引擎</button>
+      <span id="status" class="sub">未初始化</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>② 輸入</h2>
+    <div class="tabs" style="margin-bottom:10px">
+      <button class="tab on" data-tab="ipa">直接輸入 IPA</button>
+      <button class="tab" data-tab="lex">字表模式</button>
+    </div>
+
+    <div id="pane-ipa">
+      <textarea id="ipa" spellcheck="false">ɭiæŋ²⁴ nʌm³¹ dɑw²⁴ tʰiwŋ⁵³ tsɑk⁵</textarea>
+      <div class="sub" style="margin-top:8px">
+        音節用空格分隔。調值可寫上標 <code>⁵³</code> 或 ASCII <code>53</code>。
+      </div>
+    </div>
+
+    <div id="pane-lex" class="hide">
+      <div class="sub" style="margin-bottom:8px">
+        每行一個「字 + IPA」，例如 <code>山 ʂæn⁵³</code>。<code>#</code> 開頭是註釋。
+      </div>
+      <textarea id="lexTable" spellcheck="false" style="min-height:110px"># 示範字表
+山 ʂæn⁵³
+水 ɕyi²⁴
+天 tʰen⁵³
+地 di²¹²
+玄 ɣuen³¹
+黃 ɣuɑŋ³¹</textarea>
+      <div class="row" style="margin-top:10px">
+        <label>要讀的文本</label>
+        <input id="lexText" value="天地玄黃" style="flex:1;min-width:160px">
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="primary" id="play">合成並播放</button>
+      <button id="dl">下載 WAV</button>
+      <button id="stop">停止</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>③ 參數</h2>
+    <div class="row">
+      <label>嗓音變體 pitch</label>
+      <select id="variant" style="width:auto;min-width:180px">
+        <option value="ipa+wide80">wide80 · pitch 80 255（推薦）</option>
+        <option value="ipa">不套用（引擎默認）</option>
+      </select>
+      <label>rate</label><input id="rate" type="number" value="140">
+      <label>pitch</label><input id="pitch" type="number" value="40">
+      <label>三位調自動降速</label><input id="autoRate" type="checkbox" checked style="width:auto">
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>④ 零聲母補償</h2>
+    <div class="sub" style="margin-bottom:8px">
+      首音直接是元音的音節（<code>/a/</code>、<code>/i/</code>）缺少起首輔音段，
+      引擎少產出約 80–100ms，聽感偏短。實測前加喉塞 <code>ʔ</code> 可補回（差距 96ms → 23ms）。
+    </div>
+    <label style="margin-right:16px"><input type="radio" name="zm" value="glottal" checked> 前加喉塞 ʔ（預設）</label>
+    <label style="margin-right:16px"><input type="radio" name="zm" value="length"> 首元音加長記號</label>
+    <label><input type="radio" name="zm" value="none"> 不補償</label>
+  </div>
+
+  <div class="panel">
+    <h2>⑤ 逐音節報告</h2>
+    <pre id="log">等待初始化…</pre>
+  </div>
+
+  <div class="panel">
+    <h2>⑥ 關於模式一（推導模式）</h2>
+    <div class="sub">
+      推導模式需要 Node 的 <code>tshet-uinh</code> 套件（切韻資料庫），瀏覽器裡沒有打包，
+      因此只在 Node API 與命令行提供，見 <code>src/modes/qieyun.mjs</code> 與 README 的「模式一」一節。
+      命令行用法：<code>node tools/cli.mjs derive "天地玄黃" out/q.wav</code>
+    </div>
+  </div>
+
+</div>
+
+<script src="/engine/espeakng.js"></script>
+<script type="module">
+import { prepareBody } from '/src/ipa-espeak.mjs';
+
+const $ = id => document.getElementById(id);
+const logEl = $('log');
+function log(s, cls) { logEl.innerHTML += `\n<span class="${cls||''}">${s}</span>`; logEl.scrollTop = logEl.scrollHeight; }
+function clearLog() { logEl.innerHTML = ''; }
+
+let tts = null, ready = false, ctx = null, cur = null, lastSamples = null;
+const SR = 22050;
+
+/* 零聲母補償模式：'glottal'（預設）| 'length' | 'none' */
+let zeroMode = 'glottal';
+document.querySelectorAll('input[name="zm"]').forEach(el => {
+  el.onchange = () => { if (el.checked) zeroMode = el.value; };
+});
+
+/* 上標調值 → ASCII */
+const SUP = { '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9' };
+const normTone = s => Array.from(s).map(c => SUP[c] ?? c).join('');
+
+/* ---- tab 切換 ---- */
+document.querySelectorAll('button.tab').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('button.tab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    $('pane-ipa').classList.toggle('hide', b.dataset.tab !== 'ipa');
+    $('pane-lex').classList.toggle('hide', b.dataset.tab !== 'lex');
+  };
+});
+
+/* ---- 初始化 ---- */
+$('init').onclick = () => {
+  if (typeof eSpeakNG === 'undefined') { log('找不到 eSpeakNG —— engine/espeakng.js 未載入', 'bad'); return; }
+  log('創建 eSpeakNG(/engine/espeakng.worker.js)…');
+  tts = new eSpeakNG('/engine/espeakng.worker.js', () => {
+    ready = true;
+    $('status').innerHTML = '<span class="ok">已就緒</span>';
+    window.tts = tts;
+    log('引擎就緒 ✓（採樣率 ' + SR + ' Hz）', 'ok');
+    applyParams();
+  });
+};
+
+function applyParams() {
+  if (!ready) return;
+  tts.set_rate(Number($('rate').value));
+  tts.set_pitch(Number($('pitch').value));
+  tts.set_voice($('variant').value);
+  return $('variant').value;
+}
+$('variant').onchange = applyParams;
+
+/* ---- 合成（站點原路徑） ---- */
+function synth(text, rate) {
+  return new Promise(resolve => {
+    if (!ready) { resolve(null); return; }
+    if (rate) tts.set_rate(rate);
+    tts.set_voice($('variant').value);
+    const chunks = [];
+    let n = 0, peak = 0;
+    let settled = false;
+    const finish = (runaway) => {
+      if (settled) return;
+      settled = true;
+      const s = new Float32Array(n);
+      let p = 0;
+      chunks.forEach(c => { s.set(c, p); p += c.length; });
+      resolve({ samples: s, n, peak, runaway: !!runaway });
+    };
+    try {
+      tts.synthesize(text, (samples) => {
+        if (!samples) { finish(false); return; }
+        const f = new Float32Array(samples.buffer || samples);
+        const half = f.length >> 1;
+        const a = new Float32Array(half);
+        for (let i = 0; i < half; i++) { const v = f[i * 2]; a[i] = v; const av = v < 0 ? -v : v; if (av > peak) peak = av; }
+        chunks.push(a); n += half;
+        if (n > SR * 30) finish(true);
+      });
+    } catch (e) { log('synthesize 異常: ' + e.message, 'bad'); finish(false); }
+    setTimeout(() => finish(false), 30000);
+  });
+}
+
+/* 三位調降速（實測：rate 80 能讓 325/213 的輪廓顯現） */
+function rateFor(tone) {
+  const base = Number($('rate').value);
+  if (!$('autoRate').checked) return base;
+  if (tone.length >= 3) return Math.round(base * 0.6);
+  return base;
+}
+
+function play(samples) {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+  const buf = ctx.createBuffer(1, samples.length, SR);
+  buf.copyToChannel(samples, 0);
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination); src.start();
+  cur = src;
+  return src;
+}
+
+function toWav(samples, sr) {
+  const n = samples.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  const ws = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  ws(0,'RIFF'); v.setUint32(4, 36 + n*2, true); ws(8,'WAVE');
+  ws(12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  ws(36,'data'); v.setUint32(40, n*2, true);
+  let pk = 0; for (let i=0;i<n;i++){ const a=Math.abs(samples[i]); if(a>pk)pk=a; }
+  const g = pk > 0 ? 0.92*32767/pk : 0;
+  let p = 44;
+  for (let i=0;i<n;i++,p+=2){ const x=Math.max(-1,Math.min(1,samples[i]))*g;
+    v.setInt16(p, x<0 ? x*0x8000 : x*0x7fff, true); }
+  return buf;
+}
+
+/* ---- 字表解析 ---- */
+function parseLexicon(text) {
+  const map = new Map();
+  for (const line of text.split(/\r?\n/)) {
+    const s = line.trim();
+    if (!s || s.startsWith('#') || s.startsWith('//')) continue;
+    const m = s.match(/^(\S)\s+(.+)$/);
+    if (m) map.set(m[1], m[2].trim());
+  }
+  return map;
+}
+
+/* ---- 播放 ---- */
+$('play').onclick = async () => {
+  if (!ready) { log('請先初始化', 'warn'); return; }
+  clearLog();
+  const isLex = !$('pane-lex').classList.contains('hide');
+  let ipaText, label;
+
+  if (isLex) {
+    const map = parseLexicon($('lexTable').value);
+    const chars = Array.from($('lexText').value).filter(c => !/\s/.test(c));
+    const out = [], missing = [];
+    for (const c of chars) { const ipa = map.get(c); if (ipa) out.push(ipa); else missing.push(c); }
+    if (!out.length) { log('字表裡沒有可發音的字', 'bad'); return; }
+    ipaText = out.join(' ');
+    label = `字表模式：${chars.length} 字，命中 ${out.length}`;
+    log(label, 'ok');
+    if (missing.length) log('未收錄：' + missing.join(' '), 'warn');
+    log('IPA：' + ipaText);
+  } else {
+    ipaText = normTone($('ipa').value).trim();
+    label = '直接輸入';
+  }
+
+  const syllables = ipaText.split(/\s+/).filter(Boolean);
+  const all = [];
+  for (const syl of syllables) {
+    const m = syl.match(/^(.*?)(\d*)$/);
+    const body = m[1], tone = m[2];
+    const rate = rateFor(tone);
+
+    /* 關鍵：零聲母補償 → 轉寫成 espeak 音素名。與 Node 端共用同一份邏輯。
+       引擎的音素表收的是 espeak 音素名（t. d. l. & V A N @ Z; S; …），不是原生 IPA，
+       直接餵 IPA 會造成音素錯誤。 */
+    const prep = prepareBody(body, zeroMode);
+    const esp = prep.text + tone;
+    const notes = [];
+    if (prep.compensated) notes.push(`零聲母→${prep.ipaBody}`);
+    if (prep.dropped.length) notes.push(`丟棄${JSON.stringify(prep.dropped)}`);
+
+    const r = await synth('[[ ' + esp + ' _: ]]', rate);
+    if (!r || !r.n) { log(`✗ ${syl}  無輸出`, 'bad'); continue; }
+    const ms = (r.n / SR * 1000).toFixed(0);
+    const good = r.peak > 0.002 && !r.runaway;
+    log(`${good ? '✓' : '✗'} ${syl.padEnd(12)} ${body.padEnd(9)}→${esp.padEnd(10)} rate=${String(rate).padStart(3)} ${String(r.n).padStart(6)}採樣 ${ms.padStart(5)}ms peak=${r.peak.toFixed(3)}${notes.length ? '  ' + notes.join(' ') : ''}${r.runaway ? ' 失控' : ''}`,
+        good ? 'ok' : 'bad');
+    all.push(r.samples);
+    all.push(new Float32Array(Math.round(SR * 0.06)));
+  }
+  if (!all.length) return;
+  let n = 0; all.forEach(c => n += c.length);
+  const merged = new Float32Array(n); let p = 0;
+  all.forEach(c => { merged.set(c, p); p += c.length; });
+  lastSamples = merged;
+  play(merged);
+  log(`\n合計 ${merged.length} 採樣 = ${(merged.length / SR).toFixed(2)} 秒`, 'ok');
+};
+
+$('stop').onclick = () => { try { cur && cur.stop(); } catch (e) {} };
+$('dl').onclick = () => {
+  if (!lastSamples) { log('先播放一次', 'warn'); return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([toWav(lastSamples, SR)], { type: 'audio/wav' }));
+  a.download = 'ipa-speech.wav'; a.click();
+};
+</script>
+</body>
+</html>

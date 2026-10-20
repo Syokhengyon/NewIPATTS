@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>IPA 逐音素驗證表 v1</title>
+<style>
+  :root { --bg:#14161a; --pan:#1d2026; --line:#2e333c; --fg:#e6e8ec; --dim:#8b93a1;
+          --ok:#3fb950; --warn:#d29922; --bad:#f85149; --idle:#484f58; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:14px/1.5 -apple-system,"Segoe UI","Noto Sans CJK TC",sans-serif; padding:18px 20px 60px; }
+  h1 { font-size:19px; margin:0 0 4px; }
+  .ver { font-size:11px; font-weight:600; color:#0d1117; background:var(--acc);
+         border-radius:3px; padding:1px 6px; vertical-align:3px; letter-spacing:0; }
+  h2 { font-size:15px; margin:26px 0 8px; color:#c9d1d9; }
+  .sub { color:var(--dim); font-size:12.5px; margin-bottom:12px; }
+  .bar { display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+         background:var(--pan); border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-bottom:16px; }
+  button { background:#262b33; color:var(--fg); border:1px solid var(--line);
+           border-radius:6px; padding:5px 11px; cursor:pointer; font-size:13px; }
+  button:hover { background:#31373f; }
+  button:disabled { opacity:.4; cursor:default; }
+  select,input[type=number] { background:#262b33; color:var(--fg); border:1px solid var(--line);
+                              border-radius:6px; padding:4px 7px; font-size:13px; }
+  #status { font-size:13px; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); } .dim { color:var(--dim); }
+
+  table { border-collapse:separate; border-spacing:3px; }
+  th { font-weight:500; font-size:11.5px; color:var(--dim); padding:2px 4px; white-space:nowrap; }
+  th.rot { writing-mode:vertical-rl; transform:rotate(180deg); height:76px; }
+  td.manner { font-size:11.5px; color:var(--dim); text-align:right; padding-right:7px; white-space:nowrap; }
+
+  .cell { position:relative; min-width:52px; height:44px; border-radius:7px; border:1px solid var(--line);
+          background:#1a1d22; display:flex; flex-direction:column; align-items:center; justify-content:center;
+          cursor:pointer; user-select:none; padding:2px 4px; transition:background .12s; }
+  .cell:hover { background:#252a32; }
+  .cell .sym { font-size:17px; line-height:1.1; letter-spacing:.5px; }
+  .cell .tgt { font-size:9.5px; color:var(--dim); font-family:ui-monospace,Consolas,monospace;
+               max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cell.miss { background:#2a1a1a; border-color:#5a2a2a; }
+  .cell.miss .sym { color:#b98a8a; }
+  .cell.dead { background:#2a2519; border-color:#5a4a22; }
+  .cell.play { outline:2px solid var(--ok); }
+  .cell.empty { background:transparent; border-color:transparent; cursor:default; }
+  .cell.empty:hover { background:transparent; }
+
+  .vrow { display:flex; align-items:center; gap:4px; margin-bottom:3px; }
+  .vlabel { width:56px; font-size:11.5px; color:var(--dim); text-align:right; padding-right:6px; }
+  .vrow .cell { min-width:54px; }
+  .vrow .spacer { width:26px; }
+  #log { background:#0f1114; border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+         font-family:ui-monospace,Consolas,monospace; font-size:12.5px; white-space:pre-wrap;
+         max-height:220px; overflow:auto; margin-top:10px; }
+  .legend { display:flex; gap:16px; font-size:12px; color:var(--dim); margin:10px 0 0; flex-wrap:wrap; }
+  .key { display:inline-block; width:11px; height:11px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+
+  .tones { display: flex; flex-wrap: wrap; gap: 5px; }
+  .toneGroup { padding: 0 18px; margin-bottom: 6px; }
+  .toneGroupTitle { font-size: 12.5px; color: var(--dim); margin: 6px 0 4px; }
+  .toneGroupTitle .dim { opacity: .7; font-size: 11.5px; }
+  .tone { background: var(--pan); border: 1px solid var(--line); border-radius: 7px;
+          padding: 5px 9px; text-align: center; cursor: pointer; transition: .12s; min-width: 54px; }
+  .tone:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .tone.known { border-color: #2f5a34; background: #121a14; }
+  .tone.play { border-color: var(--ok); box-shadow: 0 0 0 2px rgba(94,194,106,.25); }
+  .tone .t { font-size: 16px; font-weight: 600; }
+  .tone .v { font-size: 9.5px; color: var(--dim); min-height: 12px; }
+  .tone .c { font-size: 10px; font-family: ui-monospace,Consolas,monospace; min-height: 12px; color: var(--accent); }
+  .toneLog { margin: 8px 18px 0; padding: 8px 12px; background: var(--pan); border: 1px solid var(--line);
+             border-radius: 8px; font-family: ui-monospace,Consolas,monospace; font-size: 11.5px;
+             color: var(--dim); max-height: 200px; overflow: auto; white-space: pre-wrap; }
+  .hint { margin: 4px 18px 8px; font-size: 12px; color: var(--dim); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<h1>IPA 逐音素驗證表 <span class="ver">v1</span></h1>
+<div class="sub">
+  點任一格即合成並播放。<b>輔音接 <code>a</code></b>（<code>[[Ca53]]</code>），<b>元音單獨</b>（<code>[[V53]]</code>）。
+  每格下方小字是它轉寫成的 espeak 音素名；顏色代表本引擎能否發出。
+</div>
+
+<div class="bar">
+  <button id="init">初始化引擎</button>
+  <span id="status" class="dim">未就緒</span>
+  <label>嗓音 <select id="variant">
+    <option value="ipa+wide80">ipa+wide80（預設）</option>
+    <option value="ipa">ipa（原版）</option>
+    <option value="ipa+male20">ipa+male20（站點用）</option>
+  </select></label>
+  <label>語速 <input type="number" id="rate" value="140" min="80" max="300" style="width:64px"></label>
+  <label><input type="checkbox" id="zeroComp"> 零聲母補償（元音測試建議關）</label>
+  <button id="stop">停止</button>
+</div>
+
+<div class="legend">
+  <span><i class="key" style="background:#1a1d22;border:1px solid var(--line)"></i>轉寫表有收錄（可發音）</span>
+  <span><i class="key" style="background:#2a1a1a;border:1px solid #5a2a2a"></i><b>表中未收錄</b>（會被丟棄）</span>
+  <span class="dim">※ 顏色只表示「轉寫表有沒有這一項」，<b>不代表能不能發音</b> —— 能否發音請自己聽。</span>
+</div>
+
+<h2>輔音（接 a）</h2>
+<div id="cons"></div>
+
+<h2>元音</h2>
+<div id="vows"></div>
+
+
+
+<h2>聲調驗證 · 五度標記法</h2>
+<p class="hint">
+  五度標記法：<b>1</b> 最低、<b>5</b> 最高。共 52 個調值。<br>
+  點一下合成 <code>[[ a＜調值＞ _: ]]</code>，並在瀏覽器內量 F0 起／終。<br>
+  <b style="color:var(--ok)">綠框</b>＝v1 原本支持的 10 個；其餘是這次窮舉出來的。
+</p>
+<div class="toneGroup"><div class="toneGroupTitle">平調（按高度排序）（5） <span class="dim">這組最關鍵 —— 聽 11→22→33→44→55 是否逐步升高</span></div>
+<div class="tones"><div class="tone" data-tone="11"><div class="t">11</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="22"><div class="t">22</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="33"><div class="t">33</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="44"><div class="t">44</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="55"><div class="t">55</div><div class="v"></div><div class="c"></div></div></div></div><div class="toneGroup"><div class="toneGroupTitle">降調（10）</div>
+<div class="tones"><div class="tone" data-tone="51"><div class="t">51</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="52"><div class="t">52</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="53"><div class="t">53</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="54"><div class="t">54</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="41"><div class="t">41</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="42"><div class="t">42</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="43"><div class="t">43</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="31"><div class="t">31</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="32"><div class="t">32</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="21"><div class="t">21</div><div class="v"></div><div class="c"></div></div></div></div><div class="toneGroup"><div class="toneGroupTitle">升調（10）</div>
+<div class="tones"><div class="tone" data-tone="12"><div class="t">12</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="13"><div class="t">13</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="14"><div class="t">14</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="15"><div class="t">15</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="23"><div class="t">23</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="24"><div class="t">24</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="25"><div class="t">25</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="34"><div class="t">34</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="35"><div class="t">35</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="45"><div class="t">45</div><div class="v"></div><div class="c"></div></div></div></div><div class="toneGroup"><div class="toneGroupTitle">三段調（22）</div>
+<div class="tones"><div class="tone" data-tone="214"><div class="t">214</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="213"><div class="t">213</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="212"><div class="t">212</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="312"><div class="t">312</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="324"><div class="t">324</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="423"><div class="t">423</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="434"><div class="t">434</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="353"><div class="t">353</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="535"><div class="t">535</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="131"><div class="t">131</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="242"><div class="t">242</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="454"><div class="t">454</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="323"><div class="t">323</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="231"><div class="t">231</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="132"><div class="t">132</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="343"><div class="t">343</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="453"><div class="t">453</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="121"><div class="t">121</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="141"><div class="t">141</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="151"><div class="t">151</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="252"><div class="t">252</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="354"><div class="t">354</div><div class="v"></div><div class="c"></div></div></div></div><div class="toneGroup"><div class="toneGroupTitle">單字調（5）</div>
+<div class="tones"><div class="tone" data-tone="1"><div class="t">1</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="2"><div class="t">2</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="3"><div class="t">3</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="4"><div class="t">4</div><div class="v"></div><div class="c"></div></div><div class="tone" data-tone="5"><div class="t">5</div><div class="v"></div><div class="c"></div></div></div></div><div id="toneLog" class="toneLog"></div>
+<div class="tones" style="padding:8px 18px"><button id="toneAll">▶ 全部 52 個挨著聽</button>
+<button id="toneLevel">▶ 只聽平調 11–55</button></div>
+<h2>塞擦音</h2>
+<div id="affr"></div>
+
+<h2>仍未收錄 · 候選測試</h2>
+<div class="sub">
+  其餘符號都已找到可用寫法（見下方記錄）。這裡是**判定為不可用**或**無候選**的幾個，
+  保留供複核。<b>元音單獨發，輔音接 <code>a</code></b>。
+</div>
+<div id="cand"></div>
+<div class="sub" style="margin-top:8px">
+  試聽結果（完整記錄：<code>reference/missing-ipa-findings.md</code>）：<br>
+  · <b>已採用</b>（該符號唯一能發的寫法）：<code>ʏ→Y</code> <code>ʕ→?\</code> <code>ħ→Q\</code>
+    <code>ɸ→f[</code> <code>ɱ→m[</code> <code>ɟ→d[</code> <code>b`→ʙ</code> <code>ⱱ→v[</code>
+    <code>ɾ→r</code> <code>ɮ→l[</code> <code>ʟ→L[</code> <code>θ→s[</code> <code>ð→z[</code><br>
+  · <b>音值有偏差</b>：<code>ɸ ɱ ɟ ⱱ</code> 借用的是 <code>f m d v</code>；
+    <code>θ ð</code> 實為齒化的 <code>s z</code>（不是英語 th）；<code>ɾ</code> 與顫音 <code>r</code> 同名<br>
+  · <b>不可用</b>：ɜ ɞ ɶ（與既有音混同）｜ <b>無候選</b>：ʜ ʢ ˤ
+</div>
+
+<div id="log">等待初始化…</div>
+
+<script src="/engine/espeakng.js"></script>
+<script type="module">
+import { prepareBody, toEspeak, IPA_TO_ESPEAK } from '/src/ipa-espeak.mjs';
+
+const $ = id => document.getElementById(id);
+const SR = 22050;
+let tts = null, ready = false, ctx = null, cur = null, aliveSet = null;
+
+function log(s, cls) {
+  $('log').innerHTML += `\n<span class="${cls || ''}">${s}</span>`;
+  $('log').scrollTop = $('log').scrollHeight;
+}
+
+/* ---------- 引擎狀態 ---------- */
+/* 不再載入「實測生效名單」—— 那個判據本身不可靠，見 marksFor 的註釋。 */
+
+/* ---------- 表格定義 ---------- */
+const PLACES = ['雙唇','唇齒','齒','齒齦','齦後','捲舌','硬顎','軟顎','小舌','咽','聲門'];
+/* 每列：'' 表示該部位此方式無音 */
+const CONS = [
+  ['塞音',   ['p b','','t̪ d̪','t d','','ʈ ɖ','c ɟ','k ɡ','q ɢ','','ʔ']],
+  ['鼻音',   ['m','ɱ','','n','','ɳ','ɲ','ŋ','ɴ','','']],
+  ['顫音',   ['ʙ','','','r','','','','','ʀ','','']],
+  ['閃音',   ['','ⱱ','','ɾ','','ɽ','','','','','']],
+  ['擦音',   ['ɸ β','f v','θ ð','s z','ʃ ʒ','ʂ ʐ','ç ʝ','x ɣ','χ ʁ','ħ ʕ','h ɦ']],
+  ['邊擦音', ['','','','ɬ ɮ','','','','','','','']],
+  ['近音',   ['','ʋ','','ɹ','','ɻ','j','ɰ','','','']],
+  ['邊近音', ['','','','l','','ɭ','ʎ','ʟ','','','']],
+];
+const AFFR = [
+  ['齒齦',  't͡s d͡z'],
+  ['齦後',  't͡ʃ d͡ʒ'],
+  ['捲舌',  't͡ʂ d͡ʐ'],
+  ['齦顎',  't͡ɕ d͡ʑ'],
+];
+/* 元音：依標準舌位圖排（前→後，閉→開） */
+const VOWS = [
+  ['閉',   'i y',  'ɨ ʉ',  'ɯ u'],
+  ['次閉', 'ɪ ʏ',  '',     'ʊ'],
+  ['半閉', 'e ø',  'ɘ ɵ',  'ɤ o'],
+  ['中',   '',     'ə',    ''],
+  ['半開', 'ɛ œ',  'ɜ ɞ',  'ʌ ɔ'],
+  ['次開', 'æ',    'ɐ',    ''],
+  ['開',   'a ɶ',  '',     'ɑ ɒ'],
+];
+
+/* ---------- 每格狀態 ---------- */
+/*
+ * 只判斷「轉寫表有沒有這一項」。不再對能否發音下結論 ——
+ * 之前用「合成 [[Xa]] 與 [[a]] 的樣本數差」當判據，結果把 u/ʊ/ɨ/ɯ 這些
+ * 明明能發的元音誤判成失效（元音接 a 會變成雙元音，時長差不成立）。
+ * 能否發音一律以耳朵為準。
+ */
+function marksFor(sym) {
+  const conv = toEspeak(sym);
+  const name = conv.text;
+  const inTable = name.length > 0 && conv.dropped.length === 0;
+  let cls = '', tgt = name || '—';
+  if (!inTable) { cls = 'miss'; tgt = '未收錄'; if (conv.text) tgt = conv.text + ' ⚠'; }
+  return { cls, tgt, name };
+}
+
+function makeCell(sym, kind) {
+  const d = document.createElement('div');
+  const m = marksFor(sym);
+  d.className = 'cell ' + m.cls;
+  d.dataset.sym = sym;
+  d.dataset.kind = kind;
+  d.innerHTML = `<div class="sym">${sym}</div><div class="tgt">${m.tgt}</div>`;
+  d.onclick = () => speak(sym, kind, d);
+  return d;
+}
+
+/* ---------- 建表 ---------- */
+{
+  const t = document.createElement('table');
+  const hr = document.createElement('tr');
+  hr.appendChild(document.createElement('th'));
+  PLACES.forEach(p => { const th = document.createElement('th'); th.className = 'rot'; th.textContent = p; hr.appendChild(th); });
+  t.appendChild(hr);
+  for (const [manner, cols] of CONS) {
+    const tr = document.createElement('tr');
+    const th = document.createElement('td'); th.className = 'manner'; th.textContent = manner; tr.appendChild(th);
+    cols.forEach(cell => {
+      const td = document.createElement('td');
+      td.style.padding = '0';
+      if (!cell) { const e = document.createElement('div'); e.className = 'cell empty'; td.appendChild(e); }
+      else {
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '3px';
+        cell.split(' ').forEach(s => box.appendChild(makeCell(s, 'C')));
+        td.appendChild(box);
+      }
+      tr.appendChild(td);
+    });
+    t.appendChild(tr);
+  }
+  $('cons').appendChild(t);
+}
+{
+  const t = document.createElement('table');
+  for (const [label, ...cols] of VOWS) {
+    const tr = document.createElement('tr');
+    const th = document.createElement('td'); th.className = 'manner'; th.textContent = label; tr.appendChild(th);
+    cols.forEach(cell => {
+      const td = document.createElement('td'); td.style.padding = '0';
+      if (!cell) { const e = document.createElement('div'); e.className = 'cell empty'; td.appendChild(e); }
+      else {
+        const box = document.createElement('div'); box.style.display = 'flex'; box.style.gap = '3px';
+        cell.split(' ').forEach(s => box.appendChild(makeCell(s, 'V')));
+        td.appendChild(box);
+      }
+      tr.appendChild(td);
+    });
+    t.appendChild(tr);
+  }
+  $('vows').appendChild(t);
+}
+{
+  const t = document.createElement('table');
+  for (const [label, cell] of AFFR) {
+    const tr = document.createElement('tr');
+    const th = document.createElement('td'); th.className = 'manner'; th.textContent = label; tr.appendChild(th);
+    const td = document.createElement('td'); td.style.padding = '0';
+    const box = document.createElement('div'); box.style.display = 'flex'; box.style.gap = '3px';
+    cell.split(' ').forEach(s => box.appendChild(makeCell(s, 'C')));
+    td.appendChild(box); tr.appendChild(td); t.appendChild(tr);
+  }
+  $('affr').appendChild(t);
+}
+
+/* ---------- 引擎 ---------- */
+$('init').onclick = () => {
+  if (typeof eSpeakNG === 'undefined') { log('找不到 eSpeakNG', 'bad'); return; }
+  tts = new eSpeakNG('/engine/espeakng.worker.js', () => {
+    ready = true;
+    $('status').innerHTML = '<span class="ok">已就緒</span>';
+    tts.set_rate(Number($('rate').value));
+    tts.set_pitch(40);
+    tts.set_voice($('variant').value);
+    log('引擎就緒 ✓', 'ok');
+  });
+};
+
+function synth(text, rate) {
+  return new Promise(resolve => {
+    if (!ready) { resolve(null); return; }
+    tts.set_rate(rate);
+    tts.set_voice($('variant').value);
+    const chunks = []; let n = 0, peak = 0, settled = false;
+    const finish = (runaway) => {
+      if (settled) return; settled = true;
+      const s = new Float32Array(n); let p = 0;
+      chunks.forEach(c => { s.set(c, p); p += c.length; });
+      resolve({ samples: s, n, peak, runaway: !!runaway });
+    };
+    try {
+      tts.synthesize(text, (samples) => {
+        if (!samples) { finish(false); return; }
+        const f = new Float32Array(samples.buffer || samples);
+        const half = f.length >> 1;
+        const a = new Float32Array(half);
+        for (let i = 0; i < half; i++) { const v = f[i * 2]; a[i] = v; const av = v < 0 ? -v : v; if (av > peak) peak = av; }
+        chunks.push(a); n += half;
+        if (n > SR * 20) finish(true);
+      });
+    } catch (e) { log('異常: ' + e.message, 'bad'); finish(false); }
+    setTimeout(() => finish(false), 20000);
+  });
+}
+
+function play(samples) {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+  const buf = ctx.createBuffer(1, samples.length, SR);
+  buf.copyToChannel(samples, 0);
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination); src.start();
+  cur = src;
+}
+$('stop').onclick = () => { try { cur && cur.stop(); } catch (e) {} };
+
+/* ---------- 點擊發音 ---------- */
+let busy = false;
+async function speak(sym, kind, el) {
+  if (!ready) { log('先按「初始化引擎」', 'warn'); return; }
+  if (busy) return;
+  busy = true;
+  document.querySelectorAll('.cell.play').forEach(x => x.classList.remove('play'));
+  el && el.classList.add('play');
+
+  const mode = $('zeroComp').checked ? 'glottal' : 'none';
+  const body = kind === 'C' ? sym + 'a' : sym;
+  const prep = prepareBody(body, mode);
+  const esp = prep.text + '53';
+  const r = await synth('[[ ' + esp + ' _: ]]', Number($('rate').value));
+  busy = false;
+  if (!r || !r.n) { log(`✗ ${sym}  無輸出`, 'bad'); return; }
+
+  const ms = (r.n / SR * 1000).toFixed(0);
+  const mark = marksFor(sym);
+  const note = [];
+  if (prep.dropped.length) note.push(`丟棄${JSON.stringify(prep.dropped)}`);
+  if (prep.compensated) note.push(`零聲母→${prep.ipaBody}`);
+  const verdict = mark.cls === 'miss' ? '✗ 未收錄' : mark.cls === 'dead' ? '⚠ 目標名未實測生效' : '✓';
+  log(`${verdict}  ${sym.padEnd(4)} ${body.padEnd(5)} → ${esp.padEnd(9)} ${String(r.n).padStart(6)}採樣 ${ms.padStart(5)}ms peak=${r.peak.toFixed(3)}${note.length ? '  ' + note.join(' ') : ''}`,
+      mark.cls === 'miss' ? 'bad' : mark.cls === 'dead' ? 'warn' : 'ok');
+  play(r.samples);
+}
+
+/* ---------- 逐列播放 ---------- */
+function addRowPlay(containerId) {
+  const t = document.querySelector('#' + containerId + ' table');
+  if (!t) return;
+  [...t.rows].forEach(tr => {
+    const syms = [...tr.querySelectorAll('.cell[data-sym]')].map(c => c.dataset.sym);
+    if (!syms.length) return;
+    const b = document.createElement('button');
+    b.textContent = '▶ 整列';
+    b.style.cssText = 'font-size:11px;padding:2px 7px;margin-left:6px';
+    b.onclick = async () => { for (const s of syms) { await speak(s, 'C', null); await new Promise(r => setTimeout(r, 260)); } };
+    tr.cells[0].appendChild(b);
+  });
+}
+addRowPlay('cons');
+addRowPlay('affr');
+
+/* ---------- 候選測試面板 ---------- */
+/*
+ * 未收錄的 IPA → 可能的音素名候選。
+ * kind: 'C' 輔音接 a（[[Ca53]]）｜ 'V' 元音單獨（[[V53]]）
+ * ok:   使用者已確認「能發出聲」的候選（音值是否準確另判）
+ * done: 已寫進轉寫表，從本面板移除
+ */
+const CANDIDATES = [
+  /* 判定為不可用（與既有音混同）—— 保留供複核 */
+  ['ɜ', 'V', ['V', '@;', 'E', '@', '3'], []],
+  ['ɞ', 'V', ['W', 'O"', '@.', 'O', '3"'], []],
+  ['ɶ', 'V', ['a.', '&', 'W', 'a', 'A.'], []],
+  /* 無候選，只能確認是否真的無聲 */
+  ['ʜ', 'C', ['H\\', 'H<trl>', 'Q\\'], []],
+  ['ʢ', 'C', ['Q\\', 'H<vcd>', '?\\'], []],
+  ['ˤ', 'C', ['?\\', 'Q\\', 'H'], []],
+  /* 對照組：已知正確，用來比對 */
+  ['ɑ(對照)', 'V', ['A.'], []],
+  ['ɒ(對照)', 'V', ['A'], []],
+  ['a(對照)', 'V', ['a'], []],
+  ['i(對照)', 'V', ['i'], []],
+  ['u(對照)', 'V', ['u'], []],
+  ['s(對照)', 'C', ['s'], []],
+  ['t(對照)', 'C', ['t'], []],
+  ['l(對照)', 'C', ['l'], []],
+];
+{
+  const box = document.createElement('div');
+  for (const [ipa, kind, list, okList] of CANDIDATES) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap';
+    const lab = document.createElement('span');
+    lab.textContent = ipa;
+    lab.style.cssText = 'min-width:64px;font-size:16px;text-align:right;color:#c9d1d9';
+    row.appendChild(lab);
+    for (const cand of list) {
+      const b = document.createElement('button');
+      b.textContent = cand;
+      b.style.fontFamily = 'ui-monospace,Consolas,monospace';
+      if (okList.includes(cand)) b.style.borderColor = 'var(--ok)';
+      b.onclick = () => speakRaw(kind === 'C' ? cand + 'a' : cand, cand, kind, b);
+      row.appendChild(b);
+    }
+    box.appendChild(row);
+  }
+  $('cand').appendChild(box);
+}
+
+/** 直接合成给定的音素串（绕过转写表），用于候选试听 */
+async function speakRaw(phonemes, label, kind, el) {
+  if (!ready) { log('先按「初始化引擎」', 'warn'); return; }
+  if (busy) return;
+  busy = true;
+  document.querySelectorAll('.cell.play').forEach(x => x.classList.remove('play'));
+  const prev = el ? el.style.outline : '';
+  if (el) el.style.outline = '2px solid var(--ok)';
+  const esp = phonemes + '53';
+  const r = await synth('[[ ' + esp + ' _: ]]', Number($('rate').value));
+  busy = false;
+  setTimeout(() => { if (el) el.style.outline = prev; }, 1200);
+  if (!r || !r.n) { log(`✗ 候選 ${label}  無輸出`, 'bad'); return; }
+  log(`候選 ${label.padEnd(8)} ${kind === 'V' ? '（元音·單獨）' : '（輔音·接 a）'} [[${esp}]]  ${String(r.n).padStart(6)}採樣 ${(r.n / SR * 1000).toFixed(0)}ms peak=${r.peak.toFixed(3)}`,
+      'ok');
+  play(r.samples);
+}
+
+/* 统计 */
+const all = [...document.querySelectorAll('.cell[data-sym]')];
+const miss = all.filter(c => c.classList.contains('miss'));
+log(`\n本表共 ${all.length} 格：轉寫表有收錄 ${all.length - miss.length}，未收錄 ${miss.length}`, 'ok');
+if (miss.length) log('未收錄（會被丟棄）：' + miss.map(c => c.dataset.sym).join(' '), 'bad');
+log('※ 未收錄的請用下方「候選測試」逐個試聽，聽到對的告訴我。', 'dim');
+
+
+
+/* ===== 聲調驗證 · 五度標記法 ===== */
+{
+  const LEVEL = ["11","22","33","44","55"];
+  const KNOWN = new Set(['55','53','35','33','11','21','214','51','44','22']);
+  const ALL = ["11","22","33","44","55","51","52","53","54","41","42","43","31","32","21","12","13","14","15","23","24","25","34","35","45","214","213","212","312","324","423","434","353","535","131","242","454","323","231","132","343","453","121","141","151","252","354","1","2","3","4","5"];
+  const tl = document.getElementById('toneLog');
+
+  function tlog(s, cls) {
+    const c = cls === 'ok' ? 'var(--ok)' : cls === 'bad' ? 'var(--bad)' : cls === 'warn' ? 'var(--warn)' : 'var(--dim)';
+    tl.innerHTML += '\n<span style="color:' + c + '">' + s + '</span>';
+    tl.scrollTop = tl.scrollHeight;
+  }
+
+  /* 标记已知支持的 */
+  document.querySelectorAll('.tone').forEach(el => {
+    if (KNOWN.has(el.dataset.tone)) {
+      el.classList.add('known');
+      el.querySelector('.v').textContent = '現有';
+    }
+  });
+
+  /*
+   * 绝对五度刻度：从平调 11/22/33/44/55 的实测反推锚点。
+   * 这里用「相对整体最低/最高」的固定标尺，避免每个调值自己归一化（那是循环论证）。
+   */
+  const ANCHOR = { 1: 80, 2: 88, 3: 98, 4: 102, 5: 114 };
+
+  function toLevel(f0) {
+    let best = 1, bestD = 1e9;
+    for (const [lv, hz] of Object.entries(ANCHOR)) {
+      const d = Math.abs(f0 - hz);
+      if (d < bestD) { bestD = d; best = +lv; }
+    }
+    return best;
+  }
+
+  function f0Track(samples) {
+    const W = Math.floor(SR * 0.040), H = Math.floor(SR * 0.010);
+    const head = Math.floor(SR * 0.060), tail = Math.floor(SR * 0.040);
+    const raw = [];
+    for (let i = head; i + W < samples.length - tail; i += H) {
+      let e = 0;
+      for (let j = i; j < i + W; j++) e += samples[j] * samples[j];
+      if (Math.sqrt(e / W) < 0.02) continue;
+      let bestLag = 0, bestR = 0;
+      const minLag = Math.floor(SR / 400), maxLag = Math.floor(SR / 60);
+      for (let lag = minLag; lag <= maxLag && i + W + lag < samples.length; lag++) {
+        let acc = 0;
+        for (let j = i; j < i + W; j++) acc += samples[j] * samples[j + lag];
+        const r = acc / (e || 1);
+        if (r > bestR) { bestR = r; bestLag = lag; }
+      }
+      if (bestR > 0.35 && bestLag) raw.push(SR / bestLag);
+    }
+    if (raw.length < 3) return [];
+    /* 中值滤波 */
+    const med = [];
+    for (let i = 0; i < raw.length; i++) {
+      const w = raw.slice(Math.max(0, i - 2), Math.min(raw.length, i + 3)).sort((a, b) => a - b);
+      med.push(w[w.length >> 1]);
+    }
+    return med;
+  }
+
+  async function playTone(tone, el) {
+    if (!ready) { tlog('先按「初始化引擎」', 'warn'); return; }
+    if (busy) return;
+    busy = true;
+    document.querySelectorAll('.tone.play').forEach(x => x.classList.remove('play'));
+    el && el.classList.add('play');
+
+    const r = await synth('[[ a' + tone + ' _: ]]', Number(document.getElementById('rate').value));
+    busy = false;
+    if (!r || !r.n) { tlog('✗ ' + tone + '  無輸出', 'bad'); return; }
+
+    const f0 = f0Track(r.samples);
+    if (!f0.length) { tlog('⚠ ' + tone.padEnd(4) + '  量不到基頻', 'warn'); play(r.samples); return; }
+
+    const head = f0.slice(0, Math.max(1, Math.floor(f0.length * 0.3)));
+    const tailv = f0.slice(-Math.max(1, Math.floor(f0.length * 0.3)));
+    const med = (a) => { const b = [...a].sort((x, y) => x - y); return b[b.length >> 1]; };
+    const s0 = med(head), s1 = med(tailv);
+    const n1 = toLevel(s0), n2 = toLevel(s1);
+    const dir = Math.abs(s1 - s0) < 4 ? '平' : s1 > s0 ? '升' : '降';
+
+    /* 目标调值：单字补成双字；三段只看首尾 */
+    const tgt = tone.length === 1 ? tone + tone : tone;
+    const t1 = +tgt[0], t2 = +tgt[tone.length - 1];
+    const dT = t2 - t1, dM = n2 - n1;
+    const ok = Math.abs(dT - dM) <= 1;
+
+    el && (el.querySelector('.c').textContent = n1 + '→' + n2);
+    tlog((ok ? '✓' : '△') + ' ' + tone.padEnd(4) + ' ' + String(r.n).padStart(6) + '採樣  ' +
+      Math.round(s0) + '→' + Math.round(s1) + ' Hz  (' + dir + ')  五度 ' + n1 + '→' + n2 +
+      '  目標 ' + t1 + '→' + t2 + (ok ? '' : '  差 ' + dM + '/應 ' + dT),
+      ok ? 'ok' : 'warn');
+    play(r.samples);
+  }
+
+  document.querySelectorAll('.tone').forEach(el => { el.onclick = () => playTone(el.dataset.tone, el); });
+
+  document.getElementById('toneAll').onclick = async () => {
+    if (!ready) { tlog('先按「初始化引擎」', 'warn'); return; }
+    for (const t of ALL) {
+      const el = document.querySelector('.tone[data-tone="' + t + '"]');
+      await playTone(t, el);
+      await new Promise(r => setTimeout(r, 260));
+    }
+  };
+  document.getElementById('toneLevel').onclick = async () => {
+    if (!ready) { tlog('先按「初始化引擎」', 'warn'); return; }
+    for (const t of LEVEL) {
+      const el = document.querySelector('.tone[data-tone="' + t + '"]');
+      await playTone(t, el);
+      await new Promise(r => setTimeout(r, 300));
+    }
+  };
+}
+
+</script>
+</body>
+</html>

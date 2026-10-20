@@ -1,0 +1,28 @@
+# ── 依賴 ──────────────────────────────────────────
+node_modules/
+
+# ── 原站點的編譯產物 ──────────────────────────────
+# site-source/ 裏是 duyin-web_bg.wasm（29 MB）等站點作者的編譯結果。
+# 本項目只把它當參考資料，不參與運行，所以不隨代碼發佈。
+site-source/
+
+# ── 只有工具用到的站點數據（可選）──────────────────
+# ⚠ 注意：reference/site-fallback-table.json 和 site-variant-table.json
+#   **不能排除** —— web/derive.html 的推導功能直接讀這兩份（約 1 MB）。
+#   下面這兩個只有 tools/extract-*.mjs 用到，頁面不讀。
+reference/site-main-table.json
+reference/site-phonologies.json
+
+# ── 備份 / 臨時檔 ─────────────────────────────────
+*.bak
+*.tmp
+*.log
+_*.mjs
+
+# ── 系統檔 ────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── 編輯器 ────────────────────────────────────────
+.vscode/
+.idea/
