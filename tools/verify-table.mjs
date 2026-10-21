@@ -70,7 +70,13 @@ const byLen = [...names].sort((a, b) => b.length - a.length);
 function decompose(v) {
   const parts = []; let i = 0;
   while (i < v.length) {
-    if (/[0-9_.:;'"`~·^]/.test(v[i])) { i++; continue; }
+    /*
+     * 跳過「不算音素名」的字符。
+     * ⚠ 必須包含**空白**：`ɨw → i" w` 這種寫法靠空格分隔，
+     *   引擎接受（實測 221ms，不加空格只有 122ms），
+     *   但舊的正則裏沒有 \s，於是報「卡在 " w"」。
+     */
+    if (/[0-9_.:;'"`~·^\s]/.test(v[i])) { i++; continue; }
     let hit = null;
     for (const n of byLen) { if (n && v.startsWith(n, i)) { hit = n; break; } }
     if (!hit) return { ok: false, bad: v.slice(i) };

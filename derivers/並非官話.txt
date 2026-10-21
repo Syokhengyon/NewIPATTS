@@ -55,7 +55,7 @@ function 聲母規則() {
   if (is('疑母')) return 'ŋ';
 
   if (is('曉母')) return 'h';
-  if (is('匣母')) return 'ɦ';
+  if (is('匣母')) return '';
   if (is('影母')) return '';
   if (is('云母')) return is('東韻 舒聲')?'ɦ':'';
   if (is('以母')) return '';

@@ -84,17 +84,46 @@ for (const f of files) {
   }
 
   /* ② 取默认选项值（页面会填进 方案選項）*/
+  /*
+   * 推導器的選項是 `[標籤, 默認值, { ...說明 }]`，默認值有三種形態，
+   * 必須逐種展開，否則推導器裏拿到的會是索引而不是真實值：
+   *
+   *   ① ['RTR', currRTR, {...}]
+   *        默認值就是 currRTR 本身（字符串/布爾）。
+   *
+   *   ② ['聲調記號', 0, { options: [{text, value}, …] }]
+   *        默認值是**索引**，真實值 = options[0].value
+   *        （= ',\u0301,\u0300,'）。
+   *        不展開的話 選項.聲調記號 是數字 0，
+   *        推導器裏 `選項.聲調記號.split(',')` 就炸「split is not a function」。
+   *
+   *   ③ ['三C介音', [1, 'ɰ', 'ɣ̞', 'ɣ'], {...}]
+   *        默認值是 [索引, …候選]，真實值 = 候選[1] = 'ɰ'。
+   */
   const 方案選項 = {};
   if (Array.isArray(opts)) {
     for (const o of opts) {
-      if (!Array.isArray(o)) continue;
-      /* 页面逻辑：o 是 [key, 默认值] 或 [key, [枚举...]] */
-      if (o.length >= 2 && typeof o[0] === 'string') {
-        const v = o[1];
-        if (Array.isArray(v) && v.length && Array.isArray(v[0])) 方案選項[o[0]] = v[0][0];   // 枚举：取第一项
-        else if (Array.isArray(v) && v.length && typeof v[0] === 'string') 方案選項[o[0]] = v[0];
-        else 方案選項[o[0]] = v;
+      if (!Array.isArray(o) || typeof o[0] !== 'string' || o.length < 2) continue;
+      const key = o[0];
+      let v = o[1];
+      const meta = (o[2] && typeof o[2] === 'object') ? o[2] : null;
+
+      /* 形態 ②：默認值是索引，真實值在 meta.options 裏 */
+      if (meta && Array.isArray(meta.options) && meta.options.length && typeof v === 'number') {
+        const idx = Math.max(0, Math.min(meta.options.length - 1, v));
+        const opt = meta.options[idx];
+        v = (opt && typeof opt === 'object' && 'value' in opt) ? opt.value : opt;
       }
+      /* 形態 ③：[索引, …候選] */
+      else if (Array.isArray(v) && typeof v[0] === 'number' && v.length > 1) {
+        const idx = Math.max(0, Math.min(v.length - 2, v[0]));
+        v = v[idx + 1];
+      }
+      /* 形態 ①：若 v 是對象且 o[2] 有值，取 o[2]（較少見） */
+      else if (v && typeof v === 'object' && !Array.isArray(v)) {
+        v = o[2] ?? v;
+      }
+      方案選項[key] = v;
     }
   }
 

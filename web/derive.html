@@ -232,9 +232,28 @@
         <div class="rng"><input type="range" id="rateR" min="80" max="300" value="140">
           <span class="val" id="rateVal">140</span></div>
 
-        <label>字間隔</label>
-        <div class="rng"><input type="range" id="gapR" min="0" max="300" value="45">
-          <span class="val" id="gapVal">45</span></div>
+        <!--
+          「補償」按音節實際時長做差別化補間隔。
+          引擎給每個音節分配的時長差別極大（實測 51 個元音）：
+            帶塞音尾 -p/-t/-k（入聲）→ 只有原來的 61–62%（ik 74ms、ɑk 95ms）
+            帶鼻音尾 -m/-n/-ŋ        → 110–119%
+            帶 -j 尾                  → 139%（被明顯拉長）
+          統一間隔只能部分緩解（實測最長/最短仍差 2.2 倍），
+          按時長補才能真的拉平（70% → 1.26 倍，100% → 1.00 倍）。
+
+          公式：gap = 補償 × (目標週期 − 該字時長)，限 0–400ms
+            0%   → 零間隔（原始行為）
+            100% → 所有字的週期都等於目標週期
+          長音節時長超過目標時，(目標−時長) 為負 → 間隔自動壓到 0，
+          正好抵消「被拉長」的聽感。
+        -->
+        <label>補償</label>
+        <div class="rng"><input type="range" id="compR" min="0" max="100" value="70">
+          <span class="val" id="compVal">70%</span></div>
+
+        <label>目標週期</label>
+        <div class="rng"><input type="range" id="targetR" min="150" max="450" value="260">
+          <span class="val" id="targetVal">260ms</span></div>
       </div>
       <div class="row" style="margin-top:8px">
         <label>零聲母
@@ -1072,26 +1091,23 @@ async function speakAll(paraIndex) {
   const segs = [];
   let okN = 0, badN = 0, done = 0;
   const total = list.filter(r => r.字).length;
-  const gapMs = Number($('gapR').value);
   /*
-   * 各級停頓時長。微停頓（行內空格）取 gapMs 但**上限 60ms** ——
-   * 它比逗號短，且不該隨「字間隔」滑條無限變大。
+   * 各級停頓時長。
+   * 原本這裏取「字間隔」滑條的值當下限，但那個滑條已經移除
+   * （改成按音節時長做差別化補償），所以改成固定值。
+   * 依據：微停頓要比逗號明顯短，句末要比逗號長得多，
+   * 且都應顯著大於字間補償的上限（400ms 只在極短音節 + 高補償時才碰到）。
    */
-  const PAUSE = {
-    tiny: Math.min(Math.max(gapMs, 30), 60),
-    short: Math.max(gapMs, 120),
-    long: Math.max(gapMs, 300),
-    para: Math.max(gapMs, 500),
-  };
+  const PAUSE = { tiny: 40, short: 130, long: 320, para: 520 };
   const rate = Number($('rateR').value);
   const t0 = Date.now();
 
   log(`— 開始朗讀${para ? `第 ${paraIndex + 1} 段` : ''}，共 ${total} 字 —`, 'dim');
   for (const row of list) {
     if (myGen !== speakGen) { log('⏹ 已被新的朗讀取代', 'warn'); return; }
-    if (row.para) { segs.push(new Float32Array(Math.round(SR * PAUSE.para / 1000))); continue; }
-    if (row.pause) { segs.push(new Float32Array(Math.round(SR * (PAUSE[row.pause] || gapMs) / 1000))); continue; }
-    if (row.br) { segs.push(new Float32Array(Math.round(SR * PAUSE.long / 1000))); continue; }
+    if (row.para) { segs.push({ audio: new Float32Array(Math.round(SR * PAUSE.para / 1000)), isChar: false }); continue; }
+    if (row.pause) { segs.push({ audio: new Float32Array(Math.round(SR * PAUSE[row.pause] / 1000)), isChar: false }); continue; }
+    if (row.br) { segs.push({ audio: new Float32Array(Math.round(SR * PAUSE.long / 1000)), isChar: false }); continue; }
     const r = currentReading(row);
     if (!r || !r.ipa) { badN++; continue; }
     const { esp, prep, tone } = espOf(r.ipa);
@@ -1107,13 +1123,55 @@ async function speakAll(paraIndex) {
     if (!s || !s.n) { log(`✗ ${row.字}  ${r.ipa} → ${esp}  無輸出`, 'bad'); badN++; continue; }
     okN++; done++;
     const trimmed = trimSilence(s.samples, { sr: SR });
-    segs.push(trimmed);
+    segs.push({ audio: trimmed, isChar: true });
     if (done % 20 === 0) log(`  …已合成 ${done}/${total} 字`, 'dim');
     if (badN && !r.err) { /* 静默 */ }
   }
   if (!segs.length) { log('全部無輸出', 'bad'); return; }
-  /* 字間隔已由停頓段承擔，這裏不再額外加 —— 否則每個字後面都插一次 */
-  const merged = mergeWithGap(segs, 0, SR);
+
+  /*
+   * 拼接：**只在相鄰的「字」之間**插入統一的 gapMs。
+   *
+   * 為什麼要改（原本是 mergeWithGap(segs, 0) —— 全零間隔）：
+   *   引擎給每個音節分配的時長差別極大。實測 51 個元音，
+   *   帶塞音尾（入聲 -p/-t/-k）的音節被壓到只有原來的 61–62%，
+   *   而帶鼻音尾（-m/-n/-ŋ）反而是 110–119%、帶 -j 是 139%。
+   *   具體：ik 74ms、ɑk 95ms，對比 an 189ms、ɑ 218ms。
+   *
+   *   零間隔直接拼起來時，這些短音節會「黏」在下一個字上，聽感像被吞掉。
+   *   「字間隔」滑條（gapR，預設 45ms）原本只用來給標點停頓設下限，
+   *   普通字之間完全沒用到 —— 名不符實。這裏讓它真正生效。
+   *
+   * 標點/換行/分段已經自帶停頓段，那幾處**不再重複加** gap。
+   *
+   * ── 差別化補償（補償滑條）──
+   *   統一間隔只能部分緩解。真正拉平要用「目標週期」：
+   *     每個短音節補到接近目標週期，長音節則少補或不補。
+   *       gap_i = clamp( gapMs + comp × (目標週期 − 實際時長), 0, MAX )
+   *     comp = 0   → 就是統一間隔（原行為）
+   *     comp = 1   → 完全拉平（所有字的週期都 = 目標週期）
+   *   長音節（如 -j 尾被拉到 139% 的那些）時長已超過目標，
+   *   (目標 − 實際) 為負 → 間隔被壓小，正好抵消「被拉長」的聽感。
+   */
+  const compPct = Number($('compR')?.value ?? 0) / 100;
+  const targetMs = Number($('targetR')?.value ?? 260);
+  const GAP_MAX = 400;
+
+  /** 单字的实际时长（ms） */
+  const durOf = (seg) => seg.audio.length / SR * 1000;
+
+  const parts = [];
+  for (let i = 0; i < segs.length; i++) {
+    const cur = segs[i], prev = segs[i - 1];
+    if (i > 0 && cur.isChar && prev && prev.isChar) {
+      /* 用**前者**的時長來決定它後面該補多少 */
+      const d = durOf(prev);
+      const g = Math.max(0, Math.min(GAP_MAX, compPct * (targetMs - d)));
+      if (g > 0.5) parts.push(new Float32Array(Math.round(SR * g / 1000)));
+    }
+    parts.push(cur.audio);
+  }
+  const merged = mergeWithGap(parts, 0, SR);
   lastSamples = merged;
   lastSig = speakSig(paraIndex);
   play(merged);
@@ -1519,15 +1577,18 @@ $('tbCopy').onclick = () => {
   navigator.clipboard.writeText(t).then(() => log('已複製 IPA 到剪貼板', 'ok'), e => log('複製失敗：' + e.message, 'bad'));
 };
 /* 滑條與其數值顯示。注意：span 的 id 不是 id+'Val' ——
-   input 是 rateR/gapR/pitch，span 是 rateVal/gapVal/pitchVal。
-   早先寫成 $(id + 'Val') 拼出 rateRVal/gapRVal，取到 null，
+   input 是 rateR/compR/targetR/pitch，span 是 rateVal/compVal/targetVal/pitchVal。
+   早先寫成 $(id + 'Val') 拼出 rateRVal，取到 null，
    out.textContent 拋 TypeError 導致整個模組求值中斷，
    後面所有按鈕（示例、從檔案、自檢…）都沒綁上，表現為「點了沒反應」。 */
-[['pitch', 'pitchVal'], ['rateR', 'rateVal'], ['gapR', 'gapVal']].forEach(([inputId, outId]) => {
+[['pitch', 'pitchVal'], ['rateR', 'rateVal'],
+ ['compR', 'compVal', v => v + '%'], ['targetR', 'targetVal', v => v + 'ms']
+].forEach(([inputId, outId, fmt]) => {
   const el = $(inputId), out = $(outId);
   if (!el || !out) { console.error('滑條元素缺失:', inputId, outId); return; }
-  el.oninput = () => { out.textContent = el.value; if (inputId === 'pitch') applyVoice(); };
-  out.textContent = el.value;
+  const show = () => { out.textContent = fmt ? fmt(el.value) : el.value; };
+  el.oninput = () => { show(); if (inputId === 'pitch') applyVoice(); };
+  show();
 });
 ['showIpa', 'showPhon', 'hideUnknown'].forEach(id => $(id).onchange = renderCanvas);
 
