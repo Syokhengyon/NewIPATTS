@@ -44,7 +44,7 @@ function 聲母規則() {
 
   if (is('章母')) return 'tʃ';
   if (is('昌母')) return 'tʃʰ';
-  if (is('常母')) return 'ʒ';
+  if (is('常母')) return is('平聲')?'dʒʱ':'ʒ';
   if (is('書母')) return 'ʃ';
   if (is('船母')) return 'ʒ';
   if (is('日母')) return 'ʒ';
