@@ -89,11 +89,11 @@ function 韻母規則() {
   // 蟹攝
   if (is('齊韻')) return is('合口')?'yi':'i';
   if (is('祭韻')) return is('合口')?'yi':'i';
-  if (is('泰韻 合口')) return is('見溪疑母')?'uaj':'ui';
+  if (is('泰韻 合口')) return is('見溪疑母')?'uaj':'uɨi';
   if (is('泰韻')) return 'aj';
   if (is('佳韻')) return 'e';
   if (is('皆夬韻')) return 'ej';
-  if (is('灰韻')) return 'ui';
+  if (is('灰韻')) return 'uɨi';
   if (is('咍韻')) return 'aj';
   if (is('廢韻 開口')) return 'i';
   if (is('廢韻')) return is('合口')?'yi':'ui';
@@ -144,7 +144,7 @@ function 韻母規則() {
 
 
   // 曾攝
-  if (is('蒸韻')) return is('莊組')?'ɨŋ':'iŋ';
+  if (is('蒸韻')) return is('莊組')?'eŋ':'iŋ';
   if (is('登韻')) return is('合口')?'uɨŋ':'ɨŋ';
 
   // 流攝
@@ -206,7 +206,7 @@ if (is('合口')) {
 韻母=韻母.replace('uu','u');
 韻母=韻母.replace('uy','y');
 }
-
+韻母=韻母.replace('uɨi','ui');
 if (is('云母')) {
   韻母=韻母.replace('iew','ɑw');
   韻母=韻母.replace('ie','a');
@@ -235,8 +235,7 @@ if(is('莊組'))
 {
 韻母=韻母.replace('yi','ui');
 if(is('非 止攝'))韻母=韻母.replace('i','ɨ');
-韻母=韻母.replace('ie','a');
-韻母=韻母.replace('ye','ua');
+韻母=韻母.replace('ie','e');
+韻母=韻母.replace('ye','ue');
 }
 return 聲母 + 韻母 + 聲調;
-
