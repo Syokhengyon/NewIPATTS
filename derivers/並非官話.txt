@@ -65,8 +65,8 @@ function 聲母規則() {
 
 function 韻母規則() {
   // 通攝
-  if (is('東冬韻 一等')) return 'oŋ';
-  if (is('東鍾韻 三等')) return is('幫莊組')?'oŋ':'ioŋ';
+  if (is('東冬韻 一等')) return 'ʊŋ';
+  if (is('東鍾韻 三等')) return is('幫莊組')?'ʊŋ':'iʊŋ';
 
   // 江攝
   if (is('江韻 知莊組')) return 'uɑŋ';
