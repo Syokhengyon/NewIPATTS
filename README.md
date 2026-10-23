@@ -20,8 +20,45 @@ IPA → espeak 音素名的對照表以**口口聲聲站點作者的那張表**�
 
 ## 一、快速開始
 
+### 1.1 Windows：雙擊 `start.bat`
+
+把專案解壓到硬碟上的資料夾（**不要在壓縮包裏直接雙擊**），然後雙擊根目錄的 **`start.bat`**。
+它會自動做完這四件事：
+
+| 步驟 | 做什麼 |
+|---|---|
+| ① 檢查 Node.js | 沒裝或低於 18 → 提示原因並打開下載頁 |
+| ② 裝依賴 | 首次運行自動 `npm install`（約 10–60 秒）；失敗會改用專案內的 `.npm-cache` 再試一次 |
+| ③ 挑端口 | 預設 8981；被別的程式佔用就自動往後找；若 8981 上**已經是本服務**，只開瀏覽器、不重複啟動 |
+| ④ 起服務 | 等 `serve.mjs` 真的能回應 HTTP，才自動打開瀏覽器 |
+
+**關掉那個窗口就是停止服務**。（按 Ctrl+C 也行，只是 cmd 會再問一句
+`終止批處理作業 (Y/N)?`，答 `Y` 即可 —— 這是 `cmd.exe` 對批次檔的固有行爲。）
+
+```bat
+start.bat                  :: 預設端口，自動開瀏覽器
+start.bat --port 9000      :: 指定端口
+start.bat --no-open        :: 不自動開瀏覽器
+start.bat --install        :: 強制重新 npm install
+start.bat --help           :: 全部選項
+```
+
+想要桌面捷徑：右鍵 `start.bat` → 傳送到 → 桌面（建立捷徑），再改圖示即可；
+捷徑不管從哪個目錄點都會正確進入專案目錄。
+
+> **爲什麼 `start.bat` 裏一個中文都沒有**：cmd.exe 用當前代碼頁解讀 `.bat`，
+> 在 936／65001 之間切換時非 ASCII 字元會亂碼，甚至讓 `if` 區塊解析錯。
+> 所以 `.bat` 只管找 `node.exe`、檢查版本、轉交，**所有中文提示都由
+> `tools/start-web.mjs` 輸出** —— Node 在 Windows 上是以 Unicode 寫控制台
+> （`WriteConsoleW`），跟 `chcp` 無關，任何代碼頁都不會亂碼。
+
+也可以不經過 `.bat`：`npm start` 就等於 `node tools/start-web.mjs`。
+
+### 1.2 手動啟動（macOS / Linux，或想看完整輸出）
+
+在專案根目錄（與 `package.json` 同一層）：
+
 ```bash
-cd ipa-tts/speech
 npm install                 # 首次
 npm run serve               # 起服務（必須）
 ```
@@ -84,6 +121,7 @@ npm install --no-save jsdom       # 只補測試用的 jsdom
 
 ```
 ipa-tts/speech/
+├── start.bat                  ★ Windows 雙擊啟動（調用 tools/start-web.mjs）
 ├── web/                       三個頁面
 │   ├── derive.html            /        切韻推導（主界面）
 │   ├── index.html             /ipa     IPA 直輸 / 字表
@@ -571,6 +609,7 @@ node tools/extract-variant-table.mjs    # 異體字/簡繁 8520 字
 
 | 腳本 | 說明 |
 |---|---|
+| `start-web.mjs` | 一鍵啟動：查 Node 版本 → 缺依賴就 `npm install` → 挑空閒端口 → 起服務 → 開瀏覽器。`start.bat` 與 `npm start` 都調它 |
 | `serve.mjs [端口]` | 靜態服務器，默認 8981 |
 | `cli.mjs` | 命令行（`speak` / `check` / `derive` / `lexicon`） |
 | `install-variant.mjs` | 把嗓音變體烘焙進 `.data` |

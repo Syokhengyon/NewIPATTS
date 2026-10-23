@@ -52,9 +52,10 @@ function runDeriver(rawFn, pos, 字頭, 選項) {
 
 /* ---------- 主流程 ---------- */
 const only = process.argv.slice(2);
+const EXTS = ['.txt', '.js', '.mjs'];   /* 與 serve.mjs 下拉框接受的副檔名一致 */
 const files = fs.readdirSync(path.join(ROOT, 'derivers'))
-  .filter(f => f.endsWith('.txt'))
-  .filter(f => !only.length || only.includes(f.replace(/\.txt$/, '')));
+  .filter(f => EXTS.includes(path.extname(f).toLowerCase()))
+  .filter(f => !only.length || only.includes(path.basename(f, path.extname(f))));
 
 console.log(`检查 ${files.length} 个推导方案${only.length ? '（' + only.join(', ') + '）' : ''}`);
 console.log(`  tshet-uinh: ${T ? '✓' : '✗'}   deriver-tools: ${DT ? '✓' : '（未载入）'}\n`);
@@ -62,7 +63,7 @@ console.log(`  tshet-uinh: ${T ? '✓' : '✗'}   deriver-tools: ${DT ? '✓' : 
 let totalOk = 0, totalBad = 0;
 for (const f of files) {
   const src = fs.readFileSync(path.join(ROOT, 'derivers', f), 'utf8');
-  const name = f.replace(/\.txt$/, '');
+  const name = path.basename(f, path.extname(f));
   console.log(`=== ${f}  ${(src.length / 1024).toFixed(1)} KB  ${src.split('\n').length} 行 ===`);
 
   const fn = compile(src);
@@ -114,10 +115,11 @@ for (const f of files) {
         const opt = meta.options[idx];
         v = (opt && typeof opt === 'object' && 'value' in opt) ? opt.value : opt;
       }
-      /* 形態 ③：[索引, …候選] */
+      /* 形態 ③：[索引, …候選]，索引是 1-based（與 推導設定 一致） */
       else if (Array.isArray(v) && typeof v[0] === 'number' && v.length > 1) {
-        const idx = Math.max(0, Math.min(v.length - 2, v[0]));
-        v = v[idx + 1];
+        const 候選 = v.slice(1);
+        const 索引 = Math.max(1, Math.min(候選.length, v[0]));
+        v = 候選[索引 - 1];
       }
       /* 形態 ①：若 v 是對象且 o[2] 有值，取 o[2]（較少見） */
       else if (v && typeof v === 'object' && !Array.isArray(v)) {

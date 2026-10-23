@@ -5,6 +5,7 @@
   "type": "module",
   "description": "IPA 讀音合成 — espeak-ng 發音 + 切韻推導器 / 字表兩種模式",
   "scripts": {
+    "start": "node tools/start-web.mjs",
     "serve": "node tools/serve.mjs",
     "test": "node tools/test-all.mjs",
     "test:quick": "node tools/test-all.mjs --quick",
