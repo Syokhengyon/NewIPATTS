@@ -1142,7 +1142,8 @@ async function speakAll(paraIndex) {
    *   「字間隔」滑條（gapR，預設 45ms）原本只用來給標點停頓設下限，
    *   普通字之間完全沒用到 —— 名不符實。這裏讓它真正生效。
    *
-   * 標點/換行/分段已經自帶停頓段，那幾處**不再重複加** gap。
+   * 標點/換行/分段自帶的停頓段，會依「這個字短不短」被補償拉長
+   * （見下面 gapAfter：停頓時長算進「已用時長」，只補不足的部分）。
    *
    * ── 差別化補償（補償滑條）──
    *   統一間隔只能部分緩解。真正拉平要用「目標週期」：
@@ -1160,16 +1161,39 @@ async function speakAll(paraIndex) {
   /** 单字的实际时长（ms） */
   const durOf = (seg) => seg.audio.length / SR * 1000;
 
+  /*
+   * ── 補償間隔（字接字、字接停頓共用同一條公式）──
+   *   gap = clamp( 補償 × (目標週期 − 已用時長), 0, MAX )
+   *
+   * 「已用時長」= 這個字的時長 ＋ 它後面**已經有的**停頓時長。
+   *
+   * 原本只在「字接字」時插 gap，字後面若跟停頓段（空格 / 標點 / 換行）
+   * 補償就整個失效：帶塞音尾的音節被引擎壓到 74ms，接一個 40ms 的空格停頓
+   * 總共才 114ms，聽感就是被吞掉。現在停頓段會被補到「該補的量」，
+   * 但**不縮短**標點本身的長度 —— 句號 320ms 遠大於補償量，所以原樣不動。
+   */
   const parts = [];
+  /** 這個字後面「還該補多少」（已扣掉既有停頓） */
+  const gapAfter = (d, usedMs) =>
+    Math.max(0, Math.min(GAP_MAX, compPct * (targetMs - d - usedMs)));
+
   for (let i = 0; i < segs.length; i++) {
     const cur = segs[i], prev = segs[i - 1];
-    if (i > 0 && cur.isChar && prev && prev.isChar) {
-      /* 用**前者**的時長來決定它後面該補多少 */
-      const d = durOf(prev);
-      const g = Math.max(0, Math.min(GAP_MAX, compPct * (targetMs - d)));
-      if (g > 0.5) parts.push(new Float32Array(Math.round(SR * g / 1000)));
+    if (cur.isChar) {
+      /* 字接字：插在兩字之間，用**前者**的時長算 */
+      if (i > 0 && prev && prev.isChar) {
+        const g = gapAfter(durOf(prev), 0);
+        if (g > 0.5) parts.push(new Float32Array(Math.round(SR * g / 1000)));
+      }
+      parts.push(cur.audio);
+      continue;
     }
-    parts.push(cur.audio);
+    /* 停頓段：緊跟在字後面時按該字補償（只延長，不縮短） */
+    const baseMs = durOf(cur);
+    const g = prev && prev.isChar ? gapAfter(durOf(prev), baseMs) : 0;
+    parts.push(g > 0.5
+      ? new Float32Array(Math.round(SR * (baseMs + g) / 1000))
+      : cur.audio);
   }
   const merged = mergeWithGap(parts, 0, SR);
   lastSamples = merged;

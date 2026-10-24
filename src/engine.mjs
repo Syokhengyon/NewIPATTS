@@ -13,13 +13,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
 /** 引擎输出采样率（固定值，已实测） */
 export const SR = 22050;
 
 /** 默认引擎目录（本包内的 engine/） */
 export function defaultEngineDir() {
-  return path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..', 'engine');
+  /*
+   * 必須用 fileURLToPath：`new URL(import.meta.url).pathname` 會把非 ASCII
+   * 百分號編碼（路徑含「兴趣爱好」這類字元時會變成 %E5%85%B4…），
+   * Windows 上還會留下開頭的 `/D:`，結果 fs.existsSync 一定失敗。
+   */
+  return path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'engine');
 }
 
 /**

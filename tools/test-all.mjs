@@ -23,6 +23,7 @@ const SUITES = [
   ['test-page-clicks.mjs',   '頁面交互（按鈕、多音字、顯示開關）',        false],
   ['test-annotated.mjs',     '括號注音（固定讀音、補全類別、標點）',      false],
   ['test-paragraph.mjs',     '標點停頓、分段、單段朗讀、定時器泄漏',      true],
+  ['test-stop-gap.mjs',      '音長補償（短音節接停頓也要補）',            false],
   ['test-longtext.mjs',      '長文本（3387 字）不 OOM、不並行朗讀',       true],
   ['test-readings-io.mjs',   'txt 匯入匯出、改讀音寫回原文、引擎重建',    true],
   ['test-fallback.mjs',      '類推與三色（補充字表、異體字、簡化字）',    false],
