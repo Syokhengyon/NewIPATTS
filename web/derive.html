@@ -11,7 +11,7 @@
   *{box-sizing:border-box}
   html,body{height:100%}
   body{margin:0;background:var(--bg);color:var(--fg);overflow:hidden;
-       font:13.5px/1.6 "Charis SIL","Source Han Serif TC","Noto Serif CJK TC","Songti TC",
+       font:13.5px/1.6 "Charis SIL","Charis","Source Han Serif TC","Noto Serif CJK TC","Songti TC",
             PMingLiU,MingLiU,"STSong","华文宋体",SimSun,"宋体",serif;}
   header{height:46px;border-bottom:1px solid var(--line);display:flex;align-items:center;
          gap:14px;padding:0 16px;background:var(--pan);flex:0 0 auto}
@@ -76,7 +76,10 @@
   .line{display:flex;flex-wrap:wrap;row-gap:16px;margin-bottom:20px}
   .cell{display:flex;flex-direction:column;align-items:center;margin:0 9px;
         cursor:default;user-select:none;position:relative}
-  .cell .ipa{font-size:12px;color:var(--dim);font-family:ui-monospace,Consolas,monospace;
+  /* IPA 註音：Consolas 的 ɑ 與 a 相似度 0.62（17px），小字號下幾乎分不出，
+     所以在等寬字後面接上有完整 IPA 的 Charis（本機註冊名是 Charis）與 Segoe UI。 */
+  .cell .ipa{font-size:12px;color:var(--dim);
+             font-family:ui-monospace,Consolas,"Charis","Segoe UI",monospace;
              white-space:nowrap;margin-bottom:2px;min-height:17px}
   .cell .ch{font-size:25px;line-height:1.15;color:var(--single)}
   .cell.multi{cursor:pointer}
@@ -125,7 +128,7 @@
   /* 只有「可選」的項纔有指針與懸停；單一讀音只展示 */
   #pop .op.only{cursor:default;opacity:.75}
   #pop .op.only:hover{background:transparent}
-  #pop .op .ipa{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:var(--fg);
+  #pop .op .ipa{font-family:ui-monospace,Consolas,"Charis","Segoe UI",monospace;font-size:13.5px;color:var(--fg);
                 min-width:66px;flex:0 0 auto}
   #pop .op .d{font-size:11.5px;color:var(--dim);flex:0 0 auto;min-width:110px}
   /* 釋義：讓它佔滿剩餘寬度，兩行截斷 */
