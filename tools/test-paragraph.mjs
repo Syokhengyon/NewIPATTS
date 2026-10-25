@@ -247,8 +247,26 @@ check('仍有多音字', cells().some(c => c.classList.contains('multi')));
 check('仍有綠色固定字', cells().some(c => c.classList.contains('fixed')));
 check('標點成爲停頓', doc.querySelectorAll('#canvas .pause').length > 5,
   `${doc.querySelectorAll('#canvas .pause').length} 個`);
-check('範例詞是多段', doc.querySelectorAll('#canvas .para').length >= 1,
-  `${doc.querySelectorAll('#canvas .para').length} 段`);
+/* 分段規則改了：只有**空行**才分段，單個換行只是行內換行（見 parseAnnotated）。
+   以前 j 從 i 起算導致每個換行都被當空行，每行自成一段，所以下面這兩條是回歸。 */
+setText($, '天地玄黃\n宇宙洪荒\n日月盈昃');
+await tick(80);
+$('deriveOnly').click();
+await tick(400);
+check('單換行不分段（不畫段落框）', doc.querySelectorAll('#canvas .para').length === 0,
+  `${doc.querySelectorAll('#canvas .para').length} 個框`);
+check('單換行仍分三行', doc.querySelectorAll('#canvas .line').length === 3,
+  `${doc.querySelectorAll('#canvas .line').length} 行`);
+
+setText($, '天地玄黃\n宇宙洪荒\n\n日月盈昃\n辰宿列張');
+await tick(80);
+$('deriveOnly').click();
+await tick(400);
+const paras = [...doc.querySelectorAll('#canvas .para')];
+check('空行才分段', paras.length === 2, `${paras.length} 段`);
+check('空行前的兩行同屬一段',
+  paras.length === 2 && paras[0].querySelectorAll('.line').length === 2,
+  paras.length === 2 ? `第一段 ${paras[0].querySelectorAll('.line').length} 行` : '段數不對');
 
 console.log(`\n${'='.repeat(52)}`);
 console.log(`通過 ${pass} / 失敗 ${fail}`);

@@ -626,9 +626,14 @@ function parseAnnotated(text) {
       continue;
     }
 
-    /* 空行 → 分段 */
+    /* 空行 → 分段；單個換行只是「行內換行」，仍屬同一段 */
     if (ch === '\n') {
-      let j = i;
+      /*
+       * j 必須從 i+1 起算：chars[i] 自己就是那個 '\n'，
+       * 從 i 起算的話條件恆真，單個換行也會被當成空行 → 每行都成一段。
+       * 正確判法：跳過本行換行與其後的空格／製表符，再看下一個字符是不是又一個 '\n'。
+       */
+      let j = i + 1;
       while (j < chars.length && /[ \t\r]/.test(chars[j])) j++;
       if (chars[j] === '\n' || j >= chars.length) {
         /* 連續換行或到末尾：收成一個分段 */

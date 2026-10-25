@@ -192,12 +192,12 @@ console.log('\n=== 5. IPA → 音素名 / 聲調 ===');
   const cases = [
     ['tʰen⁵³', 'then', '53'],
     ['ɖɨw²¹²', 'd.i":w', '212'],   // ɨw 有音長補償（i" → i":w，見 OVERRIDES）
-    ['ɣuɑŋ³¹', 'g"uA.N', '31'],    // ɣ 現用 g"（Q 在這份資料裏只剩低頻濁音，聽着像滑音）
+    ['ɣuɑŋ³¹', 'g"uaN', '31'],     // ɣ → g"；ɑ 現映射到 a（低元音重定後）
     ['ʈʂɨk⁵', 'ts.i"k', '5'],
-    ['ɬa⁵³', 'l#a', '53'],
-    ['bʱa⁵³', 'bh.a', '53'],
+    ['ɬa⁵³', 'l#A.', '53'],        // a 現映射到 A.
+    ['bʱa⁵³', 'bh.A.', '53'],
     ['ɭiæŋ²⁴', 'l.i&N', '24'],
-    ['ʕa⁵³', '?\\a', '53'],
+    ['ʕa⁵³', '?\\A.', '53'],
     ['ʏ⁵³', 'Y', '53'],
   ];
   for (const [ipa, wantEsp, wantTone] of cases) {
@@ -205,9 +205,9 @@ console.log('\n=== 5. IPA → 音素名 / 聲調 ===');
     ok(`${ipa} → ${wantEsp}`, esp === wantEsp + wantTone, `得到 ${esp}`);
   }
   const z = espOf('a⁵³', 'glottal');
-  ok('零聲母補償', z.esp === '?a53', z.esp);
+  ok('零聲母補償', z.esp === '?A.53', z.esp);
   const z0 = espOf('a⁵³', 'none');
-  ok('零聲母可關', z0.esp === 'a53', z0.esp);
+  ok('零聲母可關', z0.esp === 'A.53', z0.esp);
 }
 {
   ok('三位調不降速', rateForTone('313', 140, 1, true) === 140);
