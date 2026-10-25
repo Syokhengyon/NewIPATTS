@@ -57,7 +57,7 @@ function 聲母規則() {
   if (is('曉母')) return 'x';
   if (is('匣母')) return 'ɣ';
   if (is('影母')) return 'ʔ';
-  if (is('云母')) return '';
+  if (is('云母')) return is('東韻 舒聲')?'ɣ':'';
   if (is('以母')) return 'j';
 
   throw new Error('無聲母規則');
@@ -66,8 +66,8 @@ function 聲母規則() {
 function 韻母規則() {
   // 通攝
   if (is('東冬韻 一等')) return 'ʊŋ';
-  if (is('東鍾韻 三等')) return is('幫莊組')?'ʊŋ':'iʊŋ';
-  if (is('東鍾韻 三等')) return is('幫莊組')?'ʊŋ':'yʊŋ';
+  if (is('東韻 三等')) return is('幫莊組')?'ʊŋ':'iʊŋ';
+  if (is('鍾韻 三等')) return is('幫莊組')?'ʊŋ':'yʊŋ';
 
   // 江攝
   if (is('江韻 知莊組')) return 'uaŋ';

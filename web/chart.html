@@ -8,7 +8,8 @@
           --ok:#3fb950; --warn:#d29922; --bad:#f85149; --idle:#484f58; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--fg);
-         font:14px/1.5 -apple-system,"Segoe UI","Noto Sans CJK TC",sans-serif; padding:18px 20px 60px; }
+         font:14px/1.5 "Charis SIL","Source Han Serif TC","Noto Serif CJK TC","Songti TC",
+              PMingLiU,MingLiU,"STSong","华文宋体",SimSun,"宋体",serif; padding:18px 20px 60px; }
   h1 { font-size:19px; margin:0 0 4px; }
   .ver { font-size:11px; font-weight:600; color:#0d1117; background:var(--acc);
          border-radius:3px; padding:1px 6px; vertical-align:3px; letter-spacing:0; }
@@ -177,6 +178,19 @@ const AFFR = [
   ['齦後',  't͡ʃ d͡ʒ'],
   ['捲舌',  't͡ʂ d͡ʐ'],
   ['齦顎',  't͡ɕ d͡ʑ'],
+  /* 以下實測補充：本引擎都能發成「閉塞 + 摩擦」（濁的會多一段預濁）；
+     c͡ç / ɟ͡ʝ 因為 c→kj、ç→xj 的映射，聽感會偏「拖」，點一下就知道。
+     ⚠ p͡f / b͡v 的特例（實測）：摩擦段與 f / v **完全相同**（頻譜 TV = 0.000，
+        重心 1177Hz 對 1177Hz），pf 只是多 32ms 靜音閉塞、bv 多 15ms 濁音條，
+        而且**沒有爆破瞬態**（+0.8dB，對照 t͡s 是 +7.6dB）。
+        所以聽感上 p͡f ≈ f、b͡v ≈ v —— 想聽塞擦感請用 t͡s / t͡ʃ / t͡ɕ 那一類。 */
+  ['唇齒',  'p͡f b͡v'],     // pf 是引擎自帶音素；bv 靠 b + v 連讀
+  ['雙唇',  'p͡ɸ b͡β'],
+  ['齒',    't͡θ d͡ð'],
+  ['硬顎',  'c͡ç ɟ͡ʝ'],
+  ['軟顎',  'k͡x ɡ͡ɣ'],
+  ['小舌',  'q͡χ'],
+  ['邊',    't͡ɬ d͡ɮ'],     // t͡ɬ 的 ɬ 本身偏弱，聽感接近純 t
 ];
 /* 元音：依標準舌位圖排（前→後，閉→開） */
 const VOWS = [
