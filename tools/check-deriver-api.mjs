@@ -47,12 +47,12 @@ catch (e) { console.log('  只傳 音韻地位 →', e.message.slice(0, 60)); }
 try { console.log('  傳 (音韻地位, 字頭) → 字頭 is', new Function('音韻地位', '字頭', src1)(pos, '為')); }
 catch (e) { console.log('  傳兩個 →', e.message.slice(0, 60)); }
 
-console.log('\n=== 4. 用使用者的推導器實測（補上 字頭）===');
+console.log('\n=== 4. 用使用者的推導器實測（補上 選項 / 字頭）===');
 const userSrc = SAMPLE_DERIVER;
-for (const sig of [['音韻地位'], ['音韻地位', '字頭']]) {
+for (const sig of [['音韻地位'], ['音韻地位', '字頭'], ['選項', '音韻地位', '字頭']]) {
   try {
     const fn = new Function(...sig, userSrc);
-    const out = fn(pos, '為');
+    const out = fn(...sig.map(n => (n === '音韻地位' ? pos : n === '字頭' ? '為' : {})));
     console.log(`  簽名 (${sig.join(', ')}) → ${JSON.stringify(out)}`);
   } catch (e) {
     console.log(`  簽名 (${sig.join(', ')}) → ✗ ${e.message.slice(0, 80)}`);
@@ -60,7 +60,8 @@ for (const sig of [['音韻地位'], ['音韻地位', '字頭']]) {
 }
 
 console.log('\n=== 5. 用正確簽名跑一批字 ===');
-const fn = new Function('音韻地位', '字頭', userSrc);
+/* 頁面用的簽名是 (選項, 音韻地位, 字頭)，見 derive.html 的 makeRawFn */
+const fn = new Function('選項', '音韻地位', '字頭', userSrc);
 function 描述串(raw) {
   const o = raw && raw.音韻地位 ? raw.音韻地位 : raw;
   return [o.母, o.呼, o.等, o.類, o.韻, o.聲].filter(v => v != null && v !== '').join('');
@@ -73,7 +74,7 @@ for (const ch of '天地玄黃宇宙洪荒日月盈昃人工島鼻不為兄橫')
   const d = 描述串(rows[0]);
   try {
     const p = T.音韻地位.from描述(d);
-    const ipa = fn(p, ch);
+    const ipa = fn({}, p, ch);
     console.log(`  ${ch}  ${d.padEnd(13)} ${String(p.描述 || '').padEnd(11)} ${ipa}`);
     ok++;
   } catch (e) {

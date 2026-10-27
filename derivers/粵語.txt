@@ -64,9 +64,9 @@ function 聲母規則() {
   if (is('疑母')) return 'ŋ';
 
   if (is('曉母')) return 'h';
-  if (is('匣母')) return is('非 合口 一二等 或 三等 或 齊韻 非 合口')?'h':'';
+  if (is('匣母')) return is('開口 一二等 或 齊韻 開口')?'h':'';
   if (is('影母')) return '';
-  if (is('云母')) return '';
+  if (is('云母')) return is('東韻 舒聲')?'h':'';
   if (is('以母')) return '';
 
   throw new Error('無聲母規則');

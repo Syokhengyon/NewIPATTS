@@ -29,29 +29,29 @@ function 聲母規則() {
   if (is('澄母')) return 'd';
   if (is('孃母')) return 'n';
 
-  if (is('精母')) return 't';
-  if (is('清母')) return 't';
-  if (is('從母')) return 'd';
+  if (is('精母')) return 't̪';
+  if (is('清母')) return 't̪';
+  if (is('從母')) return 'd̪';
   if (is('心母')) return 's';
   if (is('邪母')) return 'z';
 
-  if (is('莊母')) return 't';
-  if (is('初母')) return 't';
-  if (is('崇母')) return is('平聲')?'d':is('止攝')?'z':'d';
+  if (is('莊母')) return 't̪';
+  if (is('初母')) return 't̪';
+  if (is('崇母')) return is('平聲')?'d̪':is('止攝')?'z':'d';
   if (is('生母')) return 's';
   if (is('俟母')) return 'z';
 
-  if (is('章母')) return 't';
-  if (is('昌母')) return 't';
-  if (is('常母')) return is('平聲')?'d':'z';
-  if (is('書母')) return 's';
-  if (is('船母')) return 'z';
-  if (is('日母')) return 'z';
+  if (is('章母')) return 'ȶ';
+  if (is('昌母')) return 'ȶ';
+  if (is('常母')) return 'ʑ';
+  if (is('書母')) return 'ɕ';
+  if (is('船母')) return 'ʑ';
+  if (is('日母')) return 'ʑ';
 
   if (is('見母')) return 'k';
   if (is('溪母')) return 'k';
-  if (is('羣母')) return 'ɡ';
-  if (is('疑母')) return 'ɡ';
+  if (is('羣母')) return 'ɣ';
+  if (is('疑母')) return 'ɣ';
 
   if (is('曉母')) return 'h';
   if (is('匣母')) return '';
@@ -91,7 +91,7 @@ function 韻母規則() {
   if (is('泰韻 合口')) return is('見溪疑母')?'uai':'ui';
   if (is('泰韻')) return 'ai';
   if (is('佳韻')) return 'e';
-  if (is('皆夬韻')) return 'ei';
+  if (is('皆夬韻')) return 'e';
   if (is('灰韻')) return 'ui';
   if (is('咍韻')) return 'ai';
   if (is('廢韻 開口')) return 'i';
@@ -102,7 +102,6 @@ function 韻母規則() {
   if (is('殷韻')) return 'in';
   if (is('臻韻')) return 'un';
   if (is('文韻')) return is('幫組')?'un':'in';
-  if (is('元韻 合口')) return 'on';
   if (is('元韻')) return is('幫組')?'an':'en';
   if (is('魂韻')) return 'un';
   if (is('痕韻')) return 'un';
@@ -110,7 +109,7 @@ function 韻母規則() {
   // 山攝
   if (is('寒韻')) return 'an';
   if (is('刪山韻')) return 'en';
-  if (is('仙先韻')) return is('合口')?'on':'en';
+  if (is('仙先韻')) return 'en';
 
   // 效攝
   if (is('蕭韻')) return 'eu';
@@ -197,8 +196,8 @@ if (韻母.endsWith('m')) 韻母 = 韻母.slice(0, -1) + 'u';
   else if (韻母.endsWith('ː')) 
   {
     韻母 = 韻母.slice(0, -1)
-    if(is('曾梗攝'))韻母 = 韻母+ 'i';
-    else 韻母 = 韻母+ 'u';
+    if(is('曾梗攝'))韻母 = 韻母+ 'ʑ';
+    else 韻母 = 韻母+ 'ɣ';
   }
 
 }
@@ -214,8 +213,5 @@ if (is('合口')) {
 韻母=韻母.replace('uu','u');
 韻母=韻母.replace('ii','i');
 
-if(聲母===''&&韻母[0]==='i'&&!韻母.startsWith('i')){聲母='j';韻母=韻母.replace('i','');}
-if(聲母===''&&韻母[0]==='u'&&!韻母.startsWith('u')){聲母='w';韻母=韻母.replace('u','');}
 return 聲母 + 韻母 + 聲調;
 
-韻母.startsWith('i')

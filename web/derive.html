@@ -448,6 +448,7 @@ function renderOptions(source) {
 
   box.innerHTML = '';
   const params = [];
+  let hiddenN = 0;
   for (const o of list) {
     if (!o) continue;
     if (o.type === 'groupLabel') {
@@ -458,6 +459,9 @@ function renderOptions(source) {
     }
     if (o.type === 'newline') { const d = document.createElement('div'); d.style.height = '2px'; box.appendChild(d); continue; }
     if (o.key === undefined) continue;
+    /* 次級選項：設定項第三個元素 { hidden: 條件 } 為真時整項不畫。
+       值仍留在「方案選項」裏（用默認值），只是界面上不給改 —— 與 nk2028 的推導器一致。 */
+    if (o.hidden) { hiddenN++; continue; }
     params.push(o);
 
     const cur = 方案選項[o.key];
@@ -490,6 +494,9 @@ function renderOptions(source) {
       else 方案選項[k] = el.value;
       saveOptionValues();
       log(`設定 ${k} = ${JSON.stringify(方案選項[k])}（按「推導」生效）`, 'dim');
+      /* 重畫一次：別的設定項的 hidden 條件是跟着「選項」求值的，
+         不重畫的話次級選項不會即時出現／消失。 */
+      renderOptions(source);
     };
   });
   const reset = document.createElement('button');
