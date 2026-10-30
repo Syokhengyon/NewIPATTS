@@ -57,7 +57,7 @@ function 聲母規則() {
   if (is('曉母')) return 'x';
   if (is('匣母')) return 'ɣ';
   if (is('影母')) return 'ʔ';
-  if (is('云母')) return is('東韻 舒聲')?'ɣ':'';
+  if (is('云母')) return is('東韻 舒聲')?'ɣ':'ɰ';
   if (is('以母')) return 'j';
 
   throw new Error('無聲母規則');
@@ -95,7 +95,7 @@ function 韻母規則() {
   if (is('泰韻 合口')) return is('見溪疑母')?'uɑj':'uɨi';
   if (is('泰韻 幫組')) return 'uɨi';
   if (is('泰韻')) return is('銳音')?'aj':'ɑj';
-  if (is('佳皆夬韻')) return (['咼(呙)扠哇洼絓畫(画)罣罷(罢)', '佳鼃娃卦涯', '灑蝸話(话)掛挂查叉杈衩'].join('').includes('字頭'))?'a':'aj';
+  if (is('佳皆夬韻')) return (['咼(呙)扠哇洼絓畫(画)罣罷(罢)佳鼃娃卦涯灑蝸話(话)掛挂查叉杈衩'].join('').includes('字頭'))?'a':'aj';
   if (is('灰韻')) return 'uɨi';
   if (is('咍韻')) return 'ɑj';
   if (is('廢韻 開口')) return 'i';

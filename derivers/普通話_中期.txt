@@ -128,9 +128,9 @@ function 韻母規則() {
   if (is('仙韻')) return is('莊組')?'an':'iɛn';
   if (is('先韻')) return 'iɛn';
 
-  // 效攝
-  if (is('蕭韻')) return 'iɛu';
-  if (is('宵韻')) return 'iɛu';
+  // 效攝（三四等已併入二等讀 iau：ɛ 已降低為 a）
+  if (is('蕭韻')) return 'iau';
+  if (is('宵韻')) return 'iau';
   if (is('肴韻')) return 'au';
   if (is('豪韻')) return 'au';
 
@@ -171,7 +171,7 @@ function 韻母規則() {
   if (is('尤侯韻 幫滂並母')&&流攝幫滂並母未歸遇攝字.includes(字頭)) return 'əu';
   if (is('尤侯韻 幫滂並母')) return 'u';
   if (is('尤韻')) return is('莊組')?'əu':'iəu';
-  if (is('幽韻')) return is('幫滂並母')?'iɛu':'iəu';
+  if (is('幽韻')) return is('幫滂並母')?'iau':'iəu';   // 彪 piau，與效攝三四等同形
   if (is('侯韻')) return 'əu';
 
   // 深攝

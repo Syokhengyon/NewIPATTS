@@ -77,14 +77,11 @@ function 聲母規則() {
 }
 
 function 韻母規則() {
-  // 通攝
+  // 通攝（此期見組仍帶介音；孃母入聲「衄」一直帶介音；精組、知章日來、幫莊已丢）
   if (is('東冬韻 一等')) return 'ʊŋ';
-  if (is('東韻 三等 舒聲 溪母')) return 'iʊŋ';
-  if (is('鍾韻 三等 平聲 溪母')) return 'iʊŋ';
-  if (is('東鍾韻 三等 平聲 羣母')) return 'iʊŋ';
-  if (is('東鍾韻 三等 舒聲 疑曉匣影云以母')) return 'iʊŋ';
-  if (is('東鍾韻 三等 入聲 孃母')) return 'iʊŋ';
-  if (is('東鍾韻 三等')) return is('牙喉音 入聲')?'iʊŋ':'ʊŋ';
+  if (is('東鍾韻 三等 孃母 入聲')) return 'iʊŋ';   // 衄 niʊʔ，一路留到當代
+  if (is('東鍾韻 三等 牙喉音')) return 'iʊŋ';
+  if (is('東鍾韻 三等')) return 'ʊŋ';
 
   // 江攝
   if (is('江韻 影母 入聲')) return 'uaŋ';
