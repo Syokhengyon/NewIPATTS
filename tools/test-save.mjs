@@ -75,7 +75,7 @@ console.log('\n=== ②b 使用者自帶的檔案同樣可覆蓋 ===');
    * 這一組是這次改動的核心：**直接覆蓋使用者自己放進 texts/ 的檔案**。
    * 內容原樣寫回，不算改動，所以不需要還原。
    */
-  for (const [dir, name] of [['texts', '千字文.txt'], ['derivers', '交語.txt']]) {
+  for (const [dir, name] of [['texts', '千字文.txt'], ['derivers', '架空_交州白話.txt']]) {
     const cur = await (await fetch(`${BASE}/${dir}/` + encodeURIComponent(name))).text();
     if (!cur) { check(`${dir}/${name} 可讀`, false, '讀不到，略過'); continue; }
     const r = await post({ dir, name, content: cur });
