@@ -15,6 +15,10 @@ site-source/
 reference/site-main-table.json
 reference/site-phonologies.json
 
+# ── 測試產生的臨時檔 ─────────────────────────────
+# test-save.mjs 會往 texts/ derivers/ 寫這兩個，沙箱下刪不掉，故不入庫。
+__test_*
+
 # ── 備份 / 臨時檔 ─────────────────────────────────
 *.bak
 *.tmp
