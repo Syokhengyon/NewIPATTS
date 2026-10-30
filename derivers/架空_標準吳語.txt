@@ -100,7 +100,7 @@ function 韻母規則() {
 
   // 遇攝
   if (is('魚韻 莊組')) return 'ou';
-  if (is('魚韻 牙音 或 魚韻 曉母')) return 'ei';
+  if (is('魚韻 牙音 或 魚韻 曉母')) return 'ej';
   if (is('魚韻 知章組 非 孃母')) return 'ɿ';
   if (is('魚韻 精組')) return 'i';
   if (is('虞韻 幫莊組')) return 'u';
@@ -112,18 +112,18 @@ function 韻母規則() {
   if (is('祭齊廢韻 幫組')) return 'i';
   if (is('祭齊廢韻 開口')) return 'i';
   if (is('祭齊廢韻 合口')) return is("牙喉音")?'uei':'y';
-  if (is('泰灰韻 幫組')) return 'ei';
+  if (is('泰灰韻 幫組')) return 'e';
   if (is('泰韻 開口 端組')) return 'a';
   if (is('泰韻 開口 來母')) return 'a';
   if (is('泰韻 開口 牙喉音 或 泰韻 開口 精組')) return 'ei';
-  if (is('泰韻 合口 舌齒音')) return 'ei';
-  if (is('泰韻 合口 牙喉音')) return 'uei';
+  if (is('泰韻 合口 舌齒音')) return 'ej';
+  if (is('泰韻 合口 牙喉音')) return 'uej';
   if (is('夬韻 合口 喉音')) return 'uo';
   if (is('佳皆夬韻 合口')) return 'ua';
   if (is('佳皆夬韻')) return 'a';
-  if (is('灰韻 舌齒音')) return 'ei';
-  if (is('灰韻 牙喉音')) return 'uei';
-  if (is('咍韻')) return 'ei';
+  if (is('灰韻 舌齒音')) return 'ej';
+  if (is('灰韻 牙喉音')) return 'uej';
+  if (is('咍韻')) return 'e';
   //if (is('廢韻')) return 'ai';
 
   // 臻攝
@@ -158,9 +158,9 @@ function 韻母規則() {
   if (is('仙先韻 合口')) return 'yøn';
 
   // 效攝
-  if (is('蕭宵韻')) return 'ieu';
-  if (is('肴韻')) return 'au';
-  if (is('豪韻')) return 'au';
+  if (is('蕭宵韻')) return 'iʌw';
+  if (is('肴韻')) return 'ɔw';
+  if (is('豪韻')) return 'ʌw';
 
   // 果攝
   if (is('歌韻 幫組 一等')) return 'ou';
@@ -212,10 +212,10 @@ function 韻母規則() {
   // 流攝
   if (is('侯尤韻 幫滂並母 去聲')) return 'u';
   if (is('侯尤韻 並母 上聲')) return 'u';
-  if (is('侯韻')) return 'eu';
-  if (is('尤韻 幫莊組')) return 'eu';
-  if (is('幽韻 幫組')) return 'ieu'
-  if (is('尤幽韻')) return 'iu';
+  if (is('侯韻')) return 'ew';
+  if (is('尤韻 幫莊組')) return 'ew';
+  if (is('幽韻 幫組')) return 'iew'
+  if (is('尤幽韻')) return 'iw';
 
   // 深攝
   if (is('侵韻 莊組')) return 'əŋ';
@@ -253,13 +253,6 @@ function 聲調規則() {{
 let 聲母 = 聲母規則();
 let 韻母 = 韻母規則();
 let 聲調 = 聲調規則();
-
-if(韻母[0]==="u"&&(聲母==="ɦ"))
- {if(韻母!=="u")韻母 = 韻母.replace('u','');
-  	if(聲母==="ɦ")聲母="w";}
-if(聲母==="ɦ")
-{if(韻母[0]==="i"){聲母="j";if(韻母!=="i"&&韻母!=="iŋ")韻母 = 韻母.replace('i','');}
- if(韻母[0]==="y"){聲母="ɥ";if(韻母!=="y"&&韻母!=="yŋ")韻母 = 韻母.replace('y','');}}
 
 if(!is('入聲'))韻母=韻母.replace('n','');
 if(is('入聲'))  
