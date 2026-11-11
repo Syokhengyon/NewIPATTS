@@ -4,14 +4,7 @@ if (!音韻地位) return [
     description: '含果三戈、宕三陽藥',
     options: [{ value: 'ɑ', text: 'ɑ（預設）' }, { value: 'ɒ', text: 'ɒ' }],
   },
-  {
-    key: '二等主元音', value: 'a', text: '二等主元音',
-    options: [{ value: 'a', text: 'a（預設）' }, { value: 'æ', text: 'æ' }],
-  },
-  {
-    key: '一等ɨ', value: 'ɨ', text: '一等 ɨ（曾・流等）',
-    options: [{ value: 'ɨ', text: 'ɨ（預設）' }, { value: 'ə', text: 'ə' }],
-  },
+
 ];
 
 const is = (x) => 音韻地位.屬於(x);
@@ -28,8 +21,8 @@ const 取選項 = (k, d) => {
   return v;
 };
 const 一等主元音 = 取選項('一等主元音', 'ɑ');
-const 二等主元音 = 取選項('二等主元音', 'a');
-const 一等ɨ = 取選項('一等ɨ', 'ɨ');
+
+
 
 function 聲母規則() {
   if (is('幫母')) {
@@ -223,8 +216,8 @@ let 韻母 = 韻母規則();
 
 /* 可選項：只換主元音，不動介音與韻尾 */
 if (一等主元音 !== 'ɑ') 韻母 = 韻母.replace(/ɑ/g, 一等主元音);
-if (二等主元音 !== 'a' && is('二等')) 韻母 = 韻母.replace(/a/g, 二等主元音);
-if (一等ɨ !== 'ɨ' && is('一等')) 韻母 = 韻母.replace(/ɨ/g, 一等ɨ);
+
+
 let 聲調 = 聲調規則();
 
 if (is('入聲')) {
