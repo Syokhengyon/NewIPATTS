@@ -1,5 +1,7 @@
 if (!音韻地位) return [
-
+  ['一等ɑ讀ɒ', false],
+  ['二等a讀æ', false],
+  ['一等ɨ讀ə', false],
 ];
 
 const is = (x) => 音韻地位.屬於(x);
