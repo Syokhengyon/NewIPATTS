@@ -111,11 +111,11 @@ function 韻母規則() {
   if (is('廢韻 幫組')) return 'i';
   if (is('祭齊廢韻 幫組')) return 'i';
   if (is('祭齊廢韻 開口')) return 'i';
-  if (is('祭齊廢韻 合口')) return is("牙喉音")?'uei':'y';
-  if (is('泰灰韻 幫組')) return 'e';
+  if (is('祭齊廢韻 合口')) return is("牙喉音")?'uej':'y';
+  if (is('泰灰韻 幫組')) return 'ej';
   if (is('泰韻 開口 端組')) return 'a';
   if (is('泰韻 開口 來母')) return 'a';
-  if (is('泰韻 開口 牙喉音 或 泰韻 開口 精組')) return 'ei';
+  if (is('泰韻 開口 牙喉音 或 泰韻 開口 精組')) return 'e';
   if (is('泰韻 合口 舌齒音')) return 'ej';
   if (is('泰韻 合口 牙喉音')) return 'uej';
   if (is('夬韻 合口 喉音')) return 'uo';
