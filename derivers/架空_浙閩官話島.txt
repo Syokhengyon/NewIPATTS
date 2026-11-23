@@ -257,7 +257,7 @@ if(is('宕江攝 入聲'))
 if(is("曾梗攝 合口 三四等 見母")||['兄'].includes(字頭))
 韻母=韻母.replace('yin','ioŋ');
 
-if(is("曾梗攝 合口")&&!['橫'].includes(字頭))
+if(is("曾梗攝 合口")||!['橫'].includes(字頭))
 韻母=韻母.replace('uən','oŋ');
 
 韻母=韻母.replace('uʔ','oʔ');
