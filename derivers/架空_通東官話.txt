@@ -85,7 +85,7 @@ function 韻母規則() {
   // 止攝
   if (is('支脂之微韻 開口 日母')) return 'ɯ';
   if (is('支脂之微韻 開口')) return is('精莊組')?'ɿ':'i';
-  if (is('支脂之微韻 合口 知章組 或 支脂之微韻 合口 日母')) return 'yi';
+  if (is('支脂之微韻 合口 日母')) return 'yei';
   if (is('支脂之微韻 合口')) return is('莊組')?'uɛ':'uei';
   if (is('支脂韻 幫母 平聲')) return 'ei';
   if (is('脂韻 明母')) return 'ei';
@@ -94,16 +94,16 @@ function 韻母規則() {
 
 
   // 遇攝
-  if (is('魚韻')) return is('莊組')?'o':'y';
-  if (is('虞韻')) return is('莊組')?'o':is('幫組')?'u':'y';
-  if (is('模韻')&&['祚胙阼飵秨錯措厝謨摸膜嫫摹'].join('').includes(字頭)) return 'o';
+  if (is('魚韻')) return is('莊組')?'ʊ':'y';
+  if (is('虞韻')) return is('莊組')?'ʊ':is('幫組')?'u':'y';
+  if (is('模韻')&&['祚胙阼飵秨錯措厝謨摸膜嫫摹'].join('').includes(字頭)) return 'ʊ';
   if (is('模韻')) return 'u';
 
   // 蟹攝
   if (is('齊韻')) return is('合口')?'uei':'i';
   if (is('支脂之微韻 開口')) return is('精莊組')?'ɿ':'i';
   if (is('祭韻 莊組 開口')) return 'ɿ'
-  if (is('祭韻 合口 知章組 或 祭韻 日以母 合口')) return 'yi'
+  if (is('祭韻 合口 知章組 或 祭韻 日以母 合口')) return 'yei'
   if (is('祭韻')) return is('合口')?'uei':'i';
   if (is('泰韻 見溪疑母 合口')) return 'uɛ';
   if (is('泰韻')) return is('開口')?'ɛ':is('幫組')?'ei':'uei';
@@ -115,7 +115,7 @@ function 韻母規則() {
   if (is('廢韻')) return is('合口')?'uei':'i';
 
   // 臻攝
-  if (is('真韻 來母 合口')) return 'ən';
+  if (is('真韻 來母 合口 舒聲')) return 'ən';
   if (is('真韻')) return is('莊組')?'ən':'in';
   if (is('殷韻')) return 'in';
   if (is('臻韻')) return 'ən';
